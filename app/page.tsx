@@ -204,6 +204,7 @@ export default function Component() {
                 y={node.y + node.size / 20 + 4}
                 textAnchor="middle"
                 dominantBaseline="middle"
+                 className="fill-gray-600 stick-no-bills"
                 style={{
                   fontSize: "5px",
                   paintOrder: "stroke",
@@ -211,7 +212,7 @@ export default function Component() {
                   strokeWidth: 2.5,
                   fill: node.link ? "#2563eb" : "#000",
                   cursor: node.link ? "pointer" : "default",
-                  textTransform: "capitalize",
+       
                 }}
                 onClick={() => handleNodeClick(node)}
               >
