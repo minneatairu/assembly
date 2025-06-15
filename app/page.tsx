@@ -196,7 +196,20 @@ export default function Component() {
                   onMouseDown={(e) => handleDragStart(e, node.id)}
                   onTouchStart={(e) => handleDragStart(e, node.id)}
                 />
+                
               )}
+{!node.primary && !node.parent && (node.id === "benin" || node.id === "braids") && (
+  <text
+    x={node.x}
+    y={node.y}
+    textAnchor="middle"
+    dominantBaseline="middle"
+    className="fill-black font-bold pointer-events-none stick-no-bills"
+    style={{ fontSize: "3px" }}
+  >
+    {node.id === "benin" ? "1" : "2"}
+  </text>
+)}
 
               {/* Label with optional line break for Benin */}
               <text
