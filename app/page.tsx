@@ -31,7 +31,7 @@ export default function Component() {
   const [nodes, setNodes] = useState<Node[]>([
     {
       id: "data-assembly",
-      label: "Data Assembly",
+      label: "DATA ASSEMBLY",
       x: 50,
       y: 50,
       size: 60,
@@ -41,7 +41,7 @@ export default function Component() {
     },
     {
       id: "benin",
-      label: "Missing Benin Bronzes",
+      label: "MISSING BENIN BRONZES",
       year: "1897–1914",
       x: 20,
       y: 50,
@@ -50,7 +50,7 @@ export default function Component() {
     },
     {
       id: "braids",
-      label: "Braids",
+      label: "BRAIDS",
       x: 80,
       y: 50,
       size: 100,
@@ -68,7 +68,7 @@ export default function Component() {
     },
     {
       id: "ethnomathematics",
-      label: "Ethnomathematics",
+      label: "THNOMATHEMATICS",
       x: 90,
       y: 65,
       size: 100,
@@ -77,7 +77,7 @@ export default function Component() {
     },
     {
       id: "whats-this",
-      label: "What's This?",
+      label: "WHAT'S THIS?",
       x: 50,
       y: 30,
       size: 100,
