@@ -11,6 +11,7 @@ export default function BraidGlossaryPage() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     braidName: "",
     altNames: "",
@@ -34,9 +35,11 @@ export default function BraidGlossaryPage() {
     }
   }
 
-  // Upload image to Cloudflare
+  // Upload image to Cloudflare with fallback
   const uploadImage = async (file: File): Promise<string | null> => {
     try {
+      setUploadStatus("Uploading image...")
+
       const formData = new FormData()
       formData.append("file", file)
 
@@ -45,12 +48,22 @@ export default function BraidGlossaryPage() {
         body: formData,
       })
 
-      if (!response.ok) throw new Error("Upload failed")
+      if (!response.ok) {
+        throw new Error("Upload failed")
+      }
 
       const result = await response.json()
+
+      if (result.provider === "placeholder") {
+        setUploadStatus("Using demo mode (Cloudflare not configured)")
+      } else {
+        setUploadStatus("Image uploaded successfully!")
+      }
+
       return result.url
     } catch (error) {
       console.error("Upload error:", error)
+      setUploadStatus("Upload failed, continuing without image")
       return null
     }
   }
@@ -60,6 +73,7 @@ export default function BraidGlossaryPage() {
     e.preventDefault()
     setSubmitting(true)
     setError(null)
+    setUploadStatus(null)
 
     try {
       let imageUrl = null
@@ -97,6 +111,7 @@ export default function BraidGlossaryPage() {
       if (fileInput) fileInput.value = ""
 
       setShowForm(false)
+      setUploadStatus(null)
     } catch (error: any) {
       console.error("Error submitting braid:", error)
       setError(`Submission failed: ${error.message}`)
@@ -114,6 +129,7 @@ export default function BraidGlossaryPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null
     setFormData((prev) => ({ ...prev, imageFile: file }))
+    setUploadStatus(null) // Clear previous upload status
   }
 
   // Load braids on mount
@@ -150,6 +166,12 @@ export default function BraidGlossaryPage() {
               <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
             )}
 
+            {uploadStatus && (
+              <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded text-blue-700 text-sm">
+                {uploadStatus}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -180,12 +202,20 @@ export default function BraidGlossaryPage() {
                 required
               />
 
-              <input
-                type="file"
-                onChange={handleFileChange}
-                accept="image/*"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
+                  Upload Image (optional)
+                </label>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                />
+                {formData.imageFile && (
+                  <p className="text-sm text-gray-600 mt-1 stick-no-bills">Selected: {formData.imageFile.name}</p>
+                )}
+              </div>
 
               <input
                 type="url"
@@ -214,6 +244,12 @@ export default function BraidGlossaryPage() {
                 {submitting ? "Submitting..." : "Submit"}
               </button>
             </form>
+
+            {/* Configuration hint */}
+            <div className="mt-4 p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
+              <strong>Tip:</strong> Add CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to enable real image uploads.
+              Currently using demo mode.
+            </div>
           </div>
         </div>
       )}
@@ -276,6 +312,18 @@ export default function BraidGlossaryPage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {!loading && braids.length === 0 && (
+          <div className="text-center py-12">
+            <div className="stick-no-bills text-gray-500 mb-4">No braids submitted yet</div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors stick-no-bills text-base font-light"
+            >
+              Be the first to submit!
+            </button>
           </div>
         )}
       </div>

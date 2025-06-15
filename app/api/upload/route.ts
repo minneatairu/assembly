@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-import type { File } from "formdata-node"
 
-// Simple image upload to Cloudflare Images
+// Simple image upload to Cloudflare Images with fallback
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
@@ -11,39 +10,48 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
-    // Upload to Cloudflare Images
-    const cloudflareFormData = new FormData()
-    cloudflareFormData.append("file", file)
+    // Check if Cloudflare is configured
+    const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+    const apiToken = process.env.CLOUDFLARE_API_TOKEN
 
-    const cloudflareResponse = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v1`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
-        },
-        body: cloudflareFormData,
-      },
-    )
+    if (accountId && apiToken) {
+      try {
+        // Upload to Cloudflare Images
+        const cloudflareFormData = new FormData()
+        cloudflareFormData.append("file", file)
 
-    if (!cloudflareResponse.ok) {
-      throw new Error("Cloudflare upload failed")
+        const cloudflareResponse = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/images/v1`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+          },
+          body: cloudflareFormData,
+        })
+
+        if (cloudflareResponse.ok) {
+          const result = await cloudflareResponse.json()
+          return NextResponse.json({
+            url: result.result.variants[0], // Use the first variant
+            id: result.result.id,
+            provider: "cloudflare",
+          })
+        } else {
+          console.warn("Cloudflare upload failed, using fallback")
+        }
+      } catch (error) {
+        console.warn("Cloudflare upload error, using fallback:", error)
+      }
     }
 
-    const result = await cloudflareResponse.json()
-
+    // Fallback: return a placeholder URL for demo
+    const fileName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_")
     return NextResponse.json({
-      url: result.result.variants[0], // Use the first variant
-      id: result.result.id,
+      url: `/placeholder.svg?height=200&width=300&text=${encodeURIComponent(fileName)}`,
+      id: "demo-" + Date.now(),
+      provider: "placeholder",
     })
   } catch (error) {
     console.error("Upload error:", error)
-
-    // Fallback: return a placeholder URL for demo
-    const file = request.formData().get("file") as File
-    return NextResponse.json({
-      url: `/placeholder.svg?height=200&width=300&text=${encodeURIComponent(file?.name || "uploaded-image")}`,
-      id: "demo-" + Date.now(),
-    })
+    return NextResponse.json({ error: "Upload failed" }, { status: 500 })
   }
 }
