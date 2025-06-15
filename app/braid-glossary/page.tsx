@@ -3,41 +3,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-
-// Mock data for when database isn't set up
-const mockBraids = [
-  {
-    id: "1",
-    braid_name: "Box Braids",
-    alt_names: "Square Braids",
-    region: "West Africa",
-    image_url: "/placeholder.svg?height=200&width=300",
-    public_url: "https://example.com",
-    contributor_name: "Sample User",
-    created_at: "2024-01-01T00:00:00Z",
-  },
-  {
-    id: "2",
-    braid_name: "French Braid",
-    alt_names: "Tresse Française",
-    region: "Europe",
-    image_url: "/placeholder.svg?height=200&width=300",
-    public_url: null,
-    contributor_name: "Demo User",
-    created_at: "2024-01-02T00:00:00Z",
-  },
-]
-
-type Braid = {
-  id: string
-  braid_name: string
-  alt_names?: string | null
-  region: string
-  image_url?: string | null
-  public_url?: string | null
-  contributor_name: string
-  created_at: string
-}
+import { db, type Braid } from "@/lib/db"
 
 export default function BraidGlossaryPage() {
   const [showForm, setShowForm] = useState(true)
@@ -45,7 +11,6 @@ export default function BraidGlossaryPage() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [databaseConnected, setDatabaseConnected] = useState(false)
   const [formData, setFormData] = useState({
     braidName: "",
     altNames: "",
@@ -55,51 +20,38 @@ export default function BraidGlossaryPage() {
     contributorName: "",
   })
 
-  // Check if Supabase is configured
-  const checkSupabaseConfig = () => {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    return !!(supabaseUrl && supabaseKey)
-  }
-
-  // Fetch braids from database or use mock data
+  // Fetch braids
   const fetchBraids = async () => {
     try {
       setError(null)
-
-      if (!checkSupabaseConfig()) {
-        console.log("Supabase not configured, using mock data")
-        setBraids(mockBraids)
-        setLoading(false)
-        return
-      }
-
-      // Dynamic import to avoid errors when Supabase isn't configured
-      const { supabase } = await import("@/lib/supabase")
-
-      const { data, error } = await supabase.from("braids").select("*").order("created_at", { ascending: false })
-
-      if (error) {
-        console.error("Supabase error:", error)
-        if (error.message.includes("relation") && error.message.includes("does not exist")) {
-          setError("database-not-setup")
-        } else {
-          setError(`Database error: ${error.message}`)
-        }
-        // Fall back to mock data
-        setBraids(mockBraids)
-        return
-      }
-
-      setBraids(data || [])
-      setDatabaseConnected(true)
+      const data = await db.getBraids()
+      setBraids(data)
     } catch (error) {
       console.error("Error fetching braids:", error)
-      setError("connection-failed")
-      // Fall back to mock data
-      setBraids(mockBraids)
+      setError("Failed to load braids")
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Upload image to Cloudflare
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!response.ok) throw new Error("Upload failed")
+
+      const result = await response.json()
+      return result.url
+    } catch (error) {
+      console.error("Upload error:", error)
+      return null
     }
   }
 
@@ -110,66 +62,25 @@ export default function BraidGlossaryPage() {
     setError(null)
 
     try {
-      if (!checkSupabaseConfig()) {
-        // Simulate submission for demo
-        const newBraid: Braid = {
-          id: Date.now().toString(),
-          braid_name: formData.braidName,
-          alt_names: formData.altNames || null,
-          region: formData.region,
-          image_url: formData.imageFile ? "/placeholder.svg?height=200&width=300" : null,
-          public_url: formData.publicUrl || null,
-          contributor_name: formData.contributorName,
-          created_at: new Date().toISOString(),
-        }
+      let imageUrl = null
 
-        setBraids((prev) => [newBraid, ...prev])
-        setError("demo-mode")
-      } else {
-        // Real submission
-        const { supabase } = await import("@/lib/supabase")
-
-        let imageUrl = null
-
-        // Upload image if provided
-        if (formData.imageFile) {
-          const fileExt = formData.imageFile.name.split(".").pop()
-          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-          const filePath = `braids/${fileName}`
-
-          const { error: uploadError } = await supabase.storage.from("images").upload(filePath, formData.imageFile)
-
-          if (uploadError) {
-            console.error("Upload error:", uploadError)
-            throw new Error("Failed to upload image")
-          }
-
-          const { data } = supabase.storage.from("images").getPublicUrl(filePath)
-          imageUrl = data.publicUrl
-        }
-
-        // Insert braid data
-        const { data, error } = await supabase
-          .from("braids")
-          .insert([
-            {
-              braid_name: formData.braidName,
-              alt_names: formData.altNames || null,
-              region: formData.region,
-              image_url: imageUrl,
-              public_url: formData.publicUrl || null,
-              contributor_name: formData.contributorName,
-            },
-          ])
-          .select()
-
-        if (error) {
-          console.error("Insert error:", error)
-          throw error
-        }
-
-        await fetchBraids() // Refresh the gallery
+      // Upload image if provided
+      if (formData.imageFile) {
+        imageUrl = await uploadImage(formData.imageFile)
       }
+
+      // Add braid to database
+      const newBraid = await db.addBraid({
+        braid_name: formData.braidName,
+        alt_names: formData.altNames || undefined,
+        region: formData.region,
+        image_url: imageUrl || undefined,
+        public_url: formData.publicUrl || undefined,
+        contributor_name: formData.contributorName,
+      })
+
+      // Update local state
+      setBraids((prev) => [newBraid, ...prev])
 
       // Reset form
       setFormData({
@@ -205,14 +116,14 @@ export default function BraidGlossaryPage() {
     setFormData((prev) => ({ ...prev, imageFile: file }))
   }
 
-  // Load braids on component mount
+  // Load braids on mount
   useEffect(() => {
     fetchBraids()
   }, [])
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Sticky Submit Button */}
+      {/* Submit Button */}
       <div className="fixed top-6 right-6 z-40">
         <button
           onClick={() => setShowForm(true)}
@@ -226,7 +137,6 @@ export default function BraidGlossaryPage() {
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white p-6 w-full max-w-lg relative rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
-            {/* Close button */}
             <button
               onClick={() => setShowForm(false)}
               className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black"
@@ -236,13 +146,7 @@ export default function BraidGlossaryPage() {
 
             <h2 className="text-xl mb-4 stick-no-bills">Submit a Braid</h2>
 
-            {error === "demo-mode" && (
-              <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded text-blue-700 text-sm">
-                Demo mode: Your submission was added locally. Set up Supabase for persistent storage.
-              </div>
-            )}
-
-            {error && error !== "demo-mode" && error !== "database-not-setup" && (
+            {error && (
               <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
             )}
 
@@ -276,16 +180,12 @@ export default function BraidGlossaryPage() {
                 required
               />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">Upload Image</label>
-                <input
-                  type="file"
-                  name="imageFile"
-                  onChange={handleFileChange}
-                  accept="image/*"
-                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-                />
-              </div>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+              />
 
               <input
                 type="url"
@@ -329,36 +229,6 @@ export default function BraidGlossaryPage() {
             Traditional braiding patterns from around the world
           </p>
         </div>
-
-        {/* Setup Instructions */}
-        {error === "database-not-setup" && (
-          <div className="mb-6 p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <h3 className="text-lg font-semibold text-yellow-800 mb-3 stick-no-bills">Database Setup Required</h3>
-            <div className="text-yellow-700 stick-no-bills text-sm space-y-2">
-              <p>To enable persistent storage, please:</p>
-              <ol className="list-decimal list-inside space-y-1 ml-4">
-                <li>
-                  Create a Supabase project at{" "}
-                  <a href="https://supabase.com" className="text-blue-600 underline">
-                    supabase.com
-                  </a>
-                </li>
-                <li>Run the SQL script provided in the code</li>
-                <li>Add your environment variables</li>
-                <li>Create an "images" storage bucket</li>
-              </ol>
-              <p className="mt-3 text-xs">Currently showing sample data. Form submissions work in demo mode.</p>
-            </div>
-          </div>
-        )}
-
-        {!checkSupabaseConfig() && (
-          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-700 stick-no-bills text-sm text-center">
-              <strong>Demo Mode:</strong> Supabase not configured. Showing sample data.
-            </p>
-          </div>
-        )}
 
         {loading ? (
           <div className="text-center py-12">
@@ -406,18 +276,6 @@ export default function BraidGlossaryPage() {
                 </div>
               </div>
             ))}
-          </div>
-        )}
-
-        {!loading && braids.length === 0 && (
-          <div className="text-center py-12">
-            <div className="stick-no-bills text-gray-500 mb-4">No braids submitted yet</div>
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors stick-no-bills text-base font-light"
-            >
-              Be the first to submit!
-            </button>
           </div>
         )}
       </div>
