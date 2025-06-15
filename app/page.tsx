@@ -68,7 +68,7 @@ export default function Component() {
     },
     {
       id: "ethnomathematics",
-      label: "THNOMATHEMATICS",
+      label: "ETHNOMATHEMATICS",
       x: 90,
       y: 65,
       size: 100,
