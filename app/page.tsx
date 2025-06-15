@@ -169,7 +169,7 @@ export default function Component() {
                     r={node.size / 20}
                     fill="black"
                     stroke="black" strokeWidth="0.2"
-                    className="cursor-grab hover:scale-110 active:cursor-grabbing"
+                    className="cursor-grab active:cursor-grabbing"
                     onMouseDown={(e) => handleDragStart(e, node.id)}
                     onTouchStart={(e) => handleDragStart(e, node.id)}
                   />
@@ -181,7 +181,7 @@ export default function Component() {
                   fill="black"
                   stroke="black"
                   strokeWidth="0.2"
-                  className="cursor-pointer hover:scale-110"
+                  className="cursor-pointer "
                   onMouseDown={(e) => handleDragStart(e, node.id)}
                   onTouchStart={(e) => handleDragStart(e, node.id)}
                   onClick={() => handleNodeClick(node)}
@@ -192,7 +192,7 @@ export default function Component() {
                   width={node.size / 20} height={node.size / 20}
                   fill="white"
                   stroke="black" strokeWidth="0.2"
-                  className="cursor-grab hover:scale-110 active:cursor-grabbing"
+                  className="cursor-grab  active:cursor-grabbing"
                   onMouseDown={(e) => handleDragStart(e, node.id)}
                   onTouchStart={(e) => handleDragStart(e, node.id)}
                 />
