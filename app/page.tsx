@@ -167,7 +167,7 @@ export default function Component() {
                   <circle
                     cx={node.x} cy={node.y}
                     r={node.size / 20}
-                    fill="yellow"
+                    fill="black"
                     stroke="black" strokeWidth="0.2"
                     className="cursor-grab hover:scale-110 active:cursor-grabbing"
                     onMouseDown={(e) => handleDragStart(e, node.id)}

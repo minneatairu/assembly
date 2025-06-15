@@ -9,6 +9,16 @@ export default function BraidGlossaryPage() {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* -------- Form Modal -------- */}
+      {/* Sticky Submit Button */}
+<div className="fixed top-6 right-6 z-40">
+  <button
+    onClick={() => setShowForm(true)}
+    className="bg-black text-white text-sm px-4 py-2 rounded-full shadow hover:bg-gray-800 stick-no-bills"
+  >
+    Submit Braid
+  </button>
+</div>
+
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center ">
           <div className="bg-white  w-full max-w-lg relative">
@@ -31,14 +41,14 @@ export default function BraidGlossaryPage() {
                 type="text"
                 name="braidName"
                 placeholder="Braid name"
-                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                className="w-full px-4 py-3 border  bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
                 required
               />
                     <input
                 type="text"
                 name="braidName"
                 placeholder="ALT name"
-                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                className="w-full px-4 py-3 border  bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
                 required
               />
 
@@ -48,7 +58,7 @@ export default function BraidGlossaryPage() {
                 type="text"
                 name="braidName"
                 placeholder="https"
-                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                className="w-full px-4 py-3 border  bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
                 required
               />
 
@@ -56,7 +66,7 @@ export default function BraidGlossaryPage() {
                 type="text"
                 name="braidName"
                 placeholder="upload here"
-                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                className="w-full px-4 py-3 border  bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
                 required
               />
 
@@ -64,7 +74,7 @@ export default function BraidGlossaryPage() {
                 type="text"
                 name="braidName"
                 placeholder="your name"
-                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                className="w-full px-4 py-3 border  bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
                 required
               />
               {/* Add more fields here */}
