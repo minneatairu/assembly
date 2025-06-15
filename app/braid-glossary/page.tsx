@@ -35,6 +35,29 @@ export default function BraidGlossaryPage() {
                 className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
                 required
               />
+                    <input
+                type="text"
+                name="braidName"
+                placeholder="ALT name"
+                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                required
+              />
+
+                    <input
+                type="text"
+                name="braidName"
+                placeholder="Region"
+                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                required
+              />
+
+                    <input
+                type="text"
+                name="braidName"
+                placeholder="https"
+                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
+                required
+              />
               {/* Add more fields here */}
               <button
                 type="submit"
