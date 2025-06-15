@@ -88,7 +88,6 @@ export default function BraidGlossaryPage() {
 
       {/* -------- Gallery Behind -------- */}
       <div className="pt-24 px-6 max-w-4xl mx-auto">
-        <h1 className="text-3xl stick-no-bills mb-6">Braid Submissions</h1>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {/* Example image gallery */}
