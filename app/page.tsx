@@ -210,7 +210,7 @@ export default function Component() {
                   paintOrder: "stroke",
                   stroke: "#f8fafc",
                   strokeWidth: 2.5,
-                  fill: node.link ? "#2563eb" : "#000",
+                  fill: node.link ? "#000" : "#000",
                   cursor: node.link ? "pointer" : "default",
        
                 }}
