@@ -10,6 +10,7 @@ export default function BraidGlossaryPage() {
   const [braids, setBraids] = useState<Braid[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     braidName: "",
     altNames: "",
@@ -22,12 +23,23 @@ export default function BraidGlossaryPage() {
   // Fetch braids from database
   const fetchBraids = async () => {
     try {
+      setError(null)
       const { data, error } = await supabase.from("braids").select("*").order("created_at", { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        console.error("Supabase error:", error)
+        if (error.message.includes("relation") && error.message.includes("does not exist")) {
+          setError("Database table not found. Please run the setup script first.")
+        } else {
+          setError(`Database error: ${error.message}`)
+        }
+        return
+      }
+
       setBraids(data || [])
     } catch (error) {
       console.error("Error fetching braids:", error)
+      setError("Failed to connect to database. Please check your configuration.")
     } finally {
       setLoading(false)
     }
@@ -37,15 +49,17 @@ export default function BraidGlossaryPage() {
   const uploadImage = async (file: File): Promise<string | null> => {
     try {
       const fileExt = file.name.split(".").pop()
-      const fileName = `${Math.random()}.${fileExt}`
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
       const filePath = `braids/${fileName}`
 
       const { error: uploadError } = await supabase.storage.from("images").upload(filePath, file)
 
-      if (uploadError) throw uploadError
+      if (uploadError) {
+        console.error("Upload error:", uploadError)
+        throw uploadError
+      }
 
       const { data } = supabase.storage.from("images").getPublicUrl(filePath)
-
       return data.publicUrl
     } catch (error) {
       console.error("Error uploading image:", error)
@@ -57,6 +71,7 @@ export default function BraidGlossaryPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
+    setError(null)
 
     try {
       let imageUrl = null
@@ -64,6 +79,9 @@ export default function BraidGlossaryPage() {
       // Upload image if provided
       if (formData.imageFile) {
         imageUrl = await uploadImage(formData.imageFile)
+        if (!imageUrl) {
+          throw new Error("Failed to upload image")
+        }
       }
 
       // Insert braid data
@@ -81,7 +99,10 @@ export default function BraidGlossaryPage() {
         ])
         .select()
 
-      if (error) throw error
+      if (error) {
+        console.error("Insert error:", error)
+        throw error
+      }
 
       // Reset form and refresh data
       setFormData({
@@ -93,11 +114,15 @@ export default function BraidGlossaryPage() {
         contributorName: "",
       })
 
+      // Reset file input
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+      if (fileInput) fileInput.value = ""
+
       setShowForm(false)
       await fetchBraids() // Refresh the gallery
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting braid:", error)
-      alert("Error submitting braid. Please try again.")
+      setError(`Submission failed: ${error.message}`)
     } finally {
       setSubmitting(false)
     }
@@ -134,7 +159,7 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 w-full max-w-lg relative rounded-lg shadow-xl">
+          <div className="bg-white p-6 w-full max-w-lg relative rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
             {/* Close button */}
             <button
               onClick={() => setShowForm(false)}
@@ -144,6 +169,10 @@ export default function BraidGlossaryPage() {
             </button>
 
             <h2 className="text-xl mb-4 stick-no-bills">Submit a Braid</h2>
+
+            {error && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -175,20 +204,23 @@ export default function BraidGlossaryPage() {
                 required
               />
 
-              <input
-                type="file"
-                name="imageFile"
-                onChange={handleFileChange}
-                accept="image/*"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">Upload Image</label>
+                <input
+                  type="file"
+                  name="imageFile"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                />
+              </div>
 
               <input
                 type="url"
                 name="publicUrl"
                 value={formData.publicUrl}
                 onChange={handleInputChange}
-                placeholder="https://example.com"
+                placeholder="https://example.com (optional)"
                 className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
               />
 
@@ -226,11 +258,26 @@ export default function BraidGlossaryPage() {
           </p>
         </div>
 
+        {error && (
+          <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded text-red-700 text-center">
+            <p className="stick-no-bills">{error}</p>
+            <p className="text-sm mt-2 stick-no-bills">
+              Please make sure you have:
+              <br />
+              1. Created a Supabase project
+              <br />
+              2. Run the database setup script
+              <br />
+              3. Added your environment variables
+            </p>
+          </div>
+        )}
+
         {loading ? (
           <div className="text-center py-12">
             <div className="stick-no-bills text-gray-500">Loading braids...</div>
           </div>
-        ) : (
+        ) : !error ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {braids.map((braid) => (
               <div
@@ -242,6 +289,10 @@ export default function BraidGlossaryPage() {
                     src={braid.image_url || "/placeholder.svg"}
                     alt={braid.braid_name}
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.src = "/placeholder.svg?height=192&width=384"
+                    }}
                   />
                 ) : (
                   <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
@@ -269,9 +320,9 @@ export default function BraidGlossaryPage() {
               </div>
             ))}
           </div>
-        )}
+        ) : null}
 
-        {!loading && braids.length === 0 && (
+        {!loading && !error && braids.length === 0 && (
           <div className="text-center py-12">
             <div className="stick-no-bills text-gray-500 mb-4">No braids submitted yet</div>
             <button
