@@ -58,7 +58,7 @@ export default function Component() {
     },
     {
       id: "glossary",
-      label: "Braid Glossary",
+      label: "BRAID GLOSSARY",
       x: 90,
       y: 35,
       size: 100,
