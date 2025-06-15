@@ -154,7 +154,7 @@ export default function Component() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="relative w-full max-w-[800px] aspect-[4/3] p-8">
         <svg
-          viewBox="0 0 100 100"
+          viewBox="0 0 200 100"
           className="w-full h-full select-none"
           onMouseMove={handleMove}
           onMouseUp={endDrag}
