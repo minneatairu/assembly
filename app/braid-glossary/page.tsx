@@ -11,7 +11,7 @@ export default function BraidGlossaryPage() {
       {/* -------- Form Modal -------- */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center ">
-          <div className="bg-white p-6  shadow-lg w-full max-w-lg relative">
+          <div className="bg-white  w-full max-w-lg relative">
             {/* Close button */}
             <button
               onClick={() => setShowForm(false)}
@@ -21,13 +21,12 @@ export default function BraidGlossaryPage() {
             </button>
 
             {/* Form content here */}
-            <h2 className="text-2xl mb-4 stick-no-bills text-center">SUBMIT A BRAID</h2>
 
             <form onSubmit={(e) => {
               e.preventDefault()
               // Handle submit
               setShowForm(false) // optionally close on submit
-            }} className="space-y-4">
+            }} >
               <input
                 type="text"
                 name="braidName"
@@ -43,13 +42,7 @@ export default function BraidGlossaryPage() {
                 required
               />
 
-                    <input
-                type="text"
-                name="braidName"
-                placeholder="Region"
-                className="w-full px-4 py-3 border border-gray-300 bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
-                required
-              />
+
 
                     <input
                 type="text"
