@@ -1,7 +1,13 @@
 "use client"
 
+// You’ll need to install Framer Motion:
+// npm i framer-motion
+// or
+// yarn add framer-motion
+
 import type React from "react"
 import { useEffect, useState, useCallback } from "react"
+import { motion } from "framer-motion"
 
 interface Node {
   id: string
@@ -23,11 +29,12 @@ interface Connection {
 }
 
 export default function Component() {
-  const [mounted, setMounted] = useState(false)
+  // ─────────────────────────────────── Local state
   const [draggedNode, setDraggedNode] = useState<string | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [hoveredNode, setHoveredNode] = useState<string | null>(null)
 
+  // ─────────────────────────────────── Nodes
   const [nodes, setNodes] = useState<Node[]>([
     {
       id: "data-assembly",
@@ -94,18 +101,21 @@ export default function Component() {
     { from: "braids", to: "ethnomathematics" },
   ]
 
-  useEffect(() => setMounted(true), [])
-
+  // ─────────────────────────────────── Handlers
   const handleNodeClick = (node: Node) => {
     if (node.link) window.location.href = node.link
   }
 
-  const handleDragStart = (e: React.MouseEvent | React.TouchEvent, nodeId: string) => {
+  /** Begin drag */
+  const handleDragStart = (
+    e: React.MouseEvent | React.TouchEvent,
+    nodeId: string,
+  ) => {
     e.preventDefault()
     const svg = (e.currentTarget as HTMLElement).closest("svg")
     if (!svg) return
     const rect = svg.getBoundingClientRect()
-    const point = 'touches' in e ? e.touches[0] : e as React.MouseEvent
+    const point = "touches" in e ? e.touches[0] : (e as React.MouseEvent)
     const node = nodes.find((n) => n.id === nodeId)
     if (!node) return
     const svgX = ((point.clientX - rect.left) / rect.width) * 100
@@ -114,17 +124,24 @@ export default function Component() {
     setDragOffset({ x: svgX - node.x, y: svgY - node.y })
   }
 
-  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
+  /** Drag move (with fluid spring) */
+  const handleMove = (
+    e: React.MouseEvent | React.TouchEvent,
+  ) => {
     if (!draggedNode) return
     e.preventDefault()
     const svg = e.currentTarget as SVGSVGElement
     const rect = svg.getBoundingClientRect()
-    const point = 'touches' in e ? e.touches[0] : e as React.MouseEvent
+    const point = "touches" in e ? e.touches[0] : (e as React.MouseEvent)
     const svgX = ((point.clientX - rect.left) / rect.width) * 100
     const svgY = ((point.clientY - rect.top) / rect.height) * 100
     const newX = Math.max(5, Math.min(95, svgX - dragOffset.x))
     const newY = Math.max(5, Math.min(95, svgY - dragOffset.y))
-    setNodes((prev) => prev.map((n) => n.id === draggedNode ? { ...n, x: newX, y: newY } : n))
+    setNodes((prev) =>
+      prev.map((n) =>
+        n.id === draggedNode ? { ...n, x: newX, y: newY } : n,
+      ),
+    )
   }
 
   const endDrag = () => {
@@ -132,6 +149,7 @@ export default function Component() {
     setDragOffset({ x: 0, y: 0 })
   }
 
+  // ─────────────────────────────────── SVG
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="relative w-full max-w-[800px] aspect-[4/3] p-8">
@@ -144,127 +162,155 @@ export default function Component() {
           onTouchMove={handleMove}
           onTouchEnd={endDrag}
         >
-          {connections.map((conn, i) => {
-            const from = nodes.find(n => n.id === conn.from)
-            const to = nodes.find(n => n.id === conn.to)
+          {/* ───── Lines */}
+          {connections.map((conn) => {
+            const from = nodes.find((n) => n.id === conn.from)
+            const to = nodes.find((n) => n.id === conn.to)
             if (!from || !to) return null
             const isChild = to.parent === from.id
             return (
-              <line
+              <motion.line
                 key={`${conn.from}-${conn.to}`}
-                x1={from.x} y1={from.y} x2={to.x} y2={to.y}
+                x1={from.x}
+                y1={from.y}
+                x2={to.x}
+                y2={to.y}
                 stroke="black"
                 strokeWidth="0.2"
                 strokeDasharray={isChild ? "1 0.5" : undefined}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
               />
             )
           })}
 
-          {nodes.map((node, i) => (
-            <g key={node.id}>
+          {/* ───── Nodes */}
+          {nodes.map((node) => (
+            <motion.g
+              key={node.id}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                transition: { type: "spring", stiffness: 120, damping: 12 },
+              }}
+            >
+              {/* Shape */}
               {node.primary ? (
-                <>
-                  <circle
-                    cx={node.x} cy={node.y}
-                    r={node.size / 20}
-                    fill="black"
-                    stroke="black" strokeWidth="0.2"
-                    className="cursor-grab active:cursor-grabbing"
-                    onMouseDown={(e) => handleDragStart(e, node.id)}
-                    onTouchStart={(e) => handleDragStart(e, node.id)}
-                  />
-                  <circle cx={node.x} cy={node.y} r="0.8" fill="#32cd32" className="animate-blink" />
-                </>
-              ) : node.parent ? (
-                <polygon
-                  points={`${node.x},${node.y - ((node.size / 40) * Math.sqrt(3)) / 2} ${node.x - node.size / 40},${node.y + ((node.size / 40) * Math.sqrt(3)) / 2} ${node.x + node.size / 40},${node.y + ((node.size / 40) * Math.sqrt(3)) / 2}`}
+                <motion.circle
+                  cx={node.x}
+                  cy={node.y}
+                  r={node.size / 20}
                   fill="black"
                   stroke="black"
                   strokeWidth="0.2"
-                  className="cursor-pointer "
-                  onMouseDown={(e) => handleDragStart(e, node.id)}
-                  onTouchStart={(e) => handleDragStart(e, node.id)}
+                  whileHover={{ scale: 1.05 }}
+                  onPointerDown={(e) => handleDragStart(e, node.id)}
+                />
+              ) : node.parent ? (
+                <motion.polygon
+                  points={`${node.x},${
+                    node.y - ((node.size / 40) * Math.sqrt(3)) / 2
+                  } ${node.x - node.size / 40},${
+                    node.y + ((node.size / 40) * Math.sqrt(3)) / 2
+                  } ${node.x + node.size / 40},${
+                    node.y + ((node.size / 40) * Math.sqrt(3)) / 2
+                  }`}
+                  fill="black"
+                  stroke="black"
+                  strokeWidth="0.2"
+                  whileHover={{ scale: 1.05 }}
+                  onPointerDown={(e) => handleDragStart(e, node.id)}
                   onClick={() => handleNodeClick(node)}
                 />
               ) : (
-                <rect
-                  x={node.x - node.size / 40} y={node.y - node.size / 40}
-                  width={node.size / 20} height={node.size / 20}
+                <motion.rect
+                  x={node.x - node.size / 40}
+                  y={node.y - node.size / 40}
+                  width={node.size / 20}
+                  height={node.size / 20}
                   fill="white"
-                  stroke="black" strokeWidth="0.2"
-                  className="cursor-grab  active:cursor-grabbing"
-                  onMouseDown={(e) => handleDragStart(e, node.id)}
-                  onTouchStart={(e) => handleDragStart(e, node.id)}
+                  stroke="black"
+                  strokeWidth="0.2"
+                  whileHover={{ scale: 1.05 }}
+                  onPointerDown={(e) => handleDragStart(e, node.id)}
                 />
-                
               )}
-{!node.primary && !node.parent && (node.id === "benin" || node.id === "braids") && (
-  <text
-    x={node.x}
-    y={node.y}
-    textAnchor="middle"
-    dominantBaseline="middle"
-    className="fill-black font-bold pointer-events-none stick-no-bills"
-    style={{ fontSize: "3px" }}
-  >
-    {node.id === "benin" ? "1" : "2"}
-  </text>
-)}
 
-              {/* Label with optional line break for Benin */}
-              <text
+              {/* Number */}
+              {!node.primary && !node.parent && (
+                <motion.text
+                  x={node.x}
+                  y={node.y}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="fill-black font-bold stick-no-bills pointer-events-none"
+                  style={{ fontSize: "3px" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  {node.id === "benin" ? "1" : node.id === "braids" ? "2" : ""}
+                </motion.text>
+              )}
+
+              {/* Label */}
+              <motion.text
                 x={node.x}
                 y={node.y + node.size / 20 + 4}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                 className="fill-gray-600 stick-no-bills"
-                style={{
-                  fontSize: "5px",
-                  paintOrder: "stroke",
-                  stroke: "#f8fafc",
-                  strokeWidth: 2.5,
-                  fill: node.link ? "#000" : "#000",
-                  cursor: node.link ? "pointer" : "default",
-       
-                }}
+                className="fill-gray-900 stick-no-bills"
+                style={{ fontSize: "5px", paintOrder: "stroke", stroke: "#f8fafc", strokeWidth: 2.5 }}
+                onPointerEnter={() => setHoveredNode(node.id)}
+                onPointerLeave={() => setHoveredNode(null)}
                 onClick={() => handleNodeClick(node)}
+                animate={{ cx: node.x, cy: node.y }}
               >
                 {node.id === "benin" && node.year ? (
                   <>
-                    <tspan x={node.x} dy="-4">{node.year}</tspan>
-                    <tspan x={node.x} dy="6">{node.label}</tspan>
+                    <tspan x={node.x} dy="-4">
+                      {node.year}
+                    </tspan>
+                    <tspan x={node.x} dy="6">
+                      {node.label}
+                    </tspan>
                   </>
                 ) : (
                   node.label
                 )}
-              </text>
+              </motion.text>
 
-              {/* Subtitle on hover */}
+              {/* Subtitle */}
               {hoveredNode === node.id && node.subtitle && (
-                <text
+                <motion.text
                   x={node.x}
                   y={node.y + node.size / 20 + 10}
                   textAnchor="middle"
                   className="fill-gray-600 stick-no-bills"
                   style={{ fontSize: "5px" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duration: 0.2 } }}
                 >
                   {node.subtitle}
-                </text>
+                </motion.text>
               )}
 
-              {/* Author (for primary) */}
+              {/* Author */}
               {node.primary && node.author && (
-                <text
+                <motion.text
                   x={node.x}
                   y={node.y + node.size / 20 + 7}
                   textAnchor="middle"
                   className="fill-gray-500 stick-no-bills"
                   style={{ fontSize: "5px" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { delay: 0.3 } }}
                 >
                   {node.author}
-                </text>
+                </motion.text>
               )}
-            </g>
+            </motion.g>
           ))}
         </svg>
       </div>
