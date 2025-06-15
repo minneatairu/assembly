@@ -6,12 +6,13 @@ import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
 
 export default function BraidGlossaryPage() {
-  const [showForm, setShowForm] = useState(true)
+  const [showForm, setShowForm] = useState(false)
   const [braids, setBraids] = useState<Braid[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
+  const [demoStatus, setDemoStatus] = useState<{ isDemo: boolean; reason?: string }>({ isDemo: false })
   const [formData, setFormData] = useState({
     braidName: "",
     altNames: "",
@@ -27,9 +28,17 @@ export default function BraidGlossaryPage() {
       setError(null)
       const data = await db.getBraids()
       setBraids(data)
+
+      // Check demo status
+      const status = db.getDemoStatus()
+      setDemoStatus(status)
     } catch (error) {
       console.error("Error fetching braids:", error)
       setError("Failed to load braids")
+
+      // Still check demo status
+      const status = db.getDemoStatus()
+      setDemoStatus(status)
     } finally {
       setLoading(false)
     }
@@ -149,6 +158,15 @@ export default function BraidGlossaryPage() {
         </button>
       </div>
 
+      {/* Demo Mode Banner */}
+      {demoStatus.isDemo && (
+        <div className="fixed top-0 left-0 right-0 bg-yellow-100 border-b border-yellow-300 px-4 py-2 text-center z-30">
+          <span className="text-yellow-800 stick-no-bills text-sm">
+            🚧 Demo Mode: {demoStatus.reason} - Submissions are temporary
+          </span>
+        </div>
+      )}
+
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -161,6 +179,12 @@ export default function BraidGlossaryPage() {
             </button>
 
             <h2 className="text-xl mb-4 stick-no-bills">Submit a Braid</h2>
+
+            {demoStatus.isDemo && (
+              <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
+                <strong>Demo Mode:</strong> Your submission will be temporary. Set up a database for permanent storage.
+              </div>
+            )}
 
             {error && (
               <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
@@ -245,17 +269,21 @@ export default function BraidGlossaryPage() {
               </button>
             </form>
 
-            {/* Configuration hint */}
-            <div className="mt-4 p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
-              <strong>Tip:</strong> Add CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to enable real image uploads.
-              Currently using demo mode.
+            {/* Configuration hints */}
+            <div className="mt-4 space-y-2">
+              <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
+                <strong>Database:</strong> {demoStatus.isDemo ? "Not configured (demo mode)" : "Connected"}
+              </div>
+              <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
+                <strong>Images:</strong> Add CLOUDFLARE_* env vars for real uploads
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* Gallery */}
-      <div className="pt-24 px-6 max-w-6xl mx-auto">
+      <div className={`pt-24 px-6 max-w-6xl mx-auto ${demoStatus.isDemo ? "pt-32" : ""}`}>
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-6 text-blue-600 hover:text-blue-800 stick-no-bills text-lg">
             ← Back to Data Assembly
