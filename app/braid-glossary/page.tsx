@@ -4,6 +4,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
+import { Plus, Upload } from "lucide-react"
 
 export default function BraidGlossaryPage() {
   const [showForm, setShowForm] = useState(false)
@@ -31,12 +32,15 @@ export default function BraidGlossaryPage() {
   const audioChunksRef = useRef<Blob[]>([])
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
+  // Drag and drop states
+  const [isDragOver, setIsDragOver] = useState(false)
+
   const [formData, setFormData] = useState({
     braidName: "",
     altNames: "",
     region: "",
     imageFile: null as File | null,
-    imageUrl: "", // URL alternative to file upload
+    imageUrl: "",
     contributorName: "",
   })
 
@@ -79,6 +83,30 @@ export default function BraidGlossaryPage() {
     document.addEventListener("keydown", handleEscape)
     return () => document.removeEventListener("keydown", handleEscape)
   }, [showImageModal, showInfoModal, showForm])
+
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+    const files = e.dataTransfer.files
+    if (files.length > 0) {
+      const file = files[0]
+      if (file.type.startsWith("image/")) {
+        setFormData((prev) => ({ ...prev, imageFile: file, imageUrl: "" }))
+        setUploadStatus(null)
+      }
+    }
+  }
 
   // Toggle audio playback for gallery items
   const toggleAudio = (braidId: string | number, audioUrl: string) => {
@@ -379,7 +407,7 @@ export default function BraidGlossaryPage() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null
-    setFormData((prev) => ({ ...prev, imageFile: file }))
+    setFormData((prev) => ({ ...prev, imageFile: file, imageUrl: "" }))
     setUploadStatus(null) // Clear previous upload status
   }
 
@@ -409,6 +437,16 @@ export default function BraidGlossaryPage() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Plus Button */}
+      <div className="fixed top-6 right-6 z-40">
+        <button
+          onClick={() => setShowForm(true)}
+          className="w-12 h-12 bg-black text-white rounded-full shadow-lg hover:bg-gray-800 flex items-center justify-center transition-colors"
+        >
+          <Plus size={24} />
+        </button>
+      </div>
+
       {/* Demo Mode Banner */}
       {demoStatus.isDemo && (
         <div className="fixed top-0 left-0 right-0 bg-yellow-100 border-b border-yellow-300 px-4 py-2 text-center z-30">
@@ -421,193 +459,198 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="bg-white p-6 w-full max-w-lg relative shadow-xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowForm(false)}
-              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black"
+              className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 z-10"
             >
-              ✕
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
 
-            <h2 className="text-xl mb-4 stick-no-bills">Submit a Braid</h2>
-
-            {demoStatus.isDemo && (
-              <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm">
-                <strong>Demo Mode:</strong> Your submission will be temporary. Set up a database for permanent storage.
-              </div>
-            )}
-
-            {error && <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 text-sm">{error}</div>}
-
-            {uploadStatus && (
-              <div
-                className={`mb-4 p-3 text-sm ${
-                  uploadStatus.includes("failed") || uploadStatus.includes("error")
-                    ? "bg-orange-100 border border-orange-300 text-orange-700"
-                    : uploadStatus.includes("successfully")
-                      ? "bg-green-100 border border-green-300 text-green-700"
-                      : "bg-blue-100 border border-blue-300 text-blue-700"
-                }`}
-              >
-                {uploadStatus}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                name="braidName"
-                value={formData.braidName}
-                onChange={handleInputChange}
-                placeholder="Braid name"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
-                required
-              />
-
-              <input
-                type="text"
-                name="altNames"
-                value={formData.altNames}
-                onChange={handleInputChange}
-                placeholder="Alternative names"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
-              />
-
-              <input
-                type="text"
-                name="region"
-                value={formData.region}
-                onChange={handleInputChange}
-                placeholder="Region"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
-                required
-              />
-
-              {/* Image Upload Section */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">Image (optional)</label>
-
-                {/* File Upload */}
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  accept="image/*"
-                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base mb-2"
-                />
-                {formData.imageFile && (
-                  <p className="text-sm text-gray-600 mb-2 stick-no-bills">Selected: {formData.imageFile.name}</p>
-                )}
-
-                {/* URL Alternative */}
-                <div className="text-center text-gray-500 text-sm stick-no-bills mb-2">or</div>
-                <input
-                  type="url"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
-                  disabled={!!formData.imageFile} // Disable if file is selected
-                />
-                {formData.imageFile && (
-                  <p className="text-xs text-gray-500 mt-1 stick-no-bills">Clear the file above to use URL instead</p>
-                )}
-              </div>
-
-              {/* Audio Recording Section */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
-                  Pronunciation (optional)
-                </label>
-
-                {!audioSupported ? (
-                  <div className="p-3 bg-gray-100 text-gray-600 text-sm stick-no-bills">
-                    Audio recording not supported in this browser
+            <div className="flex">
+              {/* Left Side - Upload Area */}
+              <div className="w-1/2 p-8 bg-gray-50">
+                <div
+                  className={`relative h-80 bg-gray-200 rounded-3xl border-2 border-dashed transition-colors ${
+                    isDragOver ? "border-blue-400 bg-blue-50" : "border-gray-300"
+                  } flex flex-col items-center justify-center cursor-pointer`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => document.getElementById("file-input")?.click()}
+                >
+                  <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
+                    <Upload className="text-white" size={24} />
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    {/* Recording Controls */}
-                    <div className="flex items-center gap-3">
-                      {!isRecording && !audioBlob && (
-                        <button
-                          type="button"
-                          onClick={startRecording}
-                          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white hover:bg-red-700 stick-no-bills text-sm"
-                        >
-                          🎤 Record Pronunciation
-                        </button>
-                      )}
+                  <p className="text-gray-700 text-center font-medium">
+                    {formData.imageFile ? formData.imageFile.name : "Choose a file or drag and drop it here"}
+                  </p>
+                  <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
+                </div>
+                <p className="text-gray-500 text-sm text-center mt-4">
+                  We recommend using high quality .jpg files less than 20 MB or .mp4 files less than 200 MB.
+                </p>
 
-                      {isRecording && (
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={stopRecording}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white hover:bg-gray-700 stick-no-bills text-sm"
-                          >
-                            ⏹️ Stop Recording
-                          </button>
-                          <span className="text-red-600 stick-no-bills text-sm font-mono">
-                            🔴 {formatTime(recordingTime)}
-                          </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const url = prompt("Enter image URL:")
+                    if (url) {
+                      setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
+                    }
+                  }}
+                  className="w-full mt-6 py-3 bg-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-400 transition-colors"
+                >
+                  Save from URL
+                </button>
+
+                {formData.imageUrl && (
+                  <p className="text-sm text-gray-600 mt-2 text-center">Using URL: {formData.imageUrl}</p>
+                )}
+              </div>
+
+              {/* Right Side - Form Fields */}
+              <div className="w-1/2 p-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Title */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Braid Name</label>
+                    <input
+                      type="text"
+                      name="braidName"
+                      value={formData.braidName}
+                      onChange={handleInputChange}
+                      placeholder="Add a braid name"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Alternative Names</label>
+                    <textarea
+                      name="altNames"
+                      value={formData.altNames}
+                      onChange={handleInputChange}
+                      placeholder="Add alternative names or detailed description"
+                      rows={4}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    />
+                  </div>
+
+                  {/* Region */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                    <input
+                      type="text"
+                      name="region"
+                      value={formData.region}
+                      onChange={handleInputChange}
+                      placeholder="Add region or cultural origin"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  {/* Contributor */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Contributor</label>
+                    <input
+                      type="text"
+                      name="contributorName"
+                      value={formData.contributorName}
+                      onChange={handleInputChange}
+                      placeholder="Your name"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  {/* Audio Recording */}
+                  {audioSupported && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Pronunciation (Optional)</label>
+                      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                        <div className="flex items-center gap-3 mb-3">
+                          {!isRecording && !audioBlob && (
+                            <button
+                              type="button"
+                              onClick={startRecording}
+                              className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-sm font-medium"
+                            >
+                              🎤 Record
+                            </button>
+                          )}
+
+                          {isRecording && (
+                            <div className="flex items-center gap-3">
+                              <button
+                                type="button"
+                                onClick={stopRecording}
+                                className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 text-sm font-medium"
+                              >
+                                ⏹️ Stop
+                              </button>
+                              <span className="text-red-600 text-sm font-mono">🔴 {formatTime(recordingTime)}</span>
+                            </div>
+                          )}
+
+                          {audioBlob && (
+                            <div className="flex items-center gap-3">
+                              <button
+                                type="button"
+                                onClick={clearRecording}
+                                className="px-3 py-1 bg-gray-400 text-white rounded-full hover:bg-gray-500 text-sm"
+                              >
+                                Clear
+                              </button>
+                              <span className="text-green-600 text-sm">✓ Recorded ({formatTime(recordingTime)})</span>
+                            </div>
+                          )}
                         </div>
-                      )}
 
-                      {audioBlob && (
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={clearRecording}
-                            className="px-3 py-1 bg-gray-500 text-white hover:bg-gray-600 stick-no-bills text-sm"
-                          >
-                            Clear
-                          </button>
-                          <span className="text-green-600 stick-no-bills text-sm">
-                            ✓ Recorded ({formatTime(recordingTime)})
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Audio Playback */}
-                    {audioUrl && (
-                      <div className="p-3 bg-gray-50">
-                        <audio controls className="w-full">
-                          <source src={audioUrl} type="audio/webm" />
-                          Your browser does not support audio playback.
-                        </audio>
+                        {audioUrl && (
+                          <audio controls className="w-full">
+                            <source src={audioUrl} type="audio/webm" />
+                            Your browser does not support audio playback.
+                          </audio>
+                        )}
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  )}
 
-              <input
-                type="text"
-                name="contributorName"
-                value={formData.contributorName}
-                onChange={handleInputChange}
-                placeholder="Your name"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base"
-                required
-              />
+                  {/* Status Messages */}
+                  {error && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm">{error}</div>
+                  )}
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-blue-600 text-white py-3 hover:bg-blue-700 stick-no-bills text-lg font-light disabled:opacity-50"
-              >
-                {submitting ? "Submitting..." : "Submit"}
-              </button>
-            </form>
+                  {uploadStatus && (
+                    <div
+                      className={`p-4 rounded-2xl text-sm ${
+                        uploadStatus.includes("failed") || uploadStatus.includes("error")
+                          ? "bg-orange-50 border border-orange-200 text-orange-700"
+                          : uploadStatus.includes("successfully")
+                            ? "bg-green-50 border border-green-200 text-green-700"
+                            : "bg-blue-50 border border-blue-200 text-blue-700"
+                      }`}
+                    >
+                      {uploadStatus}
+                    </div>
+                  )}
 
-            {/* Configuration hints */}
-            <div className="mt-4 space-y-2">
-              <div className="p-3 bg-gray-50 text-gray-600 text-xs stick-no-bills">
-                <strong>Database:</strong> {demoStatus.isDemo ? "Not configured (demo mode)" : "Connected"}
-              </div>
-              <div className="p-3 bg-gray-50 text-gray-600 text-xs stick-no-bills">
-                <strong>Files:</strong> Add CLOUDFLARE_* env vars for real uploads
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full bg-red-500 text-white py-4 rounded-2xl font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? "Publishing..." : "Publish"}
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -729,12 +772,6 @@ export default function BraidGlossaryPage() {
               className="bg-gray-600 text-white py-2 px-4 hover:bg-gray-700 transition-colors stick-no-bills text-base font-light"
             >
               Learn More
-            </button>
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-black text-white py-2 px-4 hover:bg-gray-800 transition-colors stick-no-bills text-base font-light"
-            >
-              Submit a Braid
             </button>
           </div>
         </div>
