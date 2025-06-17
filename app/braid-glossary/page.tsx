@@ -611,7 +611,7 @@ export default function BraidGlossaryPage() {
             {braids.map((braid) => (
               <div
                 key={braid.id}
-                className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow relative"
+                className="bg-white overflow-hidden hover:shadow-xl transition-shadow relative"
               >
                 {/* Audio Toggle Button */}
                 {(braid as any).audio_url && (
