@@ -145,14 +145,17 @@ export default function BraidGlossaryPage() {
         body: formData,
       })
 
-      if (!response.ok) {
-        throw new Error("Upload failed")
-      }
-
       const result = await response.json()
+
+      if (!response.ok) {
+        console.error("Upload failed:", result)
+        throw new Error(result.details || result.error || "Upload failed")
+      }
 
       if (result.provider === "placeholder") {
         setUploadStatus("Using demo mode (Cloudflare not configured)")
+      } else if (result.provider === "demo") {
+        setUploadStatus("Using demo mode for file storage")
       } else {
         setUploadStatus("Image uploaded successfully!")
       }
@@ -160,7 +163,8 @@ export default function BraidGlossaryPage() {
       return result.url
     } catch (error) {
       console.error("Upload error:", error)
-      setUploadStatus("Upload failed, continuing without image")
+      setUploadStatus(`Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`)
+      // Return null instead of throwing to allow form submission to continue
       return null
     }
   }
@@ -181,15 +185,24 @@ export default function BraidGlossaryPage() {
         body: formData,
       })
 
+      const result = await response.json()
+
       if (!response.ok) {
-        throw new Error("Audio upload failed")
+        console.error("Audio upload failed:", result)
+        throw new Error(result.details || result.error || "Audio upload failed")
       }
 
-      const result = await response.json()
+      if (result.provider === "demo") {
+        setUploadStatus("Audio ready for demo playback")
+      } else {
+        setUploadStatus("Audio uploaded successfully!")
+      }
+
       return result.url
     } catch (error) {
       console.error("Audio upload error:", error)
-      setUploadStatus("Audio upload failed, continuing without audio")
+      setUploadStatus(`Audio upload failed: ${error instanceof Error ? error.message : "Unknown error"}`)
+      // Return null instead of throwing to allow form submission to continue
       return null
     }
   }
@@ -208,11 +221,13 @@ export default function BraidGlossaryPage() {
       // Upload image if provided
       if (formData.imageFile) {
         imageUrl = await uploadImage(formData.imageFile)
+        // Continue even if image upload fails
       }
 
       // Upload audio if recorded
       if (audioBlob) {
         audioUrl = await uploadAudio(audioBlob)
+        // Continue even if audio upload fails
       }
 
       // Add braid to database
@@ -248,11 +263,16 @@ export default function BraidGlossaryPage() {
       const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
       if (fileInput) fileInput.value = ""
 
-      setShowForm(false)
-      setUploadStatus(null)
+      setUploadStatus("Braid submitted successfully!")
+
+      // Auto-hide form after successful submission
+      setTimeout(() => {
+        setShowForm(false)
+        setUploadStatus(null)
+      }, 2000)
     } catch (error: any) {
       console.error("Error submitting braid:", error)
-      setError(`Submission failed: ${error.message}`)
+      setError(`Submission failed: ${error.message || "Unknown error"}`)
     } finally {
       setSubmitting(false)
     }
@@ -293,7 +313,7 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-6 right-6 z-40">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-black text-white text-sm px-4 py-2 rounded-full  hover:bg-gray-800 stick-no-bills"
+          className="bg-black text-white text-sm px-4 py-2 rounded-full hover:bg-gray-800 stick-no-bills"
         >
           {showForm ? "Hide Form" : "Submit Braid"}
         </button>
@@ -310,7 +330,7 @@ export default function BraidGlossaryPage() {
 
       {/* Form Section */}
       {showForm && (
-        <div className="bg-white p-6 w-full max-w-lg mx-auto rounded-lg  mb-8">
+        <div className="bg-white p-6 w-full max-w-lg mx-auto rounded-lg mb-8 mt-16">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl stick-no-bills">Submit a Braid</h2>
             <button onClick={() => setShowForm(false)} className="text-sm text-gray-500 hover:text-black">
@@ -329,7 +349,15 @@ export default function BraidGlossaryPage() {
           )}
 
           {uploadStatus && (
-            <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded text-blue-700 text-sm">
+            <div
+              className={`mb-4 p-3 rounded text-sm ${
+                uploadStatus.includes("failed") || uploadStatus.includes("error")
+                  ? "bg-orange-100 border border-orange-300 text-orange-700"
+                  : uploadStatus.includes("successfully")
+                    ? "bg-green-100 border border-green-300 text-green-700"
+                    : "bg-blue-100 border border-blue-300 text-blue-700"
+              }`}
+            >
               {uploadStatus}
             </div>
           )}
@@ -498,11 +526,15 @@ export default function BraidGlossaryPage() {
       )}
 
       {/* Gallery */}
-      <div className={`pt-24 px-6 max-w-6xl mx-auto ${demoStatus.isDemo ? "pt-32" : ""}`}>
+      <div className={`pt-8 px-6 max-w-6xl mx-auto ${demoStatus.isDemo ? "pt-16" : ""}`}>
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-6 text-blue-600 hover:text-blue-800 stick-no-bills text-lg">
             ← Back to Data Assembly
           </Link>
+          <h1 className="text-4xl font-light mb-4 stick-no-bills text-black">BRAID GLOSSARY</h1>
+          <p className="text-gray-600 stick-no-bills text-lg mb-6">
+            Traditional braiding patterns from around the world
+          </p>
         </div>
 
         {loading ? (
@@ -512,7 +544,7 @@ export default function BraidGlossaryPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {braids.map((braid) => (
-              <div key={braid.id} className="bg-white  overflow-hidden hover:shadow-xl transition-shadow">
+              <div key={braid.id} className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                 {braid.image_url ? (
                   <img
                     src={braid.image_url || "/placeholder.svg"}
@@ -534,6 +566,7 @@ export default function BraidGlossaryPage() {
                   {braid.alt_names && (
                     <p className="text-gray-500 stick-no-bills text-sm mb-1">Also known as: {braid.alt_names}</p>
                   )}
+                  <p className="text-gray-600 stick-no-bills text-sm mb-1">Region: {braid.region}</p>
 
                   {/* Audio Player */}
                   {(braid as any).audio_url && (
