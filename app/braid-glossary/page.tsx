@@ -508,9 +508,7 @@ export default function BraidGlossaryPage() {
             ← Back to Data Assembly
           </Link>
           <h1 className="text-4xl font-light mb-4 stick-no-bills text-black">BRAID GLOSSARY</h1>
-          <p className="text-gray-600 stick-no-bills text-lg mb-6">
-            Traditional braiding patterns from around the world
-          </p>
+ 
         </div>
 
         {loading ? (
