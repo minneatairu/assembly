@@ -13,6 +13,8 @@ export default function BraidGlossaryPage() {
   const [error, setError] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [demoStatus, setDemoStatus] = useState<{ isDemo: boolean; reason?: string }>({ isDemo: false })
+const [showFormModal, setShowFormModal] = useState(false)
+const [showImageModal, setShowImageModal] = useState<{ url: string; caption: string } | null>(null)
 
   // Audio recording states
   const [isRecording, setIsRecording] = useState(false)
