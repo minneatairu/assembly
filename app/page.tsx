@@ -1,12 +1,12 @@
 "use client"
 
-// You’ll need to install Framer Motion:
+// You'll need to install Framer Motion:
 // npm i framer-motion
 // or
 // yarn add framer-motion
 
 import type React from "react"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 
 interface Node {
@@ -29,10 +29,11 @@ interface Connection {
 }
 
 export default function Component() {
-  // ─────────────────────────────────── Local state
+  // ─────────────────────────────────── Local state
   const [draggedNode, setDraggedNode] = useState<string | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [hoveredNode, setHoveredNode] = useState<string | null>(null)
+  const [showWhatsThisModal, setShowWhatsThisModal] = useState(false)
 
   // ─────────────────────────────────── Nodes
   const [nodes, setNodes] = useState<Node[]>([
@@ -103,14 +104,32 @@ export default function Component() {
 
   // ─────────────────────────────────── Handlers
   const handleNodeClick = (node: Node) => {
-    if (node.link) window.location.href = node.link
+    if (node.id === "whats-this") {
+      setShowWhatsThisModal(true)
+    } else if (node.link) {
+      window.location.href = node.link
+    }
   }
 
+  // Close modal
+  const closeWhatsThisModal = () => {
+    setShowWhatsThisModal(false)
+  }
+
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && showWhatsThisModal) {
+        closeWhatsThisModal()
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape)
+    return () => document.removeEventListener("keydown", handleEscape)
+  }, [showWhatsThisModal])
+
   /** Begin drag */
-  const handleDragStart = (
-    e: React.MouseEvent | React.TouchEvent,
-    nodeId: string,
-  ) => {
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent, nodeId: string) => {
     e.preventDefault()
     const svg = (e.currentTarget as HTMLElement).closest("svg")
     if (!svg) return
@@ -125,9 +144,7 @@ export default function Component() {
   }
 
   /** Drag move (with fluid spring) */
-  const handleMove = (
-    e: React.MouseEvent | React.TouchEvent,
-  ) => {
+  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
     if (!draggedNode) return
     e.preventDefault()
     const svg = e.currentTarget as SVGSVGElement
@@ -137,11 +154,7 @@ export default function Component() {
     const svgY = ((point.clientY - rect.top) / rect.height) * 100
     const newX = Math.max(5, Math.min(95, svgX - dragOffset.x))
     const newY = Math.max(5, Math.min(95, svgY - dragOffset.y))
-    setNodes((prev) =>
-      prev.map((n) =>
-        n.id === draggedNode ? { ...n, x: newX, y: newY } : n,
-      ),
-    )
+    setNodes((prev) => prev.map((n) => (n.id === draggedNode ? { ...n, x: newX, y: newY } : n)))
   }
 
   const endDrag = () => {
@@ -152,6 +165,86 @@ export default function Component() {
   // ─────────────────────────────────── SVG
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* What's This Modal */}
+      {showWhatsThisModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={closeWhatsThisModal}
+              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-2xl mb-6 stick-no-bills font-light">WHAT'S THIS?</h2>
+
+            <div className="space-y-6 stick-no-bills text-gray-700">
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">Data Assembly Network</h3>
+                <p className="text-base leading-relaxed">
+                  This interactive diagram represents the Data Assembly project - a network of interconnected cultural
+                  documentation initiatives. Each node represents a different aspect of preserving and sharing cultural
+                  heritage through digital means.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">How to Navigate</h3>
+                <ul className="list-disc list-inside space-y-1 text-base ml-4">
+                  <li>
+                    <strong>Drag nodes</strong> to rearrange the network layout
+                  </li>
+                  <li>
+                    <strong>Hover over nodes</strong> to see descriptions
+                  </li>
+                  <li>
+                    <strong>Click triangular nodes</strong> to explore sub-projects
+                  </li>
+                  <li>
+                    <strong>Square nodes</strong> represent main project categories
+                  </li>
+                  <li>
+                    <strong>The central circle</strong> is the core Data Assembly hub
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">Project Goals</h3>
+                <p className="text-base leading-relaxed">
+                  Data Assembly aims to create collaborative platforms for documenting cultural artifacts, traditions,
+                  and knowledge systems. By connecting researchers, communities, and institutions, we build
+                  comprehensive digital archives that preserve heritage for future generations.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">Current Projects</h3>
+                <ul className="list-disc list-inside space-y-1 text-base ml-4">
+                  <li>
+                    <strong>Missing Benin Bronzes:</strong> Tracking and documenting displaced cultural artifacts
+                  </li>
+                  <li>
+                    <strong>Braid Glossary:</strong> Preserving traditional braiding patterns and techniques
+                  </li>
+                  <li>
+                    <strong>Ethnomathematics:</strong> Exploring mathematical concepts in cultural practices
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">Get Involved</h3>
+                <p className="text-base leading-relaxed">
+                  Each project welcomes community contributions. Click on the nodes to explore specific initiatives and
+                  learn how you can participate in preserving and sharing cultural knowledge.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="relative w-full max-w-[800px] aspect-[4/3] p-8">
         <svg
           viewBox="0 0 100 100"
@@ -210,13 +303,9 @@ export default function Component() {
                 />
               ) : node.parent ? (
                 <motion.polygon
-                  points={`${node.x},${
-                    node.y - ((node.size / 40) * Math.sqrt(3)) / 2
-                  } ${node.x - node.size / 40},${
+                  points={`${node.x},${node.y - ((node.size / 40) * Math.sqrt(3)) / 2} ${node.x - node.size / 40},${
                     node.y + ((node.size / 40) * Math.sqrt(3)) / 2
-                  } ${node.x + node.size / 40},${
-                    node.y + ((node.size / 40) * Math.sqrt(3)) / 2
-                  }`}
+                  } ${node.x + node.size / 40},${node.y + ((node.size / 40) * Math.sqrt(3)) / 2}`}
                   fill="black"
                   stroke="black"
                   strokeWidth="0.2"
