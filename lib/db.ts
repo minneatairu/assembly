@@ -1,8 +1,10 @@
-// Simple database connection with demo mode fallback
-const DB_URL = process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL
+import { neon } from "@neondatabase/serverless"
+
+// Use Neon database connection
+const DB_URL = process.env.NEON_NEON_DATABASE_URL
 
 export type Braid = {
-  id: number
+  id: string | number
   braid_name: string
   alt_names?: string
   region: string
@@ -10,6 +12,7 @@ export type Braid = {
   public_url?: string
   contributor_name: string
   created_at: string
+  updated_at?: string
 }
 
 // Demo data for when database isn't configured
@@ -76,27 +79,8 @@ const setDemoStorage = (braids: Braid[]) => {
 // Initialize demo storage
 let demoStorage: Braid[] = getDemoStorage()
 
-// Simple fetch wrapper for database operations
+// Database operations
 export const db = {
-  async query(sql: string, params: any[] = []) {
-    if (!DB_URL) {
-      // Demo mode - simulate database operations
-      return { rows: [] }
-    }
-
-    const response = await fetch("/api/db", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sql, params }),
-    })
-
-    if (!response.ok) {
-      throw new Error("Database query failed")
-    }
-
-    return response.json()
-  },
-
   async getBraids(): Promise<Braid[]> {
     if (!DB_URL) {
       // Demo mode - return persistent demo data
@@ -105,8 +89,9 @@ export const db = {
     }
 
     try {
-      const result = await this.query("SELECT * FROM braids ORDER BY created_at DESC")
-      return result.rows || []
+      const sql = neon(DB_URL)
+      const result = await sql`SELECT * FROM braids ORDER BY created_at DESC`
+      return result as Braid[]
     } catch (error) {
       console.warn("Database error, falling back to demo mode:", error)
       demoStorage = getDemoStorage()
@@ -114,7 +99,7 @@ export const db = {
     }
   },
 
-  async addBraid(braid: Omit<Braid, "id" | "created_at">): Promise<Braid> {
+  async addBraid(braid: Omit<Braid, "id" | "created_at" | "updated_at">): Promise<Braid> {
     if (!DB_URL) {
       // Demo mode - add to persistent storage
       const newBraid: Braid = {
@@ -129,11 +114,13 @@ export const db = {
     }
 
     try {
-      const result = await this.query(
-        "INSERT INTO braids (braid_name, alt_names, region, image_url, public_url, contributor_name) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-        [braid.braid_name, braid.alt_names, braid.region, braid.image_url, braid.public_url, braid.contributor_name],
-      )
-      return result.rows[0]
+      const sql = neon(DB_URL)
+      const result = await sql`
+        INSERT INTO braids (braid_name, alt_names, region, image_url, public_url, contributor_name)
+        VALUES (${braid.braid_name}, ${braid.alt_names || null}, ${braid.region}, ${braid.image_url || null}, ${braid.public_url || null}, ${braid.contributor_name})
+        RETURNING *
+      `
+      return result[0] as Braid
     } catch (error) {
       console.warn("Database error, falling back to demo mode:", error)
       // Fallback to demo mode with persistence
