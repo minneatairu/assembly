@@ -7,6 +7,7 @@ import { db, type Braid } from "@/lib/db"
 
 export default function BraidGlossaryPage() {
   const [showForm, setShowForm] = useState(false)
+  const [showInfoModal, setShowInfoModal] = useState(false)
   const [braids, setBraids] = useState<Braid[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -56,12 +57,19 @@ export default function BraidGlossaryPage() {
     setShowImageModal(null)
   }
 
+  // Close info modal
+  const closeInfoModal = () => {
+    setShowInfoModal(false)
+  }
+
   // Handle escape key to close modals
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (showImageModal) {
           closeImageModal()
+        } else if (showInfoModal) {
+          closeInfoModal()
         } else if (showForm) {
           setShowForm(false)
         }
@@ -70,7 +78,7 @@ export default function BraidGlossaryPage() {
 
     document.addEventListener("keydown", handleEscape)
     return () => document.removeEventListener("keydown", handleEscape)
-  }, [showImageModal, showForm])
+  }, [showImageModal, showInfoModal, showForm])
 
   // Toggle audio playback for gallery items
   const toggleAudio = (braidId: string | number, audioUrl: string) => {
@@ -618,6 +626,85 @@ export default function BraidGlossaryPage() {
         </div>
       )}
 
+      {/* Info Modal */}
+      {showInfoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white p-8 w-full max-w-2xl relative rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
+            <button onClick={closeInfoModal} className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black">
+              ✕
+            </button>
+
+            <h2 className="text-2xl mb-6 stick-no-bills font-light">ABOUT THE BRAID GLOSSARY</h2>
+
+            <div className="space-y-6 stick-no-bills text-gray-700">
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">What is this?</h3>
+                <p className="text-base leading-relaxed">
+                  The Braid Glossary is a collaborative documentation project that preserves and shares traditional
+                  braiding patterns from cultures around the world. Each entry includes the braid's name, regional
+                  origins, alternative names, and visual documentation.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">Cultural Significance</h3>
+                <p className="text-base leading-relaxed">
+                  Braiding traditions carry deep cultural meaning, representing identity, status, age, and community
+                  belonging. These patterns have been passed down through generations, often accompanied by stories,
+                  songs, and ceremonies. By documenting these styles, we help preserve cultural heritage and promote
+                  understanding across communities.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">How to Contribute</h3>
+                <p className="text-base leading-relaxed mb-3">
+                  Anyone can contribute to the glossary by submitting braiding patterns they know. When contributing,
+                  please:
+                </p>
+                <ul className="list-disc list-inside space-y-1 text-base ml-4">
+                  <li>Provide accurate cultural and regional context</li>
+                  <li>Include alternative names if known</li>
+                  <li>Add pronunciation recordings when possible</li>
+                  <li>Respect the cultural significance of the styles you document</li>
+                  <li>Credit sources and acknowledge cultural origins</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">Pronunciation Guides</h3>
+                <p className="text-base leading-relaxed">
+                  Many braid names have specific pronunciations that are important to preserve. Contributors can record
+                  audio pronunciations to help others learn the correct way to say these traditional names, maintaining
+                  linguistic accuracy and cultural respect.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-black">Educational Purpose</h3>
+                <p className="text-base leading-relaxed">
+                  This glossary serves as an educational resource for hairstylists, cultural researchers, educators, and
+                  anyone interested in learning about global braiding traditions. It promotes cultural appreciation
+                  while providing practical reference information.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <button
+                onClick={() => {
+                  closeInfoModal()
+                  setShowForm(true)
+                }}
+                className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors stick-no-bills text-base font-light"
+              >
+                Contribute a Braid
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Image Modal */}
       {showImageModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
@@ -635,7 +722,7 @@ export default function BraidGlossaryPage() {
               onClick={closeImageModal}
             />
             <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white p-4 rounded-lg">
-              <h3 className="text-xl font-light stick-no-bills">{showImageModal.caption}</h3>
+              <h3 className="text-xl font-light stick-no-bills uppercase">{showImageModal.caption}</h3>
             </div>
           </div>
         </div>
@@ -648,9 +735,14 @@ export default function BraidGlossaryPage() {
             ← Back to Data Assembly
           </Link>
           <h1 className="text-4xl font-light mb-4 stick-no-bills text-black">BRAID GLOSSARY</h1>
-          <p className="text-gray-600 stick-no-bills text-lg mb-6">
-            Traditional braiding patterns from around the world
-          </p>
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <button
+              onClick={() => setShowInfoModal(true)}
+              className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors stick-no-bills text-base font-light"
+            >
+              Learn More
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -660,10 +752,7 @@ export default function BraidGlossaryPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {braids.map((braid) => (
-              <div
-                key={braid.id}
-                className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow relative"
-              >
+              <div key={braid.id} className="bg-white overflow-hidden hover:opacity-90 transition-opacity relative">
                 {/* Audio Toggle Button */}
                 {(braid as any).audio_url && (
                   <button
@@ -700,7 +789,7 @@ export default function BraidGlossaryPage() {
                   </div>
                 )}
                 <div className="p-4">
-                  <h3 className="text-xl font-light mb-2 stick-no-bills text-black">{braid.braid_name}</h3>
+                  <h3 className="text-xl font-light mb-2 stick-no-bills text-black uppercase">{braid.braid_name}</h3>
                   {braid.alt_names && (
                     <p className="text-gray-500 stick-no-bills text-sm mb-1">Also known as: {braid.alt_names}</p>
                   )}
