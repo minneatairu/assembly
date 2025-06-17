@@ -535,7 +535,6 @@ export default function BraidGlossaryPage() {
                   {braid.alt_names && (
                     <p className="text-gray-500 stick-no-bills text-sm mb-1">Also known as: {braid.alt_names}</p>
                   )}
-                  <p className="text-gray-600 stick-no-bills text-sm mb-1">Region: {braid.region}</p>
 
                   {/* Audio Player */}
                   {(braid as any).audio_url && (
