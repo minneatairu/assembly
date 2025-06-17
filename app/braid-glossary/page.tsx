@@ -503,7 +503,6 @@ export default function BraidGlossaryPage() {
           <Link href="/" className="inline-block mb-6 text-blue-600 hover:text-blue-800 stick-no-bills text-lg">
             ← Back to Data Assembly
           </Link>
-          <h1 className="text-4xl font-light mb-4 stick-no-bills text-black">BRAID GLOSSARY</h1>
         </div>
 
         {loading ? (
