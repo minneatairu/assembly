@@ -6,7 +6,7 @@ import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
 
 export default function BraidGlossaryPage() {
-  const [showForm, setShowForm] = useState(false)
+  const [showForm, setShowForm] = useState(true)
   const [braids, setBraids] = useState<Braid[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -292,10 +292,10 @@ export default function BraidGlossaryPage() {
       {/* Submit Button */}
       <div className="fixed top-6 right-6 z-40">
         <button
-          onClick={() => setShowForm(true)}
+          onClick={() => setShowForm(!showForm)}
           className="bg-black text-white text-sm px-4 py-2 rounded-full shadow hover:bg-gray-800 stick-no-bills"
         >
-          Submit Braid
+          {showForm ? "Hide Form" : "Submit Braid"}
         </button>
       </div>
 
@@ -308,194 +308,190 @@ export default function BraidGlossaryPage() {
         </div>
       )}
 
-      {/* Form Modal */}
+      {/* Form Section */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 w-full max-w-lg relative rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setShowForm(false)}
-              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black"
-            >
+        <div className="bg-white p-6 w-full max-w-lg mx-auto rounded-lg shadow-xl mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl stick-no-bills">Submit a Braid</h2>
+            <button onClick={() => setShowForm(false)} className="text-sm text-gray-500 hover:text-black">
               ✕
             </button>
+          </div>
 
-            <h2 className="text-xl mb-4 stick-no-bills">Submit a Braid</h2>
+          {demoStatus.isDemo && (
+            <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
+              <strong>Demo Mode:</strong> Your submission will be temporary. Set up a database for permanent storage.
+            </div>
+          )}
 
-            {demoStatus.isDemo && (
-              <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
-                <strong>Demo Mode:</strong> Your submission will be temporary. Set up a database for permanent storage.
-              </div>
-            )}
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
+          )}
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
-            )}
+          {uploadStatus && (
+            <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded text-blue-700 text-sm">
+              {uploadStatus}
+            </div>
+          )}
 
-            {uploadStatus && (
-              <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded text-blue-700 text-sm">
-                {uploadStatus}
-              </div>
-            )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="braidName"
+              value={formData.braidName}
+              onChange={handleInputChange}
+              placeholder="Braid name"
+              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+              required
+            />
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="altNames"
+              value={formData.altNames}
+              onChange={handleInputChange}
+              placeholder="Alternative names"
+              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+            />
+
+            <input
+              type="text"
+              name="region"
+              value={formData.region}
+              onChange={handleInputChange}
+              placeholder="Region"
+              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+              required
+            />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
+                Upload Image (optional)
+              </label>
               <input
-                type="text"
-                name="braidName"
-                value={formData.braidName}
-                onChange={handleInputChange}
-                placeholder="Braid name"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-                required
-              />
-
-              <input
-                type="text"
-                name="altNames"
-                value={formData.altNames}
-                onChange={handleInputChange}
-                placeholder="Alternative names"
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
                 className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
               />
+              {formData.imageFile && (
+                <p className="text-sm text-gray-600 mt-1 stick-no-bills">Selected: {formData.imageFile.name}</p>
+              )}
+            </div>
 
-              <input
-                type="text"
-                name="region"
-                value={formData.region}
-                onChange={handleInputChange}
-                placeholder="Region"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-                required
-              />
+            {/* Audio Recording Section */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
+                Voice Recording (optional)
+              </label>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
-                  Upload Image (optional)
-                </label>
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  accept="image/*"
-                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-                />
-                {formData.imageFile && (
-                  <p className="text-sm text-gray-600 mt-1 stick-no-bills">Selected: {formData.imageFile.name}</p>
-                )}
-              </div>
+              {!audioSupported ? (
+                <div className="p-3 bg-gray-100 rounded text-gray-600 text-sm stick-no-bills">
+                  Audio recording not supported in this browser
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {/* Recording Controls */}
+                  <div className="flex items-center gap-3">
+                    {!isRecording && !audioBlob && (
+                      <button
+                        type="button"
+                        onClick={startRecording}
+                        className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 stick-no-bills text-sm"
+                      >
+                        🎤 Start Recording
+                      </button>
+                    )}
 
-              {/* Audio Recording Section */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
-                  Voice Recording (optional)
-                </label>
-
-                {!audioSupported ? (
-                  <div className="p-3 bg-gray-100 rounded text-gray-600 text-sm stick-no-bills">
-                    Audio recording not supported in this browser
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {/* Recording Controls */}
-                    <div className="flex items-center gap-3">
-                      {!isRecording && !audioBlob && (
+                    {isRecording && (
+                      <div className="flex items-center gap-3">
                         <button
                           type="button"
-                          onClick={startRecording}
-                          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 stick-no-bills text-sm"
+                          onClick={stopRecording}
+                          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 stick-no-bills text-sm"
                         >
-                          🎤 Start Recording
+                          ⏹️ Stop Recording
                         </button>
-                      )}
-
-                      {isRecording && (
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={stopRecording}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 stick-no-bills text-sm"
-                          >
-                            ⏹️ Stop Recording
-                          </button>
-                          <span className="text-red-600 stick-no-bills text-sm font-mono">
-                            🔴 {formatTime(recordingTime)}
-                          </span>
-                        </div>
-                      )}
-
-                      {audioBlob && (
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={clearRecording}
-                            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 stick-no-bills text-sm"
-                          >
-                            Clear
-                          </button>
-                          <span className="text-green-600 stick-no-bills text-sm">
-                            ✓ Recorded ({formatTime(recordingTime)})
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Audio Playback */}
-                    {audioUrl && (
-                      <div className="p-3 bg-gray-50 rounded">
-                        <audio controls className="w-full">
-                          <source src={audioUrl} type="audio/webm" />
-                          Your browser does not support audio playback.
-                        </audio>
+                        <span className="text-red-600 stick-no-bills text-sm font-mono">
+                          🔴 {formatTime(recordingTime)}
+                        </span>
                       </div>
                     )}
 
-                    {/* Audio Description */}
-                    <textarea
-                      name="audioNotes"
-                      value={formData.audioNotes}
-                      onChange={handleInputChange}
-                      placeholder="Describe what's in your recording (e.g., pronunciation guide, cultural context, braiding instructions)"
-                      className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded resize-none"
-                      rows={3}
-                    />
+                    {audioBlob && (
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={clearRecording}
+                          className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 stick-no-bills text-sm"
+                        >
+                          Clear
+                        </button>
+                        <span className="text-green-600 stick-no-bills text-sm">
+                          ✓ Recorded ({formatTime(recordingTime)})
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              <input
-                type="url"
-                name="publicUrl"
-                value={formData.publicUrl}
-                onChange={handleInputChange}
-                placeholder="https://example.com (optional)"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-              />
+                  {/* Audio Playback */}
+                  {audioUrl && (
+                    <div className="p-3 bg-gray-50 rounded">
+                      <audio controls className="w-full">
+                        <source src={audioUrl} type="audio/webm" />
+                        Your browser does not support audio playback.
+                      </audio>
+                    </div>
+                  )}
 
-              <input
-                type="text"
-                name="contributorName"
-                value={formData.contributorName}
-                onChange={handleInputChange}
-                placeholder="Your name"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-                required
-              />
+                  {/* Audio Description */}
+                  <textarea
+                    name="audioNotes"
+                    value={formData.audioNotes}
+                    onChange={handleInputChange}
+                    placeholder="Describe what's in your recording (e.g., pronunciation guide, cultural context, braiding instructions)"
+                    className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded resize-none"
+                    rows={3}
+                  />
+                </div>
+              )}
+            </div>
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-blue-600 text-white py-3 hover:bg-blue-700 stick-no-bills text-lg font-light rounded disabled:opacity-50"
-              >
-                {submitting ? "Submitting..." : "Submit"}
-              </button>
-            </form>
+            <input
+              type="url"
+              name="publicUrl"
+              value={formData.publicUrl}
+              onChange={handleInputChange}
+              placeholder="https://example.com (optional)"
+              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+            />
 
-            {/* Configuration hints */}
-            <div className="mt-4 space-y-2">
-              <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
-                <strong>Database:</strong> {demoStatus.isDemo ? "Not configured (demo mode)" : "Connected"}
-              </div>
-              <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
-                <strong>Files:</strong> Add CLOUDFLARE_* env vars for real uploads
-              </div>
+            <input
+              type="text"
+              name="contributorName"
+              value={formData.contributorName}
+              onChange={handleInputChange}
+              placeholder="Your name"
+              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+              required
+            />
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full bg-blue-600 text-white py-3 hover:bg-blue-700 stick-no-bills text-lg font-light rounded disabled:opacity-50"
+            >
+              {submitting ? "Submitting..." : "Submit"}
+            </button>
+          </form>
+
+          {/* Configuration hints */}
+          <div className="mt-4 space-y-2">
+            <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
+              <strong>Database:</strong> {demoStatus.isDemo ? "Not configured (demo mode)" : "Connected"}
+            </div>
+            <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
+              <strong>Files:</strong> Add CLOUDFLARE_* env vars for real uploads
             </div>
           </div>
         </div>
@@ -508,7 +504,6 @@ export default function BraidGlossaryPage() {
             ← Back to Data Assembly
           </Link>
           <h1 className="text-4xl font-light mb-4 stick-no-bills text-black">BRAID GLOSSARY</h1>
- 
         </div>
 
         {loading ? (
