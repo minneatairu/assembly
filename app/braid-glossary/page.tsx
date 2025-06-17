@@ -6,15 +6,14 @@ import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
 
 export default function BraidGlossaryPage() {
-  const [showForm, setShowForm] = useState(true)
+  const [showForm, setShowForm] = useState(false)
   const [braids, setBraids] = useState<Braid[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [demoStatus, setDemoStatus] = useState<{ isDemo: boolean; reason?: string }>({ isDemo: false })
-const [showFormModal, setShowFormModal] = useState(false)
-const [showImageModal, setShowImageModal] = useState<{ url: string; caption: string } | null>(null)
+  const [showImageModal, setShowImageModal] = useState<{ url: string; caption: string } | null>(null)
 
   // Audio recording states
   const [isRecording, setIsRecording] = useState(false)
@@ -47,6 +46,32 @@ const [showImageModal, setShowImageModal] = useState<{ url: string; caption: str
       setAudioSupported(false)
     }
   }, [])
+
+  // Handle image click to open modal
+  const handleImageClick = (imageUrl: string, braidName: string) => {
+    setShowImageModal({ url: imageUrl, caption: braidName })
+  }
+
+  // Close image modal
+  const closeImageModal = () => {
+    setShowImageModal(null)
+  }
+
+  // Handle escape key to close modals
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (showImageModal) {
+          closeImageModal()
+        } else if (showForm) {
+          setShowForm(false)
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape)
+    return () => document.removeEventListener("keydown", handleEscape)
+  }, [showImageModal, showForm])
 
   // Toggle audio playback for gallery items
   const toggleAudio = (braidId: string | number, audioUrl: string) => {
@@ -379,10 +404,10 @@ const [showImageModal, setShowImageModal] = useState<{ url: string; caption: str
       {/* Submit Button */}
       <div className="fixed top-6 right-6 z-40">
         <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-black text-white text-sm px-4 py-2 rounded-full hover:bg-gray-800 stick-no-bills"
+          onClick={() => setShowForm(true)}
+          className="bg-black text-white text-sm px-4 py-2 rounded-full shadow hover:bg-gray-800 stick-no-bills"
         >
-          {showForm ? "Hide Form" : "Submit Braid"}
+          Submit Braid
         </button>
       </div>
 
@@ -395,205 +420,232 @@ const [showImageModal, setShowImageModal] = useState<{ url: string; caption: str
         </div>
       )}
 
-      {/* Form Section */}
+      {/* Form Modal */}
       {showForm && (
-        <div className="bg-white p-6 w-full max-w-lg mx-auto rounded-lg mb-8 mt-16">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl stick-no-bills">Submit a Braid</h2>
-            <button onClick={() => setShowForm(false)} className="text-sm text-gray-500 hover:text-black">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white p-6 w-full max-w-lg relative rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowForm(false)}
+              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black"
+            >
               ✕
             </button>
-          </div>
 
-          {demoStatus.isDemo && (
-            <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
-              <strong>Demo Mode:</strong> Your submission will be temporary. Set up a database for permanent storage.
-            </div>
-          )}
+            <h2 className="text-xl mb-4 stick-no-bills">Submit a Braid</h2>
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
-          )}
+            {demoStatus.isDemo && (
+              <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
+                <strong>Demo Mode:</strong> Your submission will be temporary. Set up a database for permanent storage.
+              </div>
+            )}
 
-          {uploadStatus && (
-            <div
-              className={`mb-4 p-3 rounded text-sm ${
-                uploadStatus.includes("failed") || uploadStatus.includes("error")
-                  ? "bg-orange-100 border border-orange-300 text-orange-700"
-                  : uploadStatus.includes("successfully")
-                    ? "bg-green-100 border border-green-300 text-green-700"
-                    : "bg-blue-100 border border-blue-300 text-blue-700"
-              }`}
-            >
-              {uploadStatus}
-            </div>
-          )}
+            {error && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded text-red-700 text-sm">{error}</div>
+            )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="braidName"
-              value={formData.braidName}
-              onChange={handleInputChange}
-              placeholder="Braid name"
-              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-              required
-            />
+            {uploadStatus && (
+              <div
+                className={`mb-4 p-3 rounded text-sm ${
+                  uploadStatus.includes("failed") || uploadStatus.includes("error")
+                    ? "bg-orange-100 border border-orange-300 text-orange-700"
+                    : uploadStatus.includes("successfully")
+                      ? "bg-green-100 border border-green-300 text-green-700"
+                      : "bg-blue-100 border border-blue-300 text-blue-700"
+                }`}
+              >
+                {uploadStatus}
+              </div>
+            )}
 
-            <input
-              type="text"
-              name="altNames"
-              value={formData.altNames}
-              onChange={handleInputChange}
-              placeholder="Alternative names"
-              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-            />
-
-            <input
-              type="text"
-              name="region"
-              value={formData.region}
-              onChange={handleInputChange}
-              placeholder="Region"
-              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-              required
-            />
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
-                Upload Image (optional)
-              </label>
+            <form onSubmit={handleSubmit} className="space-y-4">
               <input
-                type="file"
-                onChange={handleFileChange}
-                accept="image/*"
+                type="text"
+                name="braidName"
+                value={formData.braidName}
+                onChange={handleInputChange}
+                placeholder="Braid name"
+                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                required
+              />
+
+              <input
+                type="text"
+                name="altNames"
+                value={formData.altNames}
+                onChange={handleInputChange}
+                placeholder="Alternative names"
                 className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
               />
-              {formData.imageFile && (
-                <p className="text-sm text-gray-600 mt-1 stick-no-bills">Selected: {formData.imageFile.name}</p>
-              )}
-            </div>
 
-            {/* Audio Recording Section */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
-                Voice Recording (optional)
-              </label>
+              <input
+                type="text"
+                name="region"
+                value={formData.region}
+                onChange={handleInputChange}
+                placeholder="Region"
+                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                required
+              />
 
-              {!audioSupported ? (
-                <div className="p-3 bg-gray-100 rounded text-gray-600 text-sm stick-no-bills">
-                  Audio recording not supported in this browser
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {/* Recording Controls */}
-                  <div className="flex items-center gap-3">
-                    {!isRecording && !audioBlob && (
-                      <button
-                        type="button"
-                        onClick={startRecording}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 stick-no-bills text-sm"
-                      >
-                        🎤 Start Recording
-                      </button>
-                    )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
+                  Upload Image (optional)
+                </label>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                />
+                {formData.imageFile && (
+                  <p className="text-sm text-gray-600 mt-1 stick-no-bills">Selected: {formData.imageFile.name}</p>
+                )}
+              </div>
 
-                    {isRecording && (
-                      <div className="flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={stopRecording}
-                          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 stick-no-bills text-sm"
-                        >
-                          ⏹️ Stop Recording
-                        </button>
-                        <span className="text-red-600 stick-no-bills text-sm font-mono">
-                          🔴 {formatTime(recordingTime)}
-                        </span>
-                      </div>
-                    )}
+              {/* Audio Recording Section */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
+                  Voice Recording (optional)
+                </label>
 
-                    {audioBlob && (
-                      <div className="flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={clearRecording}
-                          className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 stick-no-bills text-sm"
-                        >
-                          Clear
-                        </button>
-                        <span className="text-green-600 stick-no-bills text-sm">
-                          ✓ Recorded ({formatTime(recordingTime)})
-                        </span>
-                      </div>
-                    )}
+                {!audioSupported ? (
+                  <div className="p-3 bg-gray-100 rounded text-gray-600 text-sm stick-no-bills">
+                    Audio recording not supported in this browser
                   </div>
+                ) : (
+                  <div className="space-y-3">
+                    {/* Recording Controls */}
+                    <div className="flex items-center gap-3">
+                      {!isRecording && !audioBlob && (
+                        <button
+                          type="button"
+                          onClick={startRecording}
+                          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 stick-no-bills text-sm"
+                        >
+                          🎤 Start Recording
+                        </button>
+                      )}
 
-                  {/* Audio Playback */}
-                  {audioUrl && (
-                    <div className="p-3 bg-gray-50 rounded">
-                      <audio controls className="w-full">
-                        <source src={audioUrl} type="audio/webm" />
-                        Your browser does not support audio playback.
-                      </audio>
+                      {isRecording && (
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={stopRecording}
+                            className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 stick-no-bills text-sm"
+                          >
+                            ⏹️ Stop Recording
+                          </button>
+                          <span className="text-red-600 stick-no-bills text-sm font-mono">
+                            🔴 {formatTime(recordingTime)}
+                          </span>
+                        </div>
+                      )}
+
+                      {audioBlob && (
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={clearRecording}
+                            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 stick-no-bills text-sm"
+                          >
+                            Clear
+                          </button>
+                          <span className="text-green-600 stick-no-bills text-sm">
+                            ✓ Recorded ({formatTime(recordingTime)})
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  )}
 
-                  {/* Audio Description */}
-                  <textarea
-                    name="audioNotes"
-                    value={formData.audioNotes}
-                    onChange={handleInputChange}
-                    placeholder="Describe what's in your recording (e.g., pronunciation guide, cultural context, braiding instructions)"
-                    className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded resize-none"
-                    rows={3}
-                  />
-                </div>
-              )}
+                    {/* Audio Playback */}
+                    {audioUrl && (
+                      <div className="p-3 bg-gray-50 rounded">
+                        <audio controls className="w-full">
+                          <source src={audioUrl} type="audio/webm" />
+                          Your browser does not support audio playback.
+                        </audio>
+                      </div>
+                    )}
+
+                    {/* Audio Description */}
+                    <textarea
+                      name="audioNotes"
+                      value={formData.audioNotes}
+                      onChange={handleInputChange}
+                      placeholder="Describe what's in your recording (e.g., pronunciation guide, cultural context, braiding instructions)"
+                      className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded resize-none"
+                      rows={3}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <input
+                type="url"
+                name="publicUrl"
+                value={formData.publicUrl}
+                onChange={handleInputChange}
+                placeholder="https://example.com (optional)"
+                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+              />
+
+              <input
+                type="text"
+                name="contributorName"
+                value={formData.contributorName}
+                onChange={handleInputChange}
+                placeholder="Your name"
+                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                required
+              />
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-blue-600 text-white py-3 hover:bg-blue-700 stick-no-bills text-lg font-light rounded disabled:opacity-50"
+              >
+                {submitting ? "Submitting..." : "Submit"}
+              </button>
+            </form>
+
+            {/* Configuration hints */}
+            <div className="mt-4 space-y-2">
+              <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
+                <strong>Database:</strong> {demoStatus.isDemo ? "Not configured (demo mode)" : "Connected"}
+              </div>
+              <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
+                <strong>Files:</strong> Add CLOUDFLARE_* env vars for real uploads
+              </div>
             </div>
+          </div>
+        </div>
+      )}
 
-            <input
-              type="url"
-              name="publicUrl"
-              value={formData.publicUrl}
-              onChange={handleInputChange}
-              placeholder="https://example.com (optional)"
-              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-            />
-
-            <input
-              type="text"
-              name="contributorName"
-              value={formData.contributorName}
-              onChange={handleInputChange}
-              placeholder="Your name"
-              className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-              required
-            />
-
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+          <div className="relative max-w-4xl max-h-[90vh] w-full">
             <button
-              type="submit"
-              disabled={submitting}
-              className="w-full bg-blue-600 text-white py-3 hover:bg-blue-700 stick-no-bills text-lg font-light rounded disabled:opacity-50"
+              onClick={closeImageModal}
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white text-xl"
             >
-              {submitting ? "Submitting..." : "Submit"}
+              ✕
             </button>
-          </form>
-
-          {/* Configuration hints */}
-          <div className="mt-4 space-y-2">
-            <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
-              <strong>Database:</strong> {demoStatus.isDemo ? "Not configured (demo mode)" : "Connected"}
-            </div>
-            <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
-              <strong>Files:</strong> Add CLOUDFLARE_* env vars for real uploads
+            <img
+              src={showImageModal.url || "/placeholder.svg"}
+              alt={showImageModal.caption}
+              className="w-full h-full object-contain rounded-lg"
+              onClick={closeImageModal}
+            />
+            <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white p-4 rounded-lg">
+              <h3 className="text-xl font-light stick-no-bills">{showImageModal.caption}</h3>
             </div>
           </div>
         </div>
       )}
 
       {/* Gallery */}
-      <div className={`pt-8 px-6 max-w-6xl mx-auto ${demoStatus.isDemo ? "pt-16" : ""}`}>
+      <div className={`pt-24 px-6 max-w-6xl mx-auto ${demoStatus.isDemo ? "pt-32" : ""}`}>
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-6 text-blue-600 hover:text-blue-800 stick-no-bills text-lg">
             ← Back to Data Assembly
@@ -613,7 +665,7 @@ const [showImageModal, setShowImageModal] = useState<{ url: string; caption: str
             {braids.map((braid) => (
               <div
                 key={braid.id}
-                className="bg-white overflow-hidden hover:shadow-xl transition-shadow relative"
+                className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow relative"
               >
                 {/* Audio Toggle Button */}
                 {(braid as any).audio_url && (
@@ -639,7 +691,7 @@ const [showImageModal, setShowImageModal] = useState<{ url: string; caption: str
                     src={braid.image_url || "/placeholder.svg"}
                     alt={braid.braid_name}
                     className="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => window.open(braid.image_url, "_blank")}
+                    onClick={() => handleImageClick(braid.image_url!, braid.braid_name)}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
                       target.src = "/placeholder.svg?height=300&width=300"
