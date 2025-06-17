@@ -21,6 +21,10 @@ export default function BraidGlossaryPage() {
   const [recordingTime, setRecordingTime] = useState(0)
   const [audioSupported, setAudioSupported] = useState(true)
 
+  // Audio playback states for gallery items
+  const [playingAudio, setPlayingAudio] = useState<{ [key: string]: boolean }>({})
+  const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({})
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
   const timerRef = useRef<NodeJS.Timeout | null>(null)
@@ -41,6 +45,60 @@ export default function BraidGlossaryPage() {
       setAudioSupported(false)
     }
   }, [])
+
+  // Toggle audio playback for gallery items
+  const toggleAudio = (braidId: string | number, audioUrl: string) => {
+    const key = braidId.toString()
+    const audio = audioRefs.current[key]
+
+    if (audio) {
+      if (playingAudio[key]) {
+        // Stop audio
+        audio.pause()
+        audio.currentTime = 0
+        setPlayingAudio((prev) => ({ ...prev, [key]: false }))
+      } else {
+        // Stop all other audio first
+        Object.keys(audioRefs.current).forEach((otherKey) => {
+          if (otherKey !== key && audioRefs.current[otherKey]) {
+            audioRefs.current[otherKey].pause()
+            audioRefs.current[otherKey].currentTime = 0
+          }
+        })
+        setPlayingAudio({}) // Reset all playing states
+
+        // Start this audio
+        audio.play()
+        setPlayingAudio((prev) => ({ ...prev, [key]: true }))
+      }
+    } else {
+      // Create new audio element
+      const newAudio = new Audio(audioUrl)
+      audioRefs.current[key] = newAudio
+
+      newAudio.onended = () => {
+        setPlayingAudio((prev) => ({ ...prev, [key]: false }))
+      }
+
+      newAudio.onerror = () => {
+        console.error("Audio playback error for braid:", braidId)
+        setPlayingAudio((prev) => ({ ...prev, [key]: false }))
+      }
+
+      // Stop all other audio first
+      Object.keys(audioRefs.current).forEach((otherKey) => {
+        if (otherKey !== key && audioRefs.current[otherKey]) {
+          audioRefs.current[otherKey].pause()
+          audioRefs.current[otherKey].currentTime = 0
+        }
+      })
+      setPlayingAudio({}) // Reset all playing states
+
+      // Start this audio
+      newAudio.play()
+      setPlayingAudio((prev) => ({ ...prev, [key]: true }))
+    }
+  }
 
   // Start audio recording
   const startRecording = async () => {
@@ -304,6 +362,13 @@ export default function BraidGlossaryPage() {
       if (audioUrl) {
         URL.revokeObjectURL(audioUrl)
       }
+      // Cleanup audio refs
+      Object.values(audioRefs.current).forEach((audio) => {
+        if (audio) {
+          audio.pause()
+          audio.src = ""
+        }
+      })
     }
   }, [audioUrl])
 
@@ -544,7 +609,29 @@ export default function BraidGlossaryPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {braids.map((braid) => (
-              <div key={braid.id} className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+              <div
+                key={braid.id}
+                className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow relative"
+              >
+                {/* Audio Toggle Button */}
+                {(braid as any).audio_url && (
+                  <button
+                    onClick={() => toggleAudio(braid.id, (braid as any).audio_url)}
+                    className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/70 hover:bg-black/90 rounded-full flex items-center justify-center text-white transition-colors"
+                    title={(braid as any).audio_notes || "Play audio"}
+                  >
+                    {playingAudio[braid.id.toString()] ? (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                      </svg>
+                    ) : (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    )}
+                  </button>
+                )}
+
                 {braid.image_url ? (
                   <img
                     src={braid.image_url || "/placeholder.svg"}
@@ -568,17 +655,9 @@ export default function BraidGlossaryPage() {
                   )}
                   <p className="text-gray-600 stick-no-bills text-sm mb-1">Region: {braid.region}</p>
 
-                  {/* Audio Player */}
-                  {(braid as any).audio_url && (
-                    <div className="my-2">
-                      <audio controls className="w-full h-8">
-                        <source src={(braid as any).audio_url} type="audio/webm" />
-                        Your browser does not support audio playback.
-                      </audio>
-                      {(braid as any).audio_notes && (
-                        <p className="text-gray-500 stick-no-bills text-xs mt-1">🎤 {(braid as any).audio_notes}</p>
-                      )}
-                    </div>
+                  {/* Audio Notes (only show if audio exists) */}
+                  {(braid as any).audio_url && (braid as any).audio_notes && (
+                    <p className="text-gray-500 stick-no-bills text-xs mt-2 mb-1">🎤 {(braid as any).audio_notes}</p>
                   )}
 
                   <p className="text-gray-500 stick-no-bills text-xs">Contributed by {braid.contributor_name}</p>
