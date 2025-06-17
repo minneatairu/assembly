@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
-import { Plus, Upload } from "lucide-react"
+import { Upload } from "lucide-react"
 
 export default function BraidGlossaryPage() {
   const [showForm, setShowForm] = useState(false)
@@ -437,16 +437,6 @@ export default function BraidGlossaryPage() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Plus Button */}
-      <div className="fixed top-6 right-6 z-40">
-        <button
-          onClick={() => setShowForm(true)}
-          className="w-12 h-12 bg-black text-white rounded-full shadow-lg hover:bg-gray-800 flex items-center justify-center transition-colors"
-        >
-          <Plus size={24} />
-        </button>
-      </div>
-
       {/* Demo Mode Banner */}
       {demoStatus.isDemo && (
         <div className="fixed top-0 left-0 right-0 bg-yellow-100 border-b border-yellow-300 px-4 py-2 text-center z-30">
@@ -515,111 +505,96 @@ export default function BraidGlossaryPage() {
               {/* Right Side - Form Fields */}
               <div className="w-1/2 p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Title */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Braid Name</label>
-                    <input
-                      type="text"
-                      name="braidName"
-                      value={formData.braidName}
-                      onChange={handleInputChange}
-                      placeholder="Add a braid name"
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
+                  {/* Braid Name */}
+                  <input
+                    type="text"
+                    name="braidName"
+                    value={formData.braidName}
+                    onChange={handleInputChange}
+                    placeholder="Add a braid name"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
 
-                  {/* Description */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Alternative Names</label>
-                    <textarea
-                      name="altNames"
-                      value={formData.altNames}
-                      onChange={handleInputChange}
-                      placeholder="Add alternative names or detailed description"
-                      rows={4}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                    />
-                  </div>
+                  {/* Alternative Names */}
+                  <textarea
+                    name="altNames"
+                    value={formData.altNames}
+                    onChange={handleInputChange}
+                    placeholder="Add alternative names or detailed description"
+                    rows={4}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  />
 
                   {/* Region */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Region</label>
-                    <input
-                      type="text"
-                      name="region"
-                      value={formData.region}
-                      onChange={handleInputChange}
-                      placeholder="Add region or cultural origin"
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="region"
+                    value={formData.region}
+                    onChange={handleInputChange}
+                    placeholder="Add region or cultural origin"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
 
                   {/* Contributor */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Contributor</label>
-                    <input
-                      type="text"
-                      name="contributorName"
-                      value={formData.contributorName}
-                      onChange={handleInputChange}
-                      placeholder="Your name"
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="contributorName"
+                    value={formData.contributorName}
+                    onChange={handleInputChange}
+                    placeholder="Your name"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
 
                   {/* Audio Recording */}
                   {audioSupported && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Pronunciation (Optional)</label>
-                      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
-                        <div className="flex items-center gap-3 mb-3">
-                          {!isRecording && !audioBlob && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                      <div className="flex items-center gap-3 mb-3">
+                        {!isRecording && !audioBlob && (
+                          <button
+                            type="button"
+                            onClick={startRecording}
+                            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-sm font-medium"
+                          >
+                            🎤 Record pronunciation
+                          </button>
+                        )}
+
+                        {isRecording && (
+                          <div className="flex items-center gap-3">
                             <button
                               type="button"
-                              onClick={startRecording}
-                              className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-sm font-medium"
+                              onClick={stopRecording}
+                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 text-sm font-medium"
                             >
-                              🎤 Record
+                              ⏹️ Stop
                             </button>
-                          )}
+                            <span className="text-red-600 text-sm font-mono">🔴 {formatTime(recordingTime)}</span>
+                          </div>
+                        )}
 
-                          {isRecording && (
-                            <div className="flex items-center gap-3">
-                              <button
-                                type="button"
-                                onClick={stopRecording}
-                                className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 text-sm font-medium"
-                              >
-                                ⏹️ Stop
-                              </button>
-                              <span className="text-red-600 text-sm font-mono">🔴 {formatTime(recordingTime)}</span>
-                            </div>
-                          )}
-
-                          {audioBlob && (
-                            <div className="flex items-center gap-3">
-                              <button
-                                type="button"
-                                onClick={clearRecording}
-                                className="px-3 py-1 bg-gray-400 text-white rounded-full hover:bg-gray-500 text-sm"
-                              >
-                                Clear
-                              </button>
-                              <span className="text-green-600 text-sm">✓ Recorded ({formatTime(recordingTime)})</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {audioUrl && (
-                          <audio controls className="w-full">
-                            <source src={audioUrl} type="audio/webm" />
-                            Your browser does not support audio playback.
-                          </audio>
+                        {audioBlob && (
+                          <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={clearRecording}
+                              className="px-3 py-1 bg-gray-400 text-white rounded-full hover:bg-gray-500 text-sm"
+                            >
+                              Clear
+                            </button>
+                            <span className="text-green-600 text-sm">✓ Recorded ({formatTime(recordingTime)})</span>
+                          </div>
                         )}
                       </div>
+
+                      {audioUrl && (
+                        <audio controls className="w-full">
+                          <source src={audioUrl} type="audio/webm" />
+                          Your browser does not support audio playback.
+                        </audio>
+                      )}
                     </div>
                   )}
 
@@ -769,9 +744,17 @@ export default function BraidGlossaryPage() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <button
               onClick={() => setShowInfoModal(true)}
-              className="bg-gray-600 text-white py-2 px-4 hover:bg-gray-700 transition-colors stick-no-bills text-base font-light"
+              className="w-12 h-12 bg-gray-600 text-white hover:bg-gray-700 transition-colors flex items-center justify-center"
+              title="Learn more about the braid glossary"
             >
-              Learn More
+              <img src="/help-icon.svg" alt="Help" className="w-6 h-6 filter invert" />
+            </button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="w-12 h-12 bg-black text-white hover:bg-gray-800 transition-colors flex items-center justify-center"
+              title="Add a new braid"
+            >
+              <img src="/add-box-icon.svg" alt="Add" className="w-6 h-6 filter invert" />
             </button>
           </div>
         </div>
