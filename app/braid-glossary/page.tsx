@@ -35,9 +35,8 @@ export default function BraidGlossaryPage() {
     altNames: "",
     region: "",
     imageFile: null as File | null,
-    publicUrl: "",
+    imageUrl: "", // URL alternative to file upload
     contributorName: "",
-    audioNotes: "", // Description of what the audio contains
   })
 
   // Check audio support on mount
@@ -257,10 +256,10 @@ export default function BraidGlossaryPage() {
   // Upload audio file
   const uploadAudio = async (audioBlob: Blob): Promise<string | null> => {
     try {
-      setUploadStatus("Uploading audio...")
+      setUploadStatus("Uploading pronunciation...")
 
       // Convert blob to file
-      const audioFile = new File([audioBlob], `audio-${Date.now()}.webm`, { type: "audio/webm" })
+      const audioFile = new File([audioBlob], `pronunciation-${Date.now()}.webm`, { type: "audio/webm" })
 
       const formData = new FormData()
       formData.append("file", audioFile)
@@ -278,15 +277,15 @@ export default function BraidGlossaryPage() {
       }
 
       if (result.provider === "demo") {
-        setUploadStatus("Audio ready for demo playback")
+        setUploadStatus("Pronunciation ready for demo playback")
       } else {
-        setUploadStatus("Audio uploaded successfully!")
+        setUploadStatus("Pronunciation uploaded successfully!")
       }
 
       return result.url
     } catch (error) {
       console.error("Audio upload error:", error)
-      setUploadStatus(`Audio upload failed: ${error instanceof Error ? error.message : "Unknown error"}`)
+      setUploadStatus(`Pronunciation upload failed: ${error instanceof Error ? error.message : "Unknown error"}`)
       // Return null instead of throwing to allow form submission to continue
       return null
     }
@@ -303,10 +302,12 @@ export default function BraidGlossaryPage() {
       let imageUrl = null
       let audioUrl = null
 
-      // Upload image if provided
+      // Determine image source - prioritize file upload over URL
       if (formData.imageFile) {
         imageUrl = await uploadImage(formData.imageFile)
-        // Continue even if image upload fails
+      } else if (formData.imageUrl.trim()) {
+        imageUrl = formData.imageUrl.trim()
+        setUploadStatus("Using provided image URL")
       }
 
       // Upload audio if recorded
@@ -321,10 +322,10 @@ export default function BraidGlossaryPage() {
         alt_names: formData.altNames || undefined,
         region: formData.region,
         image_url: imageUrl || undefined,
-        public_url: formData.publicUrl || undefined,
+        public_url: undefined, // No longer using this field
         contributor_name: formData.contributorName,
         audio_url: audioUrl || undefined,
-        audio_notes: formData.audioNotes || undefined,
+        audio_notes: "Pronunciation guide", // Fixed description for pronunciation
       })
 
       // Update local state
@@ -336,9 +337,8 @@ export default function BraidGlossaryPage() {
         altNames: "",
         region: "",
         imageFile: null,
-        publicUrl: "",
+        imageUrl: "",
         contributorName: "",
-        audioNotes: "",
       })
 
       // Clear audio
@@ -487,25 +487,41 @@ export default function BraidGlossaryPage() {
                 required
               />
 
+              {/* Image Upload Section */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
-                  Upload Image (optional)
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">Image (optional)</label>
+
+                {/* File Upload */}
                 <input
                   type="file"
                   onChange={handleFileChange}
                   accept="image/*"
-                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded mb-2"
                 />
                 {formData.imageFile && (
-                  <p className="text-sm text-gray-600 mt-1 stick-no-bills">Selected: {formData.imageFile.name}</p>
+                  <p className="text-sm text-gray-600 mb-2 stick-no-bills">Selected: {formData.imageFile.name}</p>
+                )}
+
+                {/* URL Alternative */}
+                <div className="text-center text-gray-500 text-sm stick-no-bills mb-2">or</div>
+                <input
+                  type="url"
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleInputChange}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
+                  disabled={!!formData.imageFile} // Disable if file is selected
+                />
+                {formData.imageFile && (
+                  <p className="text-xs text-gray-500 mt-1 stick-no-bills">Clear the file above to use URL instead</p>
                 )}
               </div>
 
               {/* Audio Recording Section */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
-                  Voice Recording (optional)
+                  Pronunciation (optional)
                 </label>
 
                 {!audioSupported ? (
@@ -522,7 +538,7 @@ export default function BraidGlossaryPage() {
                           onClick={startRecording}
                           className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 stick-no-bills text-sm"
                         >
-                          🎤 Start Recording
+                          🎤 Record Pronunciation
                         </button>
                       )}
 
@@ -566,28 +582,9 @@ export default function BraidGlossaryPage() {
                         </audio>
                       </div>
                     )}
-
-                    {/* Audio Description */}
-                    <textarea
-                      name="audioNotes"
-                      value={formData.audioNotes}
-                      onChange={handleInputChange}
-                      placeholder="Describe what's in your recording (e.g., pronunciation guide, cultural context, braiding instructions)"
-                      className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded resize-none"
-                      rows={3}
-                    />
                   </div>
                 )}
               </div>
-
-              <input
-                type="url"
-                name="publicUrl"
-                value={formData.publicUrl}
-                onChange={handleInputChange}
-                placeholder="https://example.com (optional)"
-                className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded"
-              />
 
               <input
                 type="text"
@@ -672,7 +669,7 @@ export default function BraidGlossaryPage() {
                   <button
                     onClick={() => toggleAudio(braid.id, (braid as any).audio_url)}
                     className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/70 hover:bg-black/90 rounded-full flex items-center justify-center text-white transition-colors"
-                    title={(braid as any).audio_notes || "Play audio"}
+                    title="Play pronunciation"
                   >
                     {playingAudio[braid.id.toString()] ? (
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -709,22 +706,12 @@ export default function BraidGlossaryPage() {
                   )}
                   <p className="text-gray-600 stick-no-bills text-sm mb-1">Region: {braid.region}</p>
 
-                  {/* Audio Notes (only show if audio exists) */}
-                  {(braid as any).audio_url && (braid as any).audio_notes && (
-                    <p className="text-gray-500 stick-no-bills text-xs mt-2 mb-1">🎤 {(braid as any).audio_notes}</p>
+                  {/* Audio indicator (only show if audio exists) */}
+                  {(braid as any).audio_url && (
+                    <p className="text-gray-500 stick-no-bills text-xs mt-2 mb-1">🎤 Pronunciation available</p>
                   )}
 
                   <p className="text-gray-500 stick-no-bills text-xs">Contributed by {braid.contributor_name}</p>
-                  {braid.public_url && (
-                    <a
-                      href={braid.public_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 stick-no-bills text-sm mt-2 inline-block"
-                    >
-                      Learn more →
-                    </a>
-                  )}
                 </div>
               </div>
             ))}
