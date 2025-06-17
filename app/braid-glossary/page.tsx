@@ -301,22 +301,20 @@ export default function BraidGlossaryPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {braids.map((braid) => (
-              <div
-                key={braid.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-              >
+              <div key={braid.id} className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                 {braid.image_url ? (
                   <img
                     src={braid.image_url || "/placeholder.svg"}
                     alt={braid.braid_name}
-                    className="w-full h-48 object-cover"
+                    className="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => window.open(braid.image_url, "_blank")}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
-                      target.src = "/placeholder.svg?height=192&width=384"
+                      target.src = "/placeholder.svg?height=300&width=300"
                     }}
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                  <div className="w-full aspect-square bg-gray-200 flex items-center justify-center">
                     <span className="text-gray-400 stick-no-bills">No image</span>
                   </div>
                 )}
