@@ -293,7 +293,7 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-6 right-6 z-40">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-black text-white text-sm px-4 py-2 rounded-full shadow hover:bg-gray-800 stick-no-bills"
+          className="bg-black text-white text-sm px-4 py-2 rounded-full  hover:bg-gray-800 stick-no-bills"
         >
           {showForm ? "Hide Form" : "Submit Braid"}
         </button>
@@ -310,7 +310,7 @@ export default function BraidGlossaryPage() {
 
       {/* Form Section */}
       {showForm && (
-        <div className="bg-white p-6 w-full max-w-lg mx-auto rounded-lg shadow-xl mb-8">
+        <div className="bg-white p-6 w-full max-w-lg mx-auto rounded-lg  mb-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl stick-no-bills">Submit a Braid</h2>
             <button onClick={() => setShowForm(false)} className="text-sm text-gray-500 hover:text-black">
@@ -513,7 +513,7 @@ export default function BraidGlossaryPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {braids.map((braid) => (
-              <div key={braid.id} className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+              <div key={braid.id} className="bg-white  overflow-hidden hover:shadow-xl transition-shadow">
                 {braid.image_url ? (
                   <img
                     src={braid.image_url || "/placeholder.svg"}
