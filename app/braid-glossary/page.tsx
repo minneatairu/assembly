@@ -645,8 +645,8 @@ export default function BraidGlossaryPage() {
       )}
 
       {/* Gallery */}
-      <div className={`pt-24 px-6 max-w-6xl mx-auto ${demoStatus.isDemo ? "pt-32" : ""}`}>
-        <div className="text-center mb-8">
+      <div className={`pt-24 px-8 w-full ${demoStatus.isDemo ? "pt-32" : ""}`}>
+        <div className="text-center mb-8 max-w-4xl mx-auto">
           <Link href="/" className="inline-block mb-6 text-blue-600 hover:text-blue-800 stick-no-bills text-lg">
             ← Back to Data Assembly
           </Link>
@@ -661,7 +661,7 @@ export default function BraidGlossaryPage() {
             <div className="stick-no-bills text-gray-500">Loading braids...</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {braids.map((braid) => (
               <div
                 key={braid.id}
