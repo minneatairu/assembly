@@ -1,5 +1,5 @@
 // Simple database connection with demo mode fallback
-const DB_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL
+const DB_URL = process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL
 
 export type Braid = {
   id: number
@@ -46,8 +46,35 @@ const DEMO_BRAIDS: Braid[] = [
   },
 ]
 
-// In-memory storage for demo mode
-const demoStorage: Braid[] = [...DEMO_BRAIDS]
+// Persistent demo storage using localStorage
+const getDemoStorage = (): Braid[] => {
+  if (typeof window === "undefined") return [...DEMO_BRAIDS]
+
+  try {
+    const stored = localStorage.getItem("demo-braids")
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      return Array.isArray(parsed) ? parsed : [...DEMO_BRAIDS]
+    }
+  } catch (error) {
+    console.warn("Error loading demo storage:", error)
+  }
+
+  return [...DEMO_BRAIDS]
+}
+
+const setDemoStorage = (braids: Braid[]) => {
+  if (typeof window === "undefined") return
+
+  try {
+    localStorage.setItem("demo-braids", JSON.stringify(braids))
+  } catch (error) {
+    console.warn("Error saving demo storage:", error)
+  }
+}
+
+// Initialize demo storage
+let demoStorage: Braid[] = getDemoStorage()
 
 // Simple fetch wrapper for database operations
 export const db = {
@@ -72,7 +99,8 @@ export const db = {
 
   async getBraids(): Promise<Braid[]> {
     if (!DB_URL) {
-      // Demo mode - return demo data
+      // Demo mode - return persistent demo data
+      demoStorage = getDemoStorage()
       return [...demoStorage].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     }
 
@@ -81,19 +109,22 @@ export const db = {
       return result.rows || []
     } catch (error) {
       console.warn("Database error, falling back to demo mode:", error)
+      demoStorage = getDemoStorage()
       return [...demoStorage]
     }
   },
 
   async addBraid(braid: Omit<Braid, "id" | "created_at">): Promise<Braid> {
     if (!DB_URL) {
-      // Demo mode - add to in-memory storage
+      // Demo mode - add to persistent storage
       const newBraid: Braid = {
         ...braid,
         id: Date.now(), // Simple ID generation for demo
         created_at: new Date().toISOString(),
       }
+      demoStorage = getDemoStorage()
       demoStorage.unshift(newBraid)
+      setDemoStorage(demoStorage)
       return newBraid
     }
 
@@ -105,13 +136,15 @@ export const db = {
       return result.rows[0]
     } catch (error) {
       console.warn("Database error, falling back to demo mode:", error)
-      // Fallback to demo mode
+      // Fallback to demo mode with persistence
       const newBraid: Braid = {
         ...braid,
         id: Date.now(),
         created_at: new Date().toISOString(),
       }
+      demoStorage = getDemoStorage()
       demoStorage.unshift(newBraid)
+      setDemoStorage(demoStorage)
       return newBraid
     }
   },
