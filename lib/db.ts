@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless"
 
 // Use Neon database connection
-const DB_URL = process.env.NEON_NEON_DATABASE_URL
+const DB_URL = process.env.NEON_NEON_NEON_DATABASE_URL
 
 export type Braid = {
   id: string | number
@@ -13,6 +13,8 @@ export type Braid = {
   contributor_name: string
   created_at: string
   updated_at?: string
+  audio_url?: string
+  audio_notes?: string
 }
 
 // Demo data for when database isn't configured
@@ -116,8 +118,8 @@ export const db = {
     try {
       const sql = neon(DB_URL)
       const result = await sql`
-        INSERT INTO braids (braid_name, alt_names, region, image_url, public_url, contributor_name)
-        VALUES (${braid.braid_name}, ${braid.alt_names || null}, ${braid.region}, ${braid.image_url || null}, ${braid.public_url || null}, ${braid.contributor_name})
+        INSERT INTO braids (braid_name, alt_names, region, image_url, public_url, contributor_name, audio_url, audio_notes)
+        VALUES (${braid.braid_name}, ${braid.alt_names || null}, ${braid.region}, ${braid.image_url || null}, ${braid.public_url || null}, ${braid.contributor_name}, ${braid.audio_url || null}, ${braid.audio_notes || null})
         RETURNING *
       `
       return result[0] as Braid

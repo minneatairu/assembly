@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-// Simple image upload to Cloudflare Images with fallback
+// Simple file upload to Cloudflare with fallback
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     if (accountId && apiToken) {
       try {
-        // Upload to Cloudflare Images
+        // Upload to Cloudflare Images (supports audio files too)
         const cloudflareFormData = new FormData()
         cloudflareFormData.append("file", file)
 
@@ -45,6 +45,22 @@ export async function POST(request: NextRequest) {
 
     // Fallback: return a placeholder URL for demo
     const fileName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_")
+    const isAudio = file.type.startsWith("audio/")
+
+    if (isAudio) {
+      // For audio files, create a data URL for demo playback
+      const arrayBuffer = await file.arrayBuffer()
+      const blob = new Blob([arrayBuffer], { type: file.type })
+      const dataUrl = URL.createObjectURL(blob)
+
+      return NextResponse.json({
+        url: dataUrl,
+        id: "demo-audio-" + Date.now(),
+        provider: "demo",
+        type: "audio",
+      })
+    }
+
     return NextResponse.json({
       url: `/placeholder.svg?height=200&width=300&text=${encodeURIComponent(fileName)}`,
       id: "demo-" + Date.now(),

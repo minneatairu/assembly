@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
 
@@ -13,6 +13,18 @@ export default function BraidGlossaryPage() {
   const [error, setError] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [demoStatus, setDemoStatus] = useState<{ isDemo: boolean; reason?: string }>({ isDemo: false })
+
+  // Audio recording states
+  const [isRecording, setIsRecording] = useState(false)
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
+  const [audioUrl, setAudioUrl] = useState<string | null>(null)
+  const [recordingTime, setRecordingTime] = useState(0)
+  const [audioSupported, setAudioSupported] = useState(true)
+
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const audioChunksRef = useRef<Blob[]>([])
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+
   const [formData, setFormData] = useState({
     braidName: "",
     altNames: "",
@@ -20,7 +32,83 @@ export default function BraidGlossaryPage() {
     imageFile: null as File | null,
     publicUrl: "",
     contributorName: "",
+    audioNotes: "", // Description of what the audio contains
   })
+
+  // Check audio support on mount
+  useEffect(() => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setAudioSupported(false)
+    }
+  }, [])
+
+  // Start audio recording
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const mediaRecorder = new MediaRecorder(stream)
+      mediaRecorderRef.current = mediaRecorder
+      audioChunksRef.current = []
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data)
+        }
+      }
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" })
+        setAudioBlob(audioBlob)
+        setAudioUrl(URL.createObjectURL(audioBlob))
+
+        // Stop all tracks to release microphone
+        stream.getTracks().forEach((track) => track.stop())
+      }
+
+      mediaRecorder.start()
+      setIsRecording(true)
+      setRecordingTime(0)
+
+      // Start timer
+      timerRef.current = setInterval(() => {
+        setRecordingTime((prev) => prev + 1)
+      }, 1000)
+    } catch (error) {
+      console.error("Error starting recording:", error)
+      setError("Could not access microphone. Please check permissions.")
+    }
+  }
+
+  // Stop audio recording
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop()
+      setIsRecording(false)
+
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
+    }
+  }
+
+  // Clear audio recording
+  const clearRecording = () => {
+    setAudioBlob(null)
+    setAudioUrl(null)
+    setRecordingTime(0)
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+    }
+  }
+
+  // Format recording time
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
 
   // Fetch braids
   const fetchBraids = async () => {
@@ -77,6 +165,35 @@ export default function BraidGlossaryPage() {
     }
   }
 
+  // Upload audio file
+  const uploadAudio = async (audioBlob: Blob): Promise<string | null> => {
+    try {
+      setUploadStatus("Uploading audio...")
+
+      // Convert blob to file
+      const audioFile = new File([audioBlob], `audio-${Date.now()}.webm`, { type: "audio/webm" })
+
+      const formData = new FormData()
+      formData.append("file", audioFile)
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error("Audio upload failed")
+      }
+
+      const result = await response.json()
+      return result.url
+    } catch (error) {
+      console.error("Audio upload error:", error)
+      setUploadStatus("Audio upload failed, continuing without audio")
+      return null
+    }
+  }
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -86,10 +203,16 @@ export default function BraidGlossaryPage() {
 
     try {
       let imageUrl = null
+      let audioUrl = null
 
       // Upload image if provided
       if (formData.imageFile) {
         imageUrl = await uploadImage(formData.imageFile)
+      }
+
+      // Upload audio if recorded
+      if (audioBlob) {
+        audioUrl = await uploadAudio(audioBlob)
       }
 
       // Add braid to database
@@ -100,6 +223,8 @@ export default function BraidGlossaryPage() {
         image_url: imageUrl || undefined,
         public_url: formData.publicUrl || undefined,
         contributor_name: formData.contributorName,
+        audio_url: audioUrl || undefined,
+        audio_notes: formData.audioNotes || undefined,
       })
 
       // Update local state
@@ -113,7 +238,11 @@ export default function BraidGlossaryPage() {
         imageFile: null,
         publicUrl: "",
         contributorName: "",
+        audioNotes: "",
       })
+
+      // Clear audio
+      clearRecording()
 
       // Reset file input
       const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
@@ -130,7 +259,7 @@ export default function BraidGlossaryPage() {
   }
 
   // Handle input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
@@ -145,6 +274,18 @@ export default function BraidGlossaryPage() {
   useEffect(() => {
     fetchBraids()
   }, [])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl)
+      }
+    }
+  }, [audioUrl])
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -241,6 +382,84 @@ export default function BraidGlossaryPage() {
                 )}
               </div>
 
+              {/* Audio Recording Section */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 stick-no-bills">
+                  Voice Recording (optional)
+                </label>
+
+                {!audioSupported ? (
+                  <div className="p-3 bg-gray-100 rounded text-gray-600 text-sm stick-no-bills">
+                    Audio recording not supported in this browser
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {/* Recording Controls */}
+                    <div className="flex items-center gap-3">
+                      {!isRecording && !audioBlob && (
+                        <button
+                          type="button"
+                          onClick={startRecording}
+                          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 stick-no-bills text-sm"
+                        >
+                          🎤 Start Recording
+                        </button>
+                      )}
+
+                      {isRecording && (
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={stopRecording}
+                            className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 stick-no-bills text-sm"
+                          >
+                            ⏹️ Stop Recording
+                          </button>
+                          <span className="text-red-600 stick-no-bills text-sm font-mono">
+                            🔴 {formatTime(recordingTime)}
+                          </span>
+                        </div>
+                      )}
+
+                      {audioBlob && (
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={clearRecording}
+                            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 stick-no-bills text-sm"
+                          >
+                            Clear
+                          </button>
+                          <span className="text-green-600 stick-no-bills text-sm">
+                            ✓ Recorded ({formatTime(recordingTime)})
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Audio Playback */}
+                    {audioUrl && (
+                      <div className="p-3 bg-gray-50 rounded">
+                        <audio controls className="w-full">
+                          <source src={audioUrl} type="audio/webm" />
+                          Your browser does not support audio playback.
+                        </audio>
+                      </div>
+                    )}
+
+                    {/* Audio Description */}
+                    <textarea
+                      name="audioNotes"
+                      value={formData.audioNotes}
+                      onChange={handleInputChange}
+                      placeholder="Describe what's in your recording (e.g., pronunciation guide, cultural context, braiding instructions)"
+                      className="w-full px-4 py-3 border bg-transparent focus:ring-2 focus:ring-blue-500 stick-no-bills text-base rounded resize-none"
+                      rows={3}
+                    />
+                  </div>
+                )}
+              </div>
+
               <input
                 type="url"
                 name="publicUrl"
@@ -275,7 +494,7 @@ export default function BraidGlossaryPage() {
                 <strong>Database:</strong> {demoStatus.isDemo ? "Not configured (demo mode)" : "Connected"}
               </div>
               <div className="p-3 bg-gray-50 rounded text-gray-600 text-xs stick-no-bills">
-                <strong>Images:</strong> Add CLOUDFLARE_* env vars for real uploads
+                <strong>Files:</strong> Add CLOUDFLARE_* env vars for real uploads
               </div>
             </div>
           </div>
@@ -324,6 +543,20 @@ export default function BraidGlossaryPage() {
                     <p className="text-gray-500 stick-no-bills text-sm mb-1">Also known as: {braid.alt_names}</p>
                   )}
                   <p className="text-gray-600 stick-no-bills text-sm mb-1">Region: {braid.region}</p>
+
+                  {/* Audio Player */}
+                  {(braid as any).audio_url && (
+                    <div className="my-2">
+                      <audio controls className="w-full h-8">
+                        <source src={(braid as any).audio_url} type="audio/webm" />
+                        Your browser does not support audio playback.
+                      </audio>
+                      {(braid as any).audio_notes && (
+                        <p className="text-gray-500 stick-no-bills text-xs mt-1">🎤 {(braid as any).audio_notes}</p>
+                      )}
+                    </div>
+                  )}
+
                   <p className="text-gray-500 stick-no-bills text-xs">Contributed by {braid.contributor_name}</p>
                   {braid.public_url && (
                     <a
