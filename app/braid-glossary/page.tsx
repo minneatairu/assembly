@@ -465,15 +465,30 @@ export default function BraidGlossaryPage() {
                 <div
                   className={`relative h-80 bg-gray-200 border-2 border-dashed transition-colors ${
                     isDragOver ? "border-blue-400 bg-blue-50" : "border-gray-300"
-                  } flex flex-col items-center justify-center cursor-pointer`}
+                  } flex flex-col items-center justify-center cursor-pointer overflow-hidden`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   onClick={() => document.getElementById("file-input")?.click()}
                 >
-                  <p className="text-gray-700 text-center font-medium">
-                    {formData.imageFile ? formData.imageFile.name : "Choose a file or drag and drop it here"}
-                  </p>
+                  {formData.imageFile || formData.imageUrl ? (
+                    <div className="w-full h-full relative">
+                      <img
+                        src={formData.imageFile ? URL.createObjectURL(formData.imageFile) : formData.imageUrl}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.src = "/placeholder.svg?height=300&width=300&text=Invalid+Image"
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                        <p className="text-white text-center font-medium">Click to change image</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-gray-700 text-center font-medium">Choose a file or drag and drop it here</p>
+                  )}
                   <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
                 </div>
                 <p className="text-gray-500 text-sm text-center mt-4">
