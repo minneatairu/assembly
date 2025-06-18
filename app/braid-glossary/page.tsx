@@ -884,7 +884,7 @@ export default function BraidGlossaryPage() {
 
       {/* Gallery */}
       <div className={`pt-24 px-8 w-full ${demoStatus.isDemo ? "pt-32" : ""}`}>
-        <div className="mb-8 max-w-4xl mx-auto">
+        <div className="mb-8">
           <div className="flex items-center justify-start gap-4 mb-6">
             <div className="flex gap-4 border-2 border-black rounded-full p-4">
               <button

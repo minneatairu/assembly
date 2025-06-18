@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless"
 
 // Use Neon database connection
-const DB_URL = process.env.NEON_NEON_NEON_DATABASE_URL
+const DB_URL = process.env.NEON_NEON_NEON_NEON_DATABASE_URL
 
 export type Braid = {
   id: string | number
@@ -48,6 +48,36 @@ const DEMO_BRAIDS: Braid[] = [
     public_url: null,
     contributor_name: "Heritage Documentation Project",
     created_at: "2024-01-03T00:00:00Z",
+  },
+  {
+    id: 4,
+    braid_name: "Fishtail Braid",
+    alt_names: "Herringbone Braid, Fishbone Braid",
+    region: "Scandinavia",
+    image_url: "/placeholder.svg?height=200&width=300&text=Fishtail+Braid",
+    public_url: null,
+    contributor_name: "Nordic Traditions Archive",
+    created_at: "2024-01-04T00:00:00Z",
+  },
+  {
+    id: 5,
+    braid_name: "Fulani Braids",
+    alt_names: "Tribal Braids, Fulani Cornrows, Peul Braids",
+    region: "West Africa",
+    image_url: "/placeholder.svg?height=200&width=300&text=Fulani+Braids",
+    public_url: null,
+    contributor_name: "Fulani Cultural Center",
+    created_at: "2024-01-05T00:00:00Z",
+  },
+  {
+    id: 6,
+    braid_name: "Crown Braid",
+    alt_names: "Halo Braid, Milkmaid Braid",
+    region: "Eastern Europe",
+    image_url: "/placeholder.svg?height=200&width=300&text=Crown+Braid",
+    public_url: null,
+    contributor_name: "Folk Traditions Institute",
+    created_at: "2024-01-06T00:00:00Z",
   },
 ]
 
