@@ -447,11 +447,11 @@ export default function BraidGlossaryPage() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
             <button
               onClick={() => setShowForm(false)}
-              className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 z-10"
+              className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 z-10 transition-colors duration-200"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -569,7 +569,7 @@ export default function BraidGlossaryPage() {
                             onClick={startRecording}
                             className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-none hover:bg-red-600 text-sm font-medium"
                           >
-                            🎤 Record pronunciation
+                            Record pronunciation
                           </button>
                         )}
 
@@ -580,7 +580,7 @@ export default function BraidGlossaryPage() {
                               onClick={stopRecording}
                               className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-none hover:bg-gray-700 text-sm font-medium"
                             >
-                              ⏹️ Stop
+                              Stop
                             </button>
                             <span className="text-red-600 text-sm font-mono">🔴 {formatTime(recordingTime)}</span>
                           </div>
@@ -645,9 +645,12 @@ export default function BraidGlossaryPage() {
 
       {/* Info Modal */}
       {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto">
-            <button onClick={closeInfoModal} className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
+            <button
+              onClick={closeInfoModal}
+              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black transition-colors duration-200"
+            >
               ✕
             </button>
 
@@ -724,11 +727,11 @@ export default function BraidGlossaryPage() {
 
       {/* Image Modal */}
       {showImageModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-4xl max-h-[90vh] w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="relative max-w-4xl max-h-[90vh] w-full animate-in zoom-in-95 duration-300">
             <button
               onClick={closeImageModal}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white text-xl"
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white text-xl transition-colors duration-200"
             >
               ✕
             </button>
@@ -755,17 +758,17 @@ export default function BraidGlossaryPage() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <button
               onClick={() => setShowInfoModal(true)}
-              className="w-12 h-12 bg-gray-600 text-white hover:bg-gray-700 transition-colors flex items-center justify-center"
+              className="w-12 h-12 text-gray-600 hover:text-gray-800 transition-colors flex items-center justify-center"
               title="Learn more about the braid glossary"
             >
-              <img src="/help-icon.svg" alt="Help" className="w-6 h-6 filter invert" />
+              <img src="/help-icon.svg" alt="Help" className="w-6 h-6" />
             </button>
             <button
               onClick={() => setShowForm(true)}
-              className="w-12 h-12 bg-black text-white hover:bg-gray-800 transition-colors flex items-center justify-center"
+              className="w-12 h-12 text-black hover:text-gray-800 transition-colors flex items-center justify-center"
               title="Add a new braid"
             >
-              <img src="/add-box-icon.svg" alt="Add" className="w-6 h-6 filter invert" />
+              <img src="/add-box-icon.svg" alt="Add" className="w-6 h-6" />
             </button>
           </div>
         </div>
