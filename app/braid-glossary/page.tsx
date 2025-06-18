@@ -500,7 +500,7 @@ export default function BraidGlossaryPage() {
                       setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
                     }
                   }}
-                  className="w-full mt-6 py-3 bg-gray-300 text-gray-700 rounded-none font-medium hover:bg-gray-400 transition-colors"
+                  className="w-full py-3 bg-gray-300 text-gray-700 rounded-none font-medium hover:bg-gray-400 transition-colors"
                 >
                   Save from URL
                 </button>
@@ -564,7 +564,7 @@ export default function BraidGlossaryPage() {
                           <button
                             type="button"
                             onClick={startRecording}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-none hover:bg-gray-300 text-sm font-medium transition-colors"
+                            className="w-full h-14 px-4 bg-gray-50 border border-gray-200 rounded-none hover:bg-gray-100 text-gray-700 text-left font-normal transition-colors"
                           >
                             Record pronunciation
                           </button>
@@ -633,7 +633,7 @@ export default function BraidGlossaryPage() {
                     disabled={submitting}
                     className="w-full bg-red-500 text-white py-4 rounded-none font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                   >
-                    {submitting ? "Publishing..." : "Publish"}
+                    {submitting ? "Sharing..." : "Share"}
                   </button>
                 </form>
               </div>
