@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
 
 export default function BraidGlossaryPage() {
@@ -453,20 +452,17 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-dashed border-black">
+          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-dashed border-black rounded-[50px]">
             <button
               onClick={() => setShowForm(false)}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200 stick-no-bills"
+              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200 stick-no-bills text-5xl"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
+              ✕
             </button>
 
             <div className="flex">
               {/* Left Side - Upload Area */}
-              <div className="w-1/2 p-8 bg-gray-50 border-r border-dashed border-black">
+              <div className="w-1/2 p-8 bg-gray-50 border-r-2 border-dashed border-black rounded-l-[50px]">
                 <div
                   className={`relative h-80 bg-gray-200 border-2 border-dashed transition-colors ${
                     isDragOver ? "border-blue-400 bg-blue-50" : "border-black"
@@ -521,7 +517,7 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Right Side - Form Fields */}
-              <div className="w-1/2 p-8">
+              <div className="w-1/2 p-8 rounded-r-[50px]">
                 <form onSubmit={handleSubmit} className="space-y-0">
                   {/* Braid Name */}
                   <input
@@ -669,10 +665,10 @@ export default function BraidGlossaryPage() {
       {/* Info Modal */}
       {showInfoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
+          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 rounded-[50px]">
             <button
               onClick={closeInfoModal}
-              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black transition-colors duration-200"
+              className="absolute top-4 right-4 text-black hover:text-gray-600 transition-colors duration-200 stick-no-bills text-5xl"
             >
               ✕
             </button>
@@ -754,7 +750,7 @@ export default function BraidGlossaryPage() {
           <div className="relative max-w-4xl max-h-[90vh] w-full animate-in zoom-in-95 duration-300">
             <button
               onClick={closeImageModal}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white text-xl transition-colors duration-200"
+              className="absolute top-4 right-4 z-10 w-12 h-12 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors duration-200 border-2 border-white rounded-full stick-no-bills text-5xl"
             >
               ✕
             </button>
@@ -774,15 +770,12 @@ export default function BraidGlossaryPage() {
       {/* Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
+          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="absolute top-4 right-4 w-10 h-10 bg-white/70 hover:bg-white border border-gray-400 rounded-full flex items-center justify-center transition-colors"
+              className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-gray-400 rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
+              ✕
             </button>
 
             <div className="space-y-6">
@@ -807,7 +800,7 @@ export default function BraidGlossaryPage() {
 
               {/* Image */}
               {showDetailModal.image_url && (
-                <div className="w-full aspect-square overflow-hidden rounded-lg">
+                <div className="w-full aspect-square overflow-hidden">
                   <img
                     src={showDetailModal.image_url || "/placeholder.svg"}
                     alt={showDetailModal.braid_name}
@@ -892,9 +885,6 @@ export default function BraidGlossaryPage() {
       {/* Gallery */}
       <div className={`pt-24 px-8 w-full ${demoStatus.isDemo ? "pt-32" : ""}`}>
         <div className="text-center mb-8 max-w-4xl mx-auto">
-          <Link href="/" className="inline-block mb-6 text-blue-600 hover:text-blue-800 stick-no-bills text-lg">
-            ← Back to Data Assembly
-          </Link>
           <div className="flex items-center justify-start gap-4 mb-6 max-w-4xl mx-auto">
             <button
               onClick={() => setShowInfoModal(true)}
@@ -922,7 +912,7 @@ export default function BraidGlossaryPage() {
             {braids.map((braid, index) => (
               <div
                 key={braid.id}
-                className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative"
+                className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative rounded-[50px]"
               >
                 {/* Index Number */}
                 <div className="absolute top-4 right-4 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
@@ -931,7 +921,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Image */}
                 {braid.image_url ? (
-                  <div className="aspect-square overflow-hidden">
+                  <div className="aspect-square overflow-hidden rounded-t-[50px]">
                     <img
                       src={braid.image_url || "/placeholder.svg"}
                       alt={braid.braid_name}
@@ -943,7 +933,7 @@ export default function BraidGlossaryPage() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-square bg-gray-300 flex items-center justify-center">
+                  <div className="aspect-square bg-gray-300 flex items-center justify-center rounded-t-[50px]">
                     <svg
                       width="24"
                       height="24"
