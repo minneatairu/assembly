@@ -766,7 +766,7 @@ export default function BraidGlossaryPage() {
 
             <div className="space-y-6">
               {/* Title */}
-              <h2 className="text-3xl font-bold stick-no-bills text-black uppercase">{showDetailModal.braid_name}</h2>
+              <h2 className="text-3xl font-bold tomorrow text-black uppercase">{showDetailModal.braid_name}</h2>
 
               {/* Tags */}
               {showDetailModal.alt_names && (
@@ -784,7 +784,7 @@ export default function BraidGlossaryPage() {
 
               {/* Image */}
               {showDetailModal.image_url && (
-                <div className="w-full aspect-video overflow-hidden rounded-lg">
+                <div className="w-full aspect-square overflow-hidden rounded-lg">
                   <img
                     src={showDetailModal.image_url || "/placeholder.svg"}
                     alt={showDetailModal.braid_name}
@@ -792,7 +792,7 @@ export default function BraidGlossaryPage() {
                     onClick={() => handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name)}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
-                      target.src = "/placeholder.svg?height=300&width=400"
+                      target.src = "/placeholder.svg?height=400&width=400"
                     }}
                   />
                 </div>
@@ -909,7 +909,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-6 stick-no-bills text-black uppercase leading-tight">
+                  <h3 className="text-2xl font-bold mb-6 tomorrow text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
 

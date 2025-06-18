@@ -38,6 +38,26 @@
   font-weight: 500;
 }
 
+.tomorrow {
+  font-family: "Tomorrow", sans-serif;
+}
+
+.museo-moderno {
+  font-family: "MuseoModerno", sans-serif;
+}
+
+.inknut-antiqua {
+  font-family: "Inknut Antiqua", serif;
+}
+
+.crimson-pro {
+  font-family: "Crimson Pro", serif;
+}
+
+.boldonse {
+  font-family: "Boldonse", sans-serif;
+}
+
 label {
   background: grey;
 }
