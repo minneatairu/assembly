@@ -884,19 +884,19 @@ export default function BraidGlossaryPage() {
 
       {/* Gallery */}
       <div className={`pt-24 px-8 w-full ${demoStatus.isDemo ? "pt-32" : ""}`}>
-        <div className="text-center mb-8 max-w-4xl mx-auto">
-          <div className="flex items-center justify-start gap-4 mb-6 max-w-4xl mx-auto">
-            <div className="flex gap-4 border-2 border-black rounded-full p-2">
+        <div className="mb-8 max-w-4xl mx-auto">
+          <div className="flex items-center justify-start gap-4 mb-6">
+            <div className="flex gap-4 border-2 border-black rounded-full p-4">
               <button
                 onClick={() => setShowInfoModal(true)}
-                className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-5xl font-bold"
+                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
                 title="Learn more about the braid glossary"
               >
                 ?
               </button>
               <button
                 onClick={() => setShowForm(true)}
-                className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-5xl font-bold"
+                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
                 title="Add a new braid"
               >
                 +
