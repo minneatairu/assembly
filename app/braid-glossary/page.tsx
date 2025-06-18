@@ -441,12 +441,6 @@ export default function BraidGlossaryPage() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <style jsx>{`
-        .border-dashed-custom {
-          border-style: dashed;
-          border-width: 2px;
-        }
-      `}</style>
       {/* Demo Mode Banner */}
       {demoStatus.isDemo && (
         <div className="fixed top-0 left-0 right-0 bg-yellow-100 border-b border-yellow-300 px-4 py-2 text-center z-30">
@@ -474,7 +468,7 @@ export default function BraidGlossaryPage() {
               {/* Left Side - Upload Area */}
               <div className="w-1/2 p-8 bg-gray-50 border-r border-dashed border-black">
                 <div
-                  className={`relative h-80 bg-gray-200 border-2 border-dashed-custom transition-colors ${
+                  className={`relative h-80 bg-gray-200 border-2 border-dashed transition-colors ${
                     isDragOver ? "border-blue-400 bg-blue-50" : "border-black"
                   } flex flex-col items-center justify-center cursor-pointer overflow-hidden mb-4`}
                   onDragOver={handleDragOver}
@@ -516,7 +510,7 @@ export default function BraidGlossaryPage() {
                       setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
                     }
                   }}
-                  className="w-full py-3 bg-gray-300 text-black rounded-none font-medium hover:bg-gray-400 transition-colors stick-no-bills border border-dashed-custom border-black"
+                  className="w-full py-3 bg-gray-300 text-black rounded-none font-medium hover:bg-gray-400 transition-colors stick-no-bills border-2 border-dashed border-black"
                 >
                   Save from URL
                 </button>
@@ -536,7 +530,7 @@ export default function BraidGlossaryPage() {
                     value={formData.braidName}
                     onChange={handleInputChange}
                     placeholder="Braid name"
-                    className="w-full h-14 px-4 bg-gray-50 border border-dashed-custom border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                    className="w-full h-14 px-4 bg-gray-50 border-2 border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                     required
                   />
 
@@ -547,7 +541,7 @@ export default function BraidGlossaryPage() {
                     value={formData.altNames}
                     onChange={handleInputChange}
                     placeholder="Alternative names"
-                    className="w-full h-14 px-4 bg-gray-50 border border-dashed-custom border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                    className="w-full h-14 px-4 bg-gray-50 border-2 border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                   />
 
                   {/* Region */}
@@ -557,7 +551,7 @@ export default function BraidGlossaryPage() {
                     value={formData.region}
                     onChange={handleInputChange}
                     placeholder="Cultural origin"
-                    className="w-full h-14 px-4 bg-gray-50 border border-dashed-custom border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                    className="w-full h-14 px-4 bg-gray-50 border-2 border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     required
                   />
 
@@ -568,7 +562,7 @@ export default function BraidGlossaryPage() {
                     value={formData.contributorName}
                     onChange={handleInputChange}
                     placeholder="Contributor name"
-                    className="w-full h-14 px-4 bg-gray-50 border border-dashed-custom border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                    className="w-full h-14 px-4 bg-gray-50 border-2 border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     required
                   />
 
@@ -579,7 +573,7 @@ export default function BraidGlossaryPage() {
                     value={formData.linkUrl}
                     onChange={handleInputChange}
                     placeholder="Link to more info"
-                    className="w-full h-14 px-4 bg-gray-50 border border-dashed-custom border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                    className="w-full h-14 px-4 bg-gray-50 border-2 border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                   />
 
                   {/* Audio Recording */}
@@ -590,7 +584,7 @@ export default function BraidGlossaryPage() {
                           <button
                             type="button"
                             onClick={startRecording}
-                            className="w-full h-14 px-4 bg-gray-50 border border-dashed-custom border-black rounded-none hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
+                            className="w-full h-14 px-4 bg-gray-50 border-2 border-dashed border-black rounded-none hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
                           >
                             Record pronunciation
                           </button>
@@ -601,7 +595,7 @@ export default function BraidGlossaryPage() {
                             <button
                               type="button"
                               onClick={stopRecording}
-                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-none hover:bg-gray-700 text-sm font-medium stick-no-bills border border-dashed-custom border-black"
+                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-none hover:bg-gray-700 text-sm font-medium stick-no-bills border-2 border-dashed border-black"
                             >
                               Stop
                             </button>
@@ -616,7 +610,7 @@ export default function BraidGlossaryPage() {
                             <button
                               type="button"
                               onClick={clearRecording}
-                              className="px-3 py-1 bg-gray-400 text-white rounded-none hover:bg-gray-500 text-sm stick-no-bills border border-dashed-custom border-black"
+                              className="px-3 py-1 bg-gray-400 text-white rounded-none hover:bg-gray-500 text-sm stick-no-bills border-2 border-dashed border-black"
                             >
                               Clear
                             </button>
@@ -638,14 +632,14 @@ export default function BraidGlossaryPage() {
 
                   {/* Status Messages */}
                   {error && (
-                    <div className="p-4 bg-red-50 border border-dashed-custom border-black rounded-none text-red-700 text-sm mt-4 stick-no-bills">
+                    <div className="p-4 bg-red-50 border-2 border-dashed border-black rounded-none text-red-700 text-sm mt-4 stick-no-bills">
                       {error}
                     </div>
                   )}
 
                   {uploadStatus && (
                     <div
-                      className={`p-4 rounded-none text-sm mt-4 border border-dashed-custom border-black stick-no-bills ${
+                      className={`p-4 rounded-none text-sm mt-4 border-2 border-dashed border-black stick-no-bills ${
                         uploadStatus.includes("failed") || uploadStatus.includes("error")
                           ? "bg-orange-50 text-orange-700"
                           : uploadStatus.includes("successfully")
@@ -661,7 +655,7 @@ export default function BraidGlossaryPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-green-400 text-black py-4 rounded-none font-medium hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 stick-no-bills border border-dashed-custom border-black"
+                    className="w-full bg-green-400 text-black py-4 rounded-none font-medium hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 stick-no-bills border-2 border-dashed border-black"
                   >
                     {submitting ? "Sharing..." : "Share"}
                   </button>
@@ -828,7 +822,7 @@ export default function BraidGlossaryPage() {
               )}
 
               {/* Details - Inline Format */}
-              <div className="space-y-3 stick-no-bills text-sm">
+              <div className="space-y-1 stick-no-bills text-sm">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-black uppercase">REGION:</span>
                   <span className="text-gray-600 uppercase">{showDetailModal.region}</span>
@@ -878,14 +872,14 @@ export default function BraidGlossaryPage() {
 
                 {showDetailModal.public_url && (
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-black uppercase">LINK:</span>
+                    <span className="font-medium text-black uppercase">LEARN MORE:</span>
                     <a
                       href={showDetailModal.public_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 underline uppercase text-xs"
                     >
-                      MORE INFO
+                      {showDetailModal.public_url}
                     </a>
                   </div>
                 )}
