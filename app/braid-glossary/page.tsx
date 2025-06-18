@@ -677,54 +677,34 @@ export default function BraidGlossaryPage() {
 
             <div className="space-y-6 stick-no-bills text-black">
               <div>
-                <h3 className="text-lg font-medium mb-2 text-black">What is this?</h3>
                 <p className="text-base leading-relaxed">
-                  The Braid Glossary is a collaborative documentation project that preserves and shares traditional
-                  braiding patterns from cultures around the world. Each entry includes the braid's name, regional
-                  origins, alternative names, and visual documentation.
+                  The Braid Glossary is a crowdsourced, living dataset created to give Da Braidr (AI)—Minne Atairu's
+                  text-to-braid generator—the semantic footing it currently lacks. It catalogues the names and visual
+                  patterns of braided hairstyles across the African diaspora, capturing both widely used English terms
+                  and the indigenous or localized names spoken in braiding communities.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-lg font-medium mb-2 text-black">Cultural Significance</h3>
+                <h3 className="text-lg font-medium mb-2 text-black">Why it matters</h3>
                 <p className="text-base leading-relaxed">
-                  Braiding traditions carry deep cultural meaning, representing identity, status, age, and community
-                  belonging. These patterns have been passed down through generations, often accompanied by stories,
-                  songs, and ceremonies. By documenting these styles, we help preserve cultural heritage and promote
-                  understanding across communities.
+                  Research on multimodal models demonstrates that these systems learn by aligning caption tokens with
+                  visual features, and that culturally specific vocabularies are often sparse, mislabeled, or entirely
+                  absent (e.g., Buolamwini & Gebru, 2018; Birhane, Prabhu & Kahembwe, 2021). For Black braiding,
+                  metaphorical style names such as lemonade braids, butterfly locs, and Fulani feed-ins further confound
+                  models tuned to privilege literal, descriptive pairings. Consequently, when users prompt Da Braidr
+                  with these terms, the system frequently defaults to generic or inaccurate outputs. (See example.)
                 </p>
               </div>
 
               <div>
-                <h3 className="text-lg font-medium mb-2 text-black">How to Contribute</h3>
-                <p className="text-base leading-relaxed mb-3">
-                  Anyone can contribute to the glossary by submitting braiding patterns they know. When contributing,
-                  please:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-base ml-4">
-                  <li>Provide accurate cultural and regional context</li>
-                  <li>Include alternative names if known</li>
-                  <li>Add pronunciation recordings when possible</li>
-                  <li>Respect the cultural significance of the styles you document</li>
-                  <li>Credit sources and acknowledge cultural origins</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-2 text-black">Pronunciation Guides</h3>
+                <h3 className="text-lg font-medium mb-2 text-black">What the glossary does</h3>
                 <p className="text-base leading-relaxed">
-                  Many braid names have specific pronunciations that are important to preserve. Contributors can record
-                  audio pronunciations to help others learn the correct way to say these traditional names, maintaining
-                  linguistic accuracy and cultural respect.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-2 text-black">Educational Purpose</h3>
-                <p className="text-base leading-relaxed">
-                  This glossary serves as an educational resource for hairstylists, cultural researchers, educators, and
-                  anyone interested in learning about global braiding traditions. It promotes cultural appreciation
-                  while providing practical reference information.
+                  Your contribution helps us build an explicit mapping layer between braid names and their corresponding
+                  visual forms. Each entry in the glossary pairs a culturally specific term with vetted reference
+                  images, which we use to refine Da Braidr's training data and embedding space. This process improves
+                  name recognition and generation accuracy—without requiring users to translate or flatten their
+                  cultural vocabulary into machine-readable terms.
                 </p>
               </div>
             </div>
