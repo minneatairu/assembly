@@ -449,6 +449,32 @@ export default function BraidGlossaryPage() {
         </div>
       )}
 
+      {/* Sticky Menu Bar */}
+      <div
+        className={`fixed top-0 left-0 right-0 z-20 bg-gradient-to-br from-slate-50 to-slate-100 ${demoStatus.isDemo ? "top-12" : ""}`}
+      >
+        <div className="px-8 py-6">
+          <div className="flex items-center justify-start gap-4">
+            <div className="flex gap-4 border-2 border-black rounded-full p-4">
+              <button
+                onClick={() => setShowInfoModal(true)}
+                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
+                title="Learn more about the braid glossary"
+              >
+                ?
+              </button>
+              <button
+                onClick={() => setShowForm(true)}
+                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
+                title="Add a new braid"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
@@ -465,9 +491,9 @@ export default function BraidGlossaryPage() {
                 {/* Left Side - Upload Area */}
                 <div className="w-1/2 pr-6">
                   <div
-                    className={`relative h-80 bg-green-400 border-2 border-black rounded-[30px] transition-colors ${
+                    className={`relative aspect-square bg-green-400 border-2 border-black rounded-[30px] transition-colors ${
                       isDragOver ? "border-blue-400 bg-green-500" : "border-black"
-                    } flex flex-col items-center justify-center cursor-pointer overflow-hidden mb-6`}
+                    } flex flex-col items-center justify-center cursor-pointer overflow-hidden`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -504,23 +530,6 @@ export default function BraidGlossaryPage() {
                       className="hidden"
                     />
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const url = prompt("Enter image URL:")
-                      if (url) {
-                        setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
-                      }
-                    }}
-                    className="w-full py-4 bg-green-400 text-black font-medium hover:bg-green-500 transition-colors stick-no-bills border-2 border-black text-lg"
-                  >
-                    SAVE FROM URL
-                  </button>
-
-                  {formData.imageUrl && (
-                    <p className="text-sm text-black mt-2 text-center stick-no-bills">Using URL: {formData.imageUrl}</p>
-                  )}
                 </div>
 
                 {/* Right Side - Form Fields */}
@@ -675,7 +684,7 @@ export default function BraidGlossaryPage() {
       {/* Info Modal */}
       {showInfoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 rounded-[50px] border-2 border-black">
+          <div className="bg-white p-6 sm:p-8 lg:p-12 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 rounded-[50px] border-2 border-black">
             <button
               onClick={closeInfoModal}
               className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
@@ -748,10 +757,10 @@ export default function BraidGlossaryPage() {
       {/* Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
+          <div className="bg-white p-6 sm:p-8 lg:p-12 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-gray-400 rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
+              className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
             >
               +
             </button>
@@ -861,28 +870,7 @@ export default function BraidGlossaryPage() {
       )}
 
       {/* Gallery */}
-      <div className={`pt-24 px-8 w-full ${demoStatus.isDemo ? "pt-32" : ""}`}>
-        <div className="mb-8">
-          <div className="flex items-center justify-start gap-4 mb-6">
-            <div className="flex gap-4 border-2 border-black rounded-full p-4">
-              <button
-                onClick={() => setShowInfoModal(true)}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
-                title="Learn more about the braid glossary"
-              >
-                ?
-              </button>
-              <button
-                onClick={() => setShowForm(true)}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
-                title="Add a new braid"
-              >
-                +
-              </button>
-            </div>
-          </div>
-        </div>
-
+      <div className={`pt-32 px-8 w-full ${demoStatus.isDemo ? "pt-40" : ""}`}>
         {loading ? (
           <div className="text-center py-12">
             <div className="stick-no-bills text-black">Loading braids...</div>
@@ -895,7 +883,7 @@ export default function BraidGlossaryPage() {
                 className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative rounded-[50px]"
               >
                 {/* Index Number */}
-                <div className="absolute top-4 right-4 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
+                <div className="absolute top-8 right-8 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
                   <span className="text-black stick-no-bills text-sm font-bold">{braids.length - index}</span>
                 </div>
 
@@ -931,7 +919,7 @@ export default function BraidGlossaryPage() {
                 )}
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="p-6 sm:p-8 lg:p-12">
                   <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-20 stick-no-bills text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
