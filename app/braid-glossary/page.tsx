@@ -665,19 +665,19 @@ export default function BraidGlossaryPage() {
       {/* Info Modal */}
       {showInfoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 rounded-[50px]">
+          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 rounded-[50px] border-2 border-black">
             <button
               onClick={closeInfoModal}
-              className="absolute top-4 right-4 text-black hover:text-gray-600 transition-colors duration-200 stick-no-bills text-5xl transform rotate-45"
+              className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
             >
               +
             </button>
 
-            <h2 className="text-2xl mb-6 stick-no-bills font-light">ABOUT THE BRAID GLOSSARY</h2>
+            <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">ABOUT THE BRAID GLOSSARY</h2>
 
             <div className="space-y-6 stick-no-bills text-black">
               <div>
-                <p className="text-base leading-relaxed">
+                <p className="text-lg leading-relaxed">
                   The Braid Glossary is a crowdsourced, living dataset created to give Da Braidr (AI)—Minne Atairu's
                   text-to-braid generator—the semantic footing it currently lacks. It catalogues the names and visual
                   patterns of braided hairstyles across the African diaspora, capturing both widely used English terms
@@ -686,8 +686,8 @@ export default function BraidGlossaryPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-medium mb-2 text-black">Why it matters</h3>
-                <p className="text-base leading-relaxed">
+                <h3 className="text-lg font-medium mb-2 text-black uppercase">WHY IT MATTERS</h3>
+                <p className="text-lg leading-relaxed">
                   Research on multimodal models demonstrates that these systems learn by aligning caption tokens with
                   visual features, and that culturally specific vocabularies are often sparse, mislabeled, or entirely
                   absent (e.g., Buolamwini & Gebru, 2018; Birhane, Prabhu & Kahembwe, 2021). For Black braiding,
@@ -698,8 +698,8 @@ export default function BraidGlossaryPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-medium mb-2 text-black">What the glossary does</h3>
-                <p className="text-base leading-relaxed">
+                <h3 className="text-lg font-medium mb-2 text-black uppercase">WHAT THE GLOSSARY DOES</h3>
+                <p className="text-lg leading-relaxed">
                   Your contribution helps us build an explicit mapping layer between braid names and their corresponding
                   visual forms. Each entry in the glossary pairs a culturally specific term with vetted reference
                   images, which we use to refine Da Braidr's training data and embedding space. This process improves
@@ -707,18 +707,6 @@ export default function BraidGlossaryPage() {
                   cultural vocabulary into machine-readable terms.
                 </p>
               </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <button
-                onClick={() => {
-                  closeInfoModal()
-                  setShowForm(true)
-                }}
-                className="bg-blue-600 text-white py-2 px-6 hover:bg-blue-700 transition-colors stick-no-bills text-base font-light"
-              >
-                Contribute a Braid
-              </button>
             </div>
           </div>
         </div>
