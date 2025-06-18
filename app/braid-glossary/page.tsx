@@ -491,9 +491,6 @@ export default function BraidGlossaryPage() {
                   )}
                   <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
                 </div>
-                <p className="text-gray-500 text-sm text-center mt-4">
-                  We recommend using high quality .jpg files less than 20 MB or .mp4 files less than 200 MB.
-                </p>
 
                 <button
                   type="button"
@@ -515,7 +512,7 @@ export default function BraidGlossaryPage() {
 
               {/* Right Side - Form Fields */}
               <div className="w-1/2 p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-0">
                   {/* Braid Name */}
                   <input
                     type="text"
@@ -523,7 +520,7 @@ export default function BraidGlossaryPage() {
                     value={formData.braidName}
                     onChange={handleInputChange}
                     placeholder="Add a braid name"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
 
@@ -533,8 +530,7 @@ export default function BraidGlossaryPage() {
                     value={formData.altNames}
                     onChange={handleInputChange}
                     placeholder="Add alternative names or detailed description"
-                    rows={4}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none h-24"
                   />
 
                   {/* Region */}
@@ -544,7 +540,7 @@ export default function BraidGlossaryPage() {
                     value={formData.region}
                     onChange={handleInputChange}
                     placeholder="Add region or cultural origin"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
 
@@ -555,7 +551,7 @@ export default function BraidGlossaryPage() {
                     value={formData.contributorName}
                     onChange={handleInputChange}
                     placeholder="Your name"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
 
