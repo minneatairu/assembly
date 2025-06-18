@@ -862,17 +862,17 @@ export default function BraidGlossaryPage() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <button
               onClick={() => setShowInfoModal(true)}
-              className="w-12 h-12 text-gray-600 hover:text-gray-800 transition-colors flex items-center justify-center"
+              className="w-12 h-12 bg-gray-600 hover:bg-gray-800 transition-colors flex items-center justify-center rounded-full"
               title="Learn more about the braid glossary"
             >
-              <img src="/help-icon.svg" alt="Help" className="w-6 h-6" />
+              <span className="text-white stick-no-bills text-xl font-bold">?</span>
             </button>
             <button
               onClick={() => setShowForm(true)}
-              className="w-12 h-12 text-black hover:text-gray-800 transition-colors flex items-center justify-center"
+              className="w-12 h-12 bg-black hover:bg-gray-800 transition-colors flex items-center justify-center rounded-full"
               title="Add a new braid"
             >
-              <img src="/add-box-icon.svg" alt="Add" className="w-6 h-6" />
+              <span className="text-white stick-no-bills text-xl font-bold">+</span>
             </button>
           </div>
         </div>
@@ -883,11 +883,16 @@ export default function BraidGlossaryPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-            {braids.map((braid) => (
+            {braids.map((braid, index) => (
               <div
                 key={braid.id}
                 className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative"
               >
+                {/* Index Number */}
+                <div className="absolute top-4 right-4 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
+                  <span className="text-black stick-no-bills text-sm font-bold">{index + 1}</span>
+                </div>
+
                 {/* Image */}
                 {braid.image_url ? (
                   <div className="aspect-square overflow-hidden">
@@ -921,7 +926,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-3xl font-bold mb-20 stick-no-bills text-black uppercase leading-tight">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-20 stick-no-bills text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
 
