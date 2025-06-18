@@ -756,12 +756,32 @@ export default function BraidGlossaryPage() {
           <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black transition-colors duration-200"
+              className="absolute top-4 right-4 w-10 h-10 bg-white/70 hover:bg-white border border-gray-400 rounded-full flex items-center justify-center transition-colors"
             >
-              ✕
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
 
             <div className="space-y-6">
+              {/* Title */}
+              <h2 className="text-3xl font-bold stick-no-bills text-black uppercase">{showDetailModal.braid_name}</h2>
+
+              {/* Tags */}
+              {showDetailModal.alt_names && (
+                <div className="flex flex-wrap gap-2">
+                  {showDetailModal.alt_names.split(",").map((name, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400"
+                    >
+                      {name.trim()}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               {/* Image */}
               {showDetailModal.image_url && (
                 <div className="w-full aspect-video overflow-hidden rounded-lg">
@@ -778,65 +798,53 @@ export default function BraidGlossaryPage() {
                 </div>
               )}
 
-              {/* Title */}
-              <h2 className="text-3xl font-light stick-no-bills text-black uppercase">{showDetailModal.braid_name}</h2>
-
-              {/* Details */}
-              <div className="space-y-4 stick-no-bills">
-                {showDetailModal.alt_names && (
-                  <div>
-                    <h3 className="text-lg font-medium mb-2 text-black">Alternative Names</h3>
-                    <p className="text-gray-600">{showDetailModal.alt_names}</p>
-                  </div>
-                )}
-
-                <div>
-                  <h3 className="text-lg font-medium mb-2 text-black">Region</h3>
-                  <p className="text-gray-600">{showDetailModal.region}</p>
+              {/* Details - Inline Format */}
+              <div className="space-y-3 stick-no-bills text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-black">Region:</span>
+                  <span className="text-gray-600">{showDetailModal.region}</span>
                 </div>
 
-                <div>
-                  <h3 className="text-lg font-medium mb-2 text-black">Contributor</h3>
-                  <p className="text-gray-600">{showDetailModal.contributor_name}</p>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-black">By:</span>
+                  <span className="text-gray-600">{showDetailModal.contributor_name}</span>
                 </div>
 
                 {(showDetailModal as any).audio_url && (
-                  <div>
-                    <h3 className="text-lg font-medium mb-2 text-black">Pronunciation</h3>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => toggleAudio(showDetailModal.id, (showDetailModal as any).audio_url)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                      >
-                        {playingAudio[showDetailModal.id.toString()] ? (
-                          <>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                            </svg>
-                            Stop
-                          </>
-                        ) : (
-                          <>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                            Play
-                          </>
-                        )}
-                      </button>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-black">Pronunciation:</span>
+                    <button
+                      onClick={() => toggleAudio(showDetailModal.id, (showDetailModal as any).audio_url)}
+                      className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs"
+                    >
+                      {playingAudio[showDetailModal.id.toString()] ? (
+                        <>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                          </svg>
+                          Stop
+                        </>
+                      ) : (
+                        <>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                          Play
+                        </>
+                      )}
+                    </button>
                   </div>
                 )}
 
-                <div>
-                  <h3 className="text-lg font-medium mb-2 text-black">Submitted</h3>
-                  <p className="text-gray-600">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-black">Published:</span>
+                  <span className="text-gray-600">
                     {new Date(showDetailModal.created_at).toLocaleDateString("en-US", {
                       year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
                     })}
-                  </p>
+                  </span>
                 </div>
               </div>
             </div>
@@ -882,7 +890,7 @@ export default function BraidGlossaryPage() {
               >
                 {/* Image */}
                 {braid.image_url ? (
-                  <div className="aspect-[4/3] overflow-hidden rounded-t-2xl">
+                  <div className="aspect-square overflow-hidden rounded-t-2xl">
                     <img
                       src={braid.image_url || "/placeholder.svg"}
                       alt={braid.braid_name}
@@ -894,14 +902,14 @@ export default function BraidGlossaryPage() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-[4/3] bg-gray-400 flex items-center justify-center rounded-t-2xl">
+                  <div className="aspect-square bg-gray-400 flex items-center justify-center rounded-t-2xl">
                     <span className="text-gray-600 stick-no-bills">No image</span>
                   </div>
                 )}
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-4 stick-no-bills text-black uppercase leading-tight">
+                  <h3 className="text-2xl font-bold mb-6 stick-no-bills text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
 
@@ -909,14 +917,21 @@ export default function BraidGlossaryPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex flex-wrap gap-2">
                       {braid.alt_names && (
-                        <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
-                          {braid.alt_names.split(",")[0].trim()}
-                        </span>
-                      )}
-                      {braid.alt_names && braid.alt_names.includes(",") && (
-                        <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
-                          +{braid.alt_names.split(",").length - 1}
-                        </span>
+                        <>
+                          <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                            {braid.alt_names.split(",")[0].trim()}
+                          </span>
+                          {braid.alt_names.split(",").length > 2 && (
+                            <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                              +{braid.alt_names.split(",").length - 1}
+                            </span>
+                          )}
+                          {braid.alt_names.split(",").length === 2 && (
+                            <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                              {braid.alt_names.split(",")[1].trim()}
+                            </span>
+                          )}
+                        </>
                       )}
                     </div>
 
