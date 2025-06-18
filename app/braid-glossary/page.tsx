@@ -4,7 +4,6 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { db, type Braid } from "@/lib/db"
-import { Upload } from "lucide-react"
 
 export default function BraidGlossaryPage() {
   const [showForm, setShowForm] = useState(false)
@@ -464,7 +463,7 @@ export default function BraidGlossaryPage() {
               {/* Left Side - Upload Area */}
               <div className="w-1/2 p-8 bg-gray-50">
                 <div
-                  className={`relative h-80 bg-gray-200 rounded-3xl border-2 border-dashed transition-colors ${
+                  className={`relative h-80 bg-gray-200 border-2 border-dashed transition-colors ${
                     isDragOver ? "border-blue-400 bg-blue-50" : "border-gray-300"
                   } flex flex-col items-center justify-center cursor-pointer`}
                   onDragOver={handleDragOver}
@@ -472,9 +471,6 @@ export default function BraidGlossaryPage() {
                   onDrop={handleDrop}
                   onClick={() => document.getElementById("file-input")?.click()}
                 >
-                  <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
-                    <Upload className="text-white" size={24} />
-                  </div>
                   <p className="text-gray-700 text-center font-medium">
                     {formData.imageFile ? formData.imageFile.name : "Choose a file or drag and drop it here"}
                   </p>
@@ -492,7 +488,7 @@ export default function BraidGlossaryPage() {
                       setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
                     }
                   }}
-                  className="w-full mt-6 py-3 bg-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-400 transition-colors"
+                  className="w-full mt-6 py-3 bg-gray-300 text-gray-700 rounded-none font-medium hover:bg-gray-400 transition-colors"
                 >
                   Save from URL
                 </button>
@@ -512,7 +508,7 @@ export default function BraidGlossaryPage() {
                     value={formData.braidName}
                     onChange={handleInputChange}
                     placeholder="Add a braid name"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
 
@@ -523,7 +519,7 @@ export default function BraidGlossaryPage() {
                     onChange={handleInputChange}
                     placeholder="Add alternative names or detailed description"
                     rows={4}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   />
 
                   {/* Region */}
@@ -533,7 +529,7 @@ export default function BraidGlossaryPage() {
                     value={formData.region}
                     onChange={handleInputChange}
                     placeholder="Add region or cultural origin"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
 
@@ -544,19 +540,19 @@ export default function BraidGlossaryPage() {
                     value={formData.contributorName}
                     onChange={handleInputChange}
                     placeholder="Your name"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
 
                   {/* Audio Recording */}
                   {audioSupported && (
-                    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                    <div className="bg-gray-50 border border-gray-200 rounded-none p-4">
                       <div className="flex items-center gap-3 mb-3">
                         {!isRecording && !audioBlob && (
                           <button
                             type="button"
                             onClick={startRecording}
-                            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-sm font-medium"
+                            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-none hover:bg-red-600 text-sm font-medium"
                           >
                             🎤 Record pronunciation
                           </button>
@@ -567,7 +563,7 @@ export default function BraidGlossaryPage() {
                             <button
                               type="button"
                               onClick={stopRecording}
-                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 text-sm font-medium"
+                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-none hover:bg-gray-700 text-sm font-medium"
                             >
                               ⏹️ Stop
                             </button>
@@ -580,7 +576,7 @@ export default function BraidGlossaryPage() {
                             <button
                               type="button"
                               onClick={clearRecording}
-                              className="px-3 py-1 bg-gray-400 text-white rounded-full hover:bg-gray-500 text-sm"
+                              className="px-3 py-1 bg-gray-400 text-white rounded-none hover:bg-gray-500 text-sm"
                             >
                               Clear
                             </button>
@@ -600,12 +596,12 @@ export default function BraidGlossaryPage() {
 
                   {/* Status Messages */}
                   {error && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm">{error}</div>
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-none text-red-700 text-sm">{error}</div>
                   )}
 
                   {uploadStatus && (
                     <div
-                      className={`p-4 rounded-2xl text-sm ${
+                      className={`p-4 rounded-none text-sm ${
                         uploadStatus.includes("failed") || uploadStatus.includes("error")
                           ? "bg-orange-50 border border-orange-200 text-orange-700"
                           : uploadStatus.includes("successfully")
@@ -621,7 +617,7 @@ export default function BraidGlossaryPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-red-500 text-white py-4 rounded-2xl font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-red-500 text-white py-4 rounded-none font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Publishing..." : "Publish"}
                   </button>

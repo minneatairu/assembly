@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "dev": "next dev",
     "lint": "next lint",
-    "setup": "echo 'Visit /setup to configure your database'"
+    "setup": "echo 'Visit /setup to configure your database'",
+    "start": "next start"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
