@@ -533,7 +533,7 @@ export default function BraidGlossaryPage() {
                       value={formData.braidName}
                       onChange={handleInputChange}
                       placeholder="Braid name"
-                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                       required
                     />
 
@@ -544,7 +544,7 @@ export default function BraidGlossaryPage() {
                       value={formData.altNames}
                       onChange={handleInputChange}
                       placeholder="Alternative names"
-                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     />
 
                     {/* Region */}
@@ -554,7 +554,7 @@ export default function BraidGlossaryPage() {
                       value={formData.region}
                       onChange={handleInputChange}
                       placeholder="Cultural origin"
-                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                       required
                     />
 
@@ -565,7 +565,7 @@ export default function BraidGlossaryPage() {
                       value={formData.contributorName}
                       onChange={handleInputChange}
                       placeholder="Contributor name"
-                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                       required
                     />
 
@@ -576,7 +576,7 @@ export default function BraidGlossaryPage() {
                       value={formData.linkUrl}
                       onChange={handleInputChange}
                       placeholder="Link to more info"
-                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     />
 
                     {/* Audio Recording */}
@@ -587,7 +587,7 @@ export default function BraidGlossaryPage() {
                             <button
                               type="button"
                               onClick={startRecording}
-                              className="w-full h-14 px-4 bg-gray-50 border-2 border-black hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
+                              className="w-full h-16 px-4 bg-gray-50 border-2 border-black hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
                             >
                               Record pronunciation
                             </button>
@@ -896,7 +896,7 @@ export default function BraidGlossaryPage() {
               >
                 {/* Index Number */}
                 <div className="absolute top-4 right-4 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
-                  <span className="text-black stick-no-bills text-sm font-bold">{index + 1}</span>
+                  <span className="text-black stick-no-bills text-sm font-bold">{braids.length - index}</span>
                 </div>
 
                 {/* Image */}
