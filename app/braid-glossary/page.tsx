@@ -766,7 +766,7 @@ export default function BraidGlossaryPage() {
 
             <div className="space-y-6">
               {/* Title */}
-              <h2 className="text-3xl font-bold tomorrow text-black uppercase">{showDetailModal.braid_name}</h2>
+              <h2 className="text-3xl font-bold museo-moderno text-black uppercase">{showDetailModal.braid_name}</h2>
 
               {/* Tags */}
               {showDetailModal.alt_names && (
@@ -909,7 +909,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-6 tomorrow text-black uppercase leading-tight">
+                  <h3 className="text-2xl font-bold mb-6 museo-moderno text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
 
