@@ -15,6 +15,7 @@ export default function BraidGlossaryPage() {
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [demoStatus, setDemoStatus] = useState<{ isDemo: boolean; reason?: string }>({ isDemo: false })
   const [showImageModal, setShowImageModal] = useState<{ url: string; caption: string } | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState<Braid | null>(null)
 
   // Audio recording states
   const [isRecording, setIsRecording] = useState(false)
@@ -73,6 +74,8 @@ export default function BraidGlossaryPage() {
           closeImageModal()
         } else if (showInfoModal) {
           closeInfoModal()
+        } else if (showDetailModal) {
+          setShowDetailModal(null)
         } else if (showForm) {
           setShowForm(false)
         }
@@ -81,7 +84,7 @@ export default function BraidGlossaryPage() {
 
     document.addEventListener("keydown", handleEscape)
     return () => document.removeEventListener("keydown", handleEscape)
-  }, [showImageModal, showInfoModal, showForm])
+  }, [showImageModal, showInfoModal, showDetailModal, showForm])
 
   // Drag and drop handlers
   const handleDragOver = (e: React.DragEvent) => {
@@ -747,6 +750,100 @@ export default function BraidGlossaryPage() {
         </div>
       )}
 
+      {/* Detail Modal */}
+      {showDetailModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
+            <button
+              onClick={() => setShowDetailModal(null)}
+              className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black transition-colors duration-200"
+            >
+              ✕
+            </button>
+
+            <div className="space-y-6">
+              {/* Image */}
+              {showDetailModal.image_url && (
+                <div className="w-full aspect-video overflow-hidden rounded-lg">
+                  <img
+                    src={showDetailModal.image_url || "/placeholder.svg"}
+                    alt={showDetailModal.braid_name}
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name)}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.src = "/placeholder.svg?height=300&width=400"
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Title */}
+              <h2 className="text-3xl font-light stick-no-bills text-black uppercase">{showDetailModal.braid_name}</h2>
+
+              {/* Details */}
+              <div className="space-y-4 stick-no-bills">
+                {showDetailModal.alt_names && (
+                  <div>
+                    <h3 className="text-lg font-medium mb-2 text-black">Alternative Names</h3>
+                    <p className="text-gray-600">{showDetailModal.alt_names}</p>
+                  </div>
+                )}
+
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-black">Region</h3>
+                  <p className="text-gray-600">{showDetailModal.region}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-black">Contributor</h3>
+                  <p className="text-gray-600">{showDetailModal.contributor_name}</p>
+                </div>
+
+                {(showDetailModal as any).audio_url && (
+                  <div>
+                    <h3 className="text-lg font-medium mb-2 text-black">Pronunciation</h3>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => toggleAudio(showDetailModal.id, (showDetailModal as any).audio_url)}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                      >
+                        {playingAudio[showDetailModal.id.toString()] ? (
+                          <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                            </svg>
+                            Stop
+                          </>
+                        ) : (
+                          <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                            Play
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <h3 className="text-lg font-medium mb-2 text-black">Submitted</h3>
+                  <p className="text-gray-600">
+                    {new Date(showDetailModal.created_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Gallery */}
       <div className={`pt-24 px-8 w-full ${demoStatus.isDemo ? "pt-32" : ""}`}>
         <div className="text-center mb-8 max-w-4xl mx-auto">
@@ -779,55 +876,62 @@ export default function BraidGlossaryPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {braids.map((braid) => (
-              <div key={braid.id} className="bg-white overflow-hidden hover:opacity-90 transition-opacity relative">
-                {/* Audio Toggle Button */}
-                {(braid as any).audio_url && (
-                  <button
-                    onClick={() => toggleAudio(braid.id, (braid as any).audio_url)}
-                    className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/70 hover:bg-black/90 flex items-center justify-center text-white transition-colors"
-                    title="Play pronunciation"
-                  >
-                    {playingAudio[braid.id.toString()] ? (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                      </svg>
-                    ) : (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    )}
-                  </button>
-                )}
-
+              <div
+                key={braid.id}
+                className="bg-slate-300 rounded-2xl overflow-hidden hover:opacity-90 transition-opacity relative"
+              >
+                {/* Image */}
                 {braid.image_url ? (
-                  <img
-                    src={braid.image_url || "/placeholder.svg"}
-                    alt={braid.braid_name}
-                    className="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => handleImageClick(braid.image_url!, braid.braid_name)}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = "/placeholder.svg?height=300&width=300"
-                    }}
-                  />
+                  <div className="aspect-[4/3] overflow-hidden rounded-t-2xl">
+                    <img
+                      src={braid.image_url || "/placeholder.svg"}
+                      alt={braid.braid_name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = "/placeholder.svg?height=300&width=300"
+                      }}
+                    />
+                  </div>
                 ) : (
-                  <div className="w-full aspect-square bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400 stick-no-bills">No image</span>
+                  <div className="aspect-[4/3] bg-gray-400 flex items-center justify-center rounded-t-2xl">
+                    <span className="text-gray-600 stick-no-bills">No image</span>
                   </div>
                 )}
-                <div className="p-4">
-                  <h3 className="text-xl font-light mb-2 stick-no-bills text-black uppercase">{braid.braid_name}</h3>
-                  {braid.alt_names && (
-                    <p className="text-gray-500 stick-no-bills text-sm mb-1">Also known as: {braid.alt_names}</p>
-                  )}
-                  <p className="text-gray-600 stick-no-bills text-sm mb-1">Region: {braid.region}</p>
 
-                  {/* Audio indicator (only show if audio exists) */}
-                  {(braid as any).audio_url && (
-                    <p className="text-gray-500 stick-no-bills text-xs mt-2 mb-1">🎤 Pronunciation available</p>
-                  )}
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-4 stick-no-bills text-black uppercase leading-tight">
+                    {braid.braid_name}
+                  </h3>
 
-                  <p className="text-gray-500 stick-no-bills text-xs">Contributed by {braid.contributor_name}</p>
+                  {/* Tags and Plus Button Row */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-2">
+                      {braid.alt_names && (
+                        <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                          {braid.alt_names.split(",")[0].trim()}
+                        </span>
+                      )}
+                      {braid.alt_names && braid.alt_names.includes(",") && (
+                        <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                          +{braid.alt_names.split(",").length - 1}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Plus Button */}
+                    <button
+                      onClick={() => setShowDetailModal(braid)}
+                      className="w-10 h-10 bg-white/70 hover:bg-white border border-gray-400 rounded-full flex items-center justify-center transition-colors"
+                      title="View details"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
