@@ -886,11 +886,11 @@ export default function BraidGlossaryPage() {
             {braids.map((braid) => (
               <div
                 key={braid.id}
-                className="bg-slate-300 rounded-2xl overflow-hidden hover:opacity-90 transition-opacity relative"
+                className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative"
               >
                 {/* Image */}
                 {braid.image_url ? (
-                  <div className="aspect-square overflow-hidden rounded-t-2xl">
+                  <div className="aspect-square overflow-hidden">
                     <img
                       src={braid.image_url || "/placeholder.svg"}
                       alt={braid.braid_name}
@@ -902,32 +902,44 @@ export default function BraidGlossaryPage() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-square bg-gray-400 flex items-center justify-center rounded-t-2xl">
-                    <span className="text-gray-600 stick-no-bills">No image</span>
+                  <div className="aspect-square bg-gray-300 flex items-center justify-center">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="text-gray-500"
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21,15 16,10 5,21" />
+                    </svg>
                   </div>
                 )}
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-6 boldonse text-black uppercase leading-tight">
+                  <h3 className="text-3xl font-bold mb-6 boldonse text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
 
                   {/* Tags and Plus Button Row */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-end justify-between">
                     <div className="flex flex-wrap gap-2">
                       {braid.alt_names && (
                         <>
-                          <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                          <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
                             {braid.alt_names.split(",")[0].trim()}
                           </span>
                           {braid.alt_names.split(",").length > 2 && (
-                            <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                            <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
                               +{braid.alt_names.split(",").length - 1}
                             </span>
                           )}
                           {braid.alt_names.split(",").length === 2 && (
-                            <span className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400">
+                            <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
                               {braid.alt_names.split(",")[1].trim()}
                             </span>
                           )}
@@ -938,7 +950,7 @@ export default function BraidGlossaryPage() {
                     {/* Plus Button */}
                     <button
                       onClick={() => setShowDetailModal(braid)}
-                      className="w-10 h-10 bg-white/70 hover:bg-white border border-gray-400 rounded-full flex items-center justify-center transition-colors"
+                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
                       title="View details"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
