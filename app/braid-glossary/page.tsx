@@ -522,7 +522,7 @@ export default function BraidGlossaryPage() {
                     name="braidName"
                     value={formData.braidName}
                     onChange={handleInputChange}
-                    placeholder="Add a braid name"
+                    placeholder="Braid name"
                     className="w-full h-14 px-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills"
                     required
                   />
@@ -533,7 +533,7 @@ export default function BraidGlossaryPage() {
                     name="altNames"
                     value={formData.altNames}
                     onChange={handleInputChange}
-                    placeholder="Add alternative names or detailed description"
+                    placeholder="Alternative names"
                     className="w-full h-14 px-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills"
                   />
 
@@ -543,7 +543,7 @@ export default function BraidGlossaryPage() {
                     name="region"
                     value={formData.region}
                     onChange={handleInputChange}
-                    placeholder="Add region or cultural origin"
+                    placeholder="Cultural origin"
                     className="w-full h-14 px-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills"
                     required
                   />
@@ -554,7 +554,7 @@ export default function BraidGlossaryPage() {
                     name="contributorName"
                     value={formData.contributorName}
                     onChange={handleInputChange}
-                    placeholder="Your name"
+                    placeholder="Contributor name"
                     className="w-full h-14 px-4 bg-gray-50 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills"
                     required
                   />
@@ -766,7 +766,9 @@ export default function BraidGlossaryPage() {
 
             <div className="space-y-6">
               {/* Title */}
-              <h2 className="text-3xl font-bold stick-no-bills text-black uppercase">{showDetailModal.braid_name}</h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase">
+                {showDetailModal.braid_name}
+              </h2>
 
               {/* Tags */}
               {showDetailModal.alt_names && (
@@ -862,17 +864,17 @@ export default function BraidGlossaryPage() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <button
               onClick={() => setShowInfoModal(true)}
-              className="w-12 h-12 bg-gray-600 hover:bg-gray-800 transition-colors flex items-center justify-center rounded-full"
+              className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-3xl font-bold"
               title="Learn more about the braid glossary"
             >
-              <span className="text-white stick-no-bills text-xl font-bold">?</span>
+              ?
             </button>
             <button
               onClick={() => setShowForm(true)}
-              className="w-12 h-12 bg-black hover:bg-gray-800 transition-colors flex items-center justify-center rounded-full"
+              className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-3xl font-bold"
               title="Add a new braid"
             >
-              <span className="text-white stick-no-bills text-xl font-bold">+</span>
+              +
             </button>
           </div>
         </div>
