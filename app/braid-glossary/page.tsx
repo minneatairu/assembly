@@ -497,7 +497,7 @@ export default function BraidGlossaryPage() {
                   <div
                     className={`relative aspect-square bg-green-400 border-2 border-black rounded-[30px] transition-colors ${
                       isDragOver ? "border-blue-400 bg-green-500" : "border-black"
-                    } flex flex-col items-center justify-center cursor-pointer overflow-hidden`}
+                    } flex flex-col items-center justify-center cursor-pointer overflow-visible`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -507,16 +507,36 @@ export default function BraidGlossaryPage() {
                       <div className="w-full h-full relative">
                         {formData.imageFiles.length > 0 ? (
                           <div className="w-full h-full relative">
-                            <img
-                              src={URL.createObjectURL(formData.imageFiles[0]) || "/placeholder.svg"}
-                              alt="Preview"
-                              className="w-full h-full object-cover rounded-[28px]"
-                            />
+                            {/* Stack effect for multiple images */}
                             {formData.imageFiles.length > 1 && (
-                              <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
-                                +{formData.imageFiles.length - 1}
-                              </div>
+                              <>
+                                {/* Third layer (bottom) */}
+                                {formData.imageFiles.length > 2 && (
+                                  <div className="absolute inset-0 bg-gray-300 border-2 border-black rounded-[28px] transform translate-x-4 translate-y-4 -z-20"></div>
+                                )}
+                                {/* Second layer (middle) */}
+                                <div className="absolute inset-0 bg-gray-200 border-2 border-black rounded-[28px] transform translate-x-2 translate-y-2 -z-10">
+                                  <img
+                                    src={URL.createObjectURL(formData.imageFiles[1]) || "/placeholder.svg"}
+                                    alt="Preview 2"
+                                    className="w-full h-full object-cover rounded-[26px]"
+                                  />
+                                </div>
+                              </>
                             )}
+                            {/* Top layer (main image) */}
+                            <div className="relative w-full h-full">
+                              <img
+                                src={URL.createObjectURL(formData.imageFiles[0]) || "/placeholder.svg"}
+                                alt="Preview"
+                                className="w-full h-full object-cover rounded-[28px] border-2 border-black"
+                              />
+                              {formData.imageFiles.length > 1 && (
+                                <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
+                                  {formData.imageFiles.length} files
+                                </div>
+                              )}
+                            </div>
                           </div>
                         ) : (
                           <img
@@ -718,7 +738,7 @@ export default function BraidGlossaryPage() {
 
             <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">ABOUT THE BRAID GLOSSARY</h2>
 
-            <div className="space-y-6 stick-no-bills text-black">
+            <div className="space-y-12 stick-no-bills text-black">
               <div>
                 <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
                   The Braid Glossary is a crowdsourced, living dataset created to give Da Braidr (AI)—Minne Atairu's
