@@ -451,7 +451,7 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
+          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-dashed border-black">
             <button
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200 stick-no-bills"
@@ -464,11 +464,11 @@ export default function BraidGlossaryPage() {
 
             <div className="flex">
               {/* Left Side - Upload Area */}
-              <div className="w-1/2 p-8 bg-gray-50">
+              <div className="w-1/2 p-8 bg-gray-50 border-r border-dashed border-black">
                 <div
                   className={`relative h-80 bg-gray-200 border-2 border-dashed transition-colors ${
                     isDragOver ? "border-blue-400 bg-blue-50" : "border-black"
-                  } flex flex-col items-center justify-center cursor-pointer overflow-hidden`}
+                  } flex flex-col items-center justify-center cursor-pointer overflow-hidden mb-4`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
@@ -490,9 +490,12 @@ export default function BraidGlossaryPage() {
                       </div>
                     </div>
                   ) : (
-                    <p className="text-black text-center font-medium stick-no-bills">
-                      Choose a file or drag and drop it here
-                    </p>
+                    <div className="text-center">
+                      <p className="text-black text-center font-medium stick-no-bills mb-2">
+                        Choose a file or drag and drop it here
+                      </p>
+                      <p className="text-gray-600 text-sm stick-no-bills">Supported formats: JPG, PNG, GIF, WebP</p>
+                    </div>
                   )}
                   <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
                 </div>
@@ -505,7 +508,7 @@ export default function BraidGlossaryPage() {
                       setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
                     }
                   }}
-                  className="w-full py-3 bg-gray-300 text-black rounded-none font-medium hover:bg-gray-400 transition-colors stick-no-bills border-2 border-black"
+                  className="w-full py-3 bg-gray-300 text-black rounded-none font-medium hover:bg-gray-400 transition-colors stick-no-bills border border-dashed border-black"
                 >
                   Save from URL
                 </button>
@@ -525,7 +528,7 @@ export default function BraidGlossaryPage() {
                     value={formData.braidName}
                     onChange={handleInputChange}
                     placeholder="Braid name"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                    className="w-full h-14 px-4 bg-gray-50 border border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                     required
                   />
 
@@ -536,7 +539,7 @@ export default function BraidGlossaryPage() {
                     value={formData.altNames}
                     onChange={handleInputChange}
                     placeholder="Alternative names"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                    className="w-full h-14 px-4 bg-gray-50 border border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                   />
 
                   {/* Region */}
@@ -546,7 +549,7 @@ export default function BraidGlossaryPage() {
                     value={formData.region}
                     onChange={handleInputChange}
                     placeholder="Cultural origin"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                    className="w-full h-14 px-4 bg-gray-50 border border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     required
                   />
 
@@ -557,30 +560,30 @@ export default function BraidGlossaryPage() {
                     value={formData.contributorName}
                     onChange={handleInputChange}
                     placeholder="Contributor name"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                    className="w-full h-14 px-4 bg-gray-50 border border-dashed border-black rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     required
                   />
 
                   {/* Audio Recording */}
                   {audioSupported && (
-                    <div className="mt-4">
+                    <div className="mt-0">
                       <div className="flex items-center gap-3 mb-3">
                         {!isRecording && !audioBlob && (
                           <button
                             type="button"
                             onClick={startRecording}
-                            className="w-full h-14 px-4 bg-gray-50 border-2 border-black rounded-none hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills"
+                            className="w-full h-14 px-4 bg-gray-50 border border-dashed border-black rounded-none hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
                           >
                             Record pronunciation
                           </button>
                         )}
 
                         {isRecording && (
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 w-full">
                             <button
                               type="button"
                               onClick={stopRecording}
-                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-none hover:bg-gray-700 text-sm font-medium stick-no-bills border-2 border-black"
+                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-none hover:bg-gray-700 text-sm font-medium stick-no-bills border border-dashed border-black"
                             >
                               Stop
                             </button>
@@ -591,11 +594,11 @@ export default function BraidGlossaryPage() {
                         )}
 
                         {audioBlob && (
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 w-full">
                             <button
                               type="button"
                               onClick={clearRecording}
-                              className="px-3 py-1 bg-gray-400 text-white rounded-none hover:bg-gray-500 text-sm stick-no-bills border-2 border-black"
+                              className="px-3 py-1 bg-gray-400 text-white rounded-none hover:bg-gray-500 text-sm stick-no-bills border border-dashed border-black"
                             >
                               Clear
                             </button>
@@ -607,7 +610,7 @@ export default function BraidGlossaryPage() {
                       </div>
 
                       {audioUrl && (
-                        <audio controls className="w-full">
+                        <audio controls className="w-full mb-4">
                           <source src={audioUrl} type="audio/webm" />
                           Your browser does not support audio playback.
                         </audio>
@@ -617,14 +620,14 @@ export default function BraidGlossaryPage() {
 
                   {/* Status Messages */}
                   {error && (
-                    <div className="p-4 bg-red-50 border-2 border-black rounded-none text-red-700 text-sm mt-4 stick-no-bills">
+                    <div className="p-4 bg-red-50 border border-dashed border-black rounded-none text-red-700 text-sm mt-4 stick-no-bills">
                       {error}
                     </div>
                   )}
 
                   {uploadStatus && (
                     <div
-                      className={`p-4 rounded-none text-sm mt-4 border-2 border-black stick-no-bills ${
+                      className={`p-4 rounded-none text-sm mt-4 border border-dashed border-black stick-no-bills ${
                         uploadStatus.includes("failed") || uploadStatus.includes("error")
                           ? "bg-orange-50 text-orange-700"
                           : uploadStatus.includes("successfully")
@@ -640,7 +643,7 @@ export default function BraidGlossaryPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-green-400 text-black py-4 rounded-none font-medium hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 stick-no-bills border-2 border-black"
+                    className="w-full bg-green-400 text-black py-4 rounded-none font-medium hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 stick-no-bills border border-dashed border-black"
                   >
                     {submitting ? "Sharing..." : "Share"}
                   </button>
@@ -963,7 +966,7 @@ export default function BraidGlossaryPage() {
                     {/* Plus Button */}
                     <button
                       onClick={() => setShowDetailModal(braid)}
-                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-3xl font-bold"
+                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-5xl font-bold"
                       title="View details"
                     >
                       +
