@@ -451,7 +451,7 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
+          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 z-10 transition-colors duration-200"
@@ -753,7 +753,7 @@ export default function BraidGlossaryPage() {
       {/* Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
+          <div className="bg-white p-8 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowDetailModal(null)}
               className="absolute top-4 right-4 w-10 h-10 bg-white/70 hover:bg-white border border-gray-400 rounded-full flex items-center justify-center transition-colors"
@@ -774,7 +774,7 @@ export default function BraidGlossaryPage() {
                   {showDetailModal.alt_names.split(",").map((name, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-white/50 rounded-full text-sm stick-no-bills text-black border border-gray-400"
+                      className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase"
                     >
                       {name.trim()}
                     </span>
@@ -921,7 +921,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-3xl font-bold mb-6 boldonse text-black uppercase leading-tight">
+                  <h3 className="text-3xl font-bold mb-12 boldonse text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
 
@@ -950,13 +950,10 @@ export default function BraidGlossaryPage() {
                     {/* Plus Button */}
                     <button
                       onClick={() => setShowDetailModal(braid)}
-                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors boldonse text-xl font-bold"
                       title="View details"
                     >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg>
+                      +
                     </button>
                   </div>
                 </div>
