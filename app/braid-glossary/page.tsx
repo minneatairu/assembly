@@ -460,201 +460,213 @@ export default function BraidGlossaryPage() {
               +
             </button>
 
-            <div className="flex p-12">
-              {/* Left Side - Upload Area */}
-              <div className="w-1/2 pr-6">
-                <div
-                  className={`relative h-80 bg-gray-200 border-2 border-black rounded-[30px] transition-colors ${
-                    isDragOver ? "border-blue-400 bg-blue-50" : "border-black"
-                  } flex flex-col items-center justify-center cursor-pointer overflow-hidden mb-6`}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onClick={() => document.getElementById("file-input")?.click()}
-                >
-                  {formData.imageFile || formData.imageUrl ? (
-                    <div className="w-full h-full relative">
-                      <img
-                        src={formData.imageFile ? URL.createObjectURL(formData.imageFile) : formData.imageUrl}
-                        alt="Preview"
-                        className="w-full h-full object-cover rounded-[28px]"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          target.src = "/placeholder.svg?height=300&width=300&text=Invalid+Image"
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity rounded-[28px]">
-                        <p className="text-white text-center font-medium stick-no-bills">Click to change image</p>
+            <div className="p-12">
+              <div className="flex mb-6">
+                {/* Left Side - Upload Area */}
+                <div className="w-1/2 pr-6">
+                  <div
+                    className={`relative h-80 bg-green-400 border-2 border-black rounded-[30px] transition-colors ${
+                      isDragOver ? "border-blue-400 bg-green-500" : "border-black"
+                    } flex flex-col items-center justify-center cursor-pointer overflow-hidden mb-6`}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => document.getElementById("file-input")?.click()}
+                  >
+                    {formData.imageFile || formData.imageUrl ? (
+                      <div className="w-full h-full relative">
+                        <img
+                          src={formData.imageFile ? URL.createObjectURL(formData.imageFile) : formData.imageUrl}
+                          alt="Preview"
+                          className="w-full h-full object-cover rounded-[28px]"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src = "/placeholder.svg?height=300&width=300&text=Invalid+Image"
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity rounded-[28px]">
+                          <p className="text-white text-center font-medium stick-no-bills">Click to change image</p>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <p className="text-black text-center font-medium stick-no-bills mb-2 text-lg">CLICK TO UPLOAD</p>
-                      <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP)</p>
-                    </div>
+                    ) : (
+                      <div className="text-center">
+                        <p className="text-black text-center font-medium stick-no-bills mb-2 text-lg">
+                          CLICK TO UPLOAD
+                        </p>
+                        <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP)</p>
+                      </div>
+                    )}
+                    <input
+                      id="file-input"
+                      type="file"
+                      onChange={handleFileChange}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const url = prompt("Enter image URL:")
+                      if (url) {
+                        setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
+                      }
+                    }}
+                    className="w-full py-4 bg-green-400 text-black font-medium hover:bg-green-500 transition-colors stick-no-bills border-2 border-black text-lg"
+                  >
+                    SAVE FROM URL
+                  </button>
+
+                  {formData.imageUrl && (
+                    <p className="text-sm text-black mt-2 text-center stick-no-bills">Using URL: {formData.imageUrl}</p>
                   )}
-                  <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    const url = prompt("Enter image URL:")
-                    if (url) {
-                      setFormData((prev) => ({ ...prev, imageUrl: url, imageFile: null }))
-                    }
-                  }}
-                  className="w-full py-4 bg-gray-300 text-black font-medium hover:bg-gray-400 transition-colors stick-no-bills border-2 border-black text-lg"
-                >
-                  SAVE FROM URL
-                </button>
+                {/* Right Side - Form Fields */}
+                <div className="w-1/2 pl-6">
+                  <div className="space-y-0">
+                    {/* Braid Name */}
+                    <input
+                      type="text"
+                      name="braidName"
+                      value={formData.braidName}
+                      onChange={handleInputChange}
+                      placeholder="Braid name"
+                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      required
+                    />
 
-                {formData.imageUrl && (
-                  <p className="text-sm text-black mt-2 text-center stick-no-bills">Using URL: {formData.imageUrl}</p>
-                )}
-              </div>
+                    {/* Alternative Names */}
+                    <input
+                      type="text"
+                      name="altNames"
+                      value={formData.altNames}
+                      onChange={handleInputChange}
+                      placeholder="Alternative names"
+                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                    />
 
-              {/* Right Side - Form Fields */}
-              <div className="w-1/2 pl-6">
-                <form onSubmit={handleSubmit} className="space-y-0">
-                  {/* Braid Name */}
-                  <input
-                    type="text"
-                    name="braidName"
-                    value={formData.braidName}
-                    onChange={handleInputChange}
-                    placeholder="Braid name"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
-                    required
-                  />
+                    {/* Region */}
+                    <input
+                      type="text"
+                      name="region"
+                      value={formData.region}
+                      onChange={handleInputChange}
+                      placeholder="Cultural origin"
+                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      required
+                    />
 
-                  {/* Alternative Names */}
-                  <input
-                    type="text"
-                    name="altNames"
-                    value={formData.altNames}
-                    onChange={handleInputChange}
-                    placeholder="Alternative names"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
-                  />
+                    {/* Contributor */}
+                    <input
+                      type="text"
+                      name="contributorName"
+                      value={formData.contributorName}
+                      onChange={handleInputChange}
+                      placeholder="Contributor name"
+                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      required
+                    />
 
-                  {/* Region */}
-                  <input
-                    type="text"
-                    name="region"
-                    value={formData.region}
-                    onChange={handleInputChange}
-                    placeholder="Cultural origin"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
-                    required
-                  />
+                    {/* Link URL */}
+                    <input
+                      type="url"
+                      name="linkUrl"
+                      value={formData.linkUrl}
+                      onChange={handleInputChange}
+                      placeholder="Link to more info"
+                      className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                    />
 
-                  {/* Contributor */}
-                  <input
-                    type="text"
-                    name="contributorName"
-                    value={formData.contributorName}
-                    onChange={handleInputChange}
-                    placeholder="Contributor name"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
-                    required
-                  />
-
-                  {/* Link URL */}
-                  <input
-                    type="url"
-                    name="linkUrl"
-                    value={formData.linkUrl}
-                    onChange={handleInputChange}
-                    placeholder="Link to more info"
-                    className="w-full h-14 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
-                  />
-
-                  {/* Audio Recording */}
-                  {audioSupported && (
-                    <div className="mt-0">
-                      <div className="flex items-center gap-3 mb-6">
-                        {!isRecording && !audioBlob && (
-                          <button
-                            type="button"
-                            onClick={startRecording}
-                            className="w-full h-14 px-4 bg-gray-50 border-2 border-black hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
-                          >
-                            Record pronunciation
-                          </button>
-                        )}
-
-                        {isRecording && (
-                          <div className="flex items-center gap-3 w-full">
+                    {/* Audio Recording */}
+                    {audioSupported && (
+                      <div className="mt-0">
+                        <div className="flex items-center gap-3 mb-6">
+                          {!isRecording && !audioBlob && (
                             <button
                               type="button"
-                              onClick={stopRecording}
-                              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white hover:bg-gray-700 text-sm font-medium stick-no-bills border-2 border-black"
+                              onClick={startRecording}
+                              className="w-full h-14 px-4 bg-gray-50 border-2 border-black hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
                             >
-                              Stop
+                              Record pronunciation
                             </button>
-                            <span className="text-red-600 text-sm font-mono stick-no-bills">
-                              🔴 {formatTime(recordingTime)}
-                            </span>
-                          </div>
-                        )}
+                          )}
 
-                        {audioBlob && (
-                          <div className="flex items-center gap-3 w-full">
-                            <button
-                              type="button"
-                              onClick={clearRecording}
-                              className="px-3 py-1 bg-gray-400 text-white hover:bg-gray-500 text-sm stick-no-bills border-2 border-black"
-                            >
-                              Clear
-                            </button>
-                            <span className="text-green-600 text-sm stick-no-bills">
-                              ✓ Recorded ({formatTime(recordingTime)})
-                            </span>
-                          </div>
+                          {isRecording && (
+                            <div className="flex items-center gap-3 w-full">
+                              <button
+                                type="button"
+                                onClick={stopRecording}
+                                className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white hover:bg-gray-700 text-sm font-medium stick-no-bills border-2 border-black"
+                              >
+                                Stop
+                              </button>
+                              <span className="text-red-600 text-sm font-mono stick-no-bills">
+                                🔴 {formatTime(recordingTime)}
+                              </span>
+                            </div>
+                          )}
+
+                          {audioBlob && (
+                            <div className="flex items-center gap-3 w-full">
+                              <button
+                                type="button"
+                                onClick={clearRecording}
+                                className="px-3 py-1 bg-gray-400 text-white hover:bg-gray-500 text-sm stick-no-bills border-2 border-black"
+                              >
+                                Clear
+                              </button>
+                              <span className="text-green-600 text-sm stick-no-bills">
+                                ✓ Recorded ({formatTime(recordingTime)})
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {audioUrl && (
+                          <audio controls className="w-full mb-6">
+                            <source src={audioUrl} type="audio/webm" />
+                            Your browser does not support audio playback.
+                          </audio>
                         )}
                       </div>
+                    )}
 
-                      {audioUrl && (
-                        <audio controls className="w-full mb-6">
-                          <source src={audioUrl} type="audio/webm" />
-                          Your browser does not support audio playback.
-                        </audio>
-                      )}
-                    </div>
-                  )}
+                    {/* Status Messages */}
+                    {error && (
+                      <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mt-6 stick-no-bills">
+                        {error}
+                      </div>
+                    )}
 
-                  {/* Status Messages */}
-                  {error && (
-                    <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mt-6 stick-no-bills">
-                      {error}
-                    </div>
-                  )}
-
-                  {uploadStatus && (
-                    <div
-                      className={`p-4 text-sm mt-6 border-2 border-black stick-no-bills ${
-                        uploadStatus.includes("failed") || uploadStatus.includes("error")
-                          ? "bg-orange-50 text-orange-700"
-                          : uploadStatus.includes("successfully")
-                            ? "bg-green-50 text-green-700"
-                            : "bg-blue-50 text-blue-700"
-                      }`}
-                    >
-                      {uploadStatus}
-                    </div>
-                  )}
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6 stick-no-bills border-2 border-black rounded-full text-5xl"
-                  >
-                    {submitting ? "SHARING..." : "SHARE"}
-                  </button>
-                </form>
+                    {uploadStatus && (
+                      <div
+                        className={`p-4 text-sm mt-6 border-2 border-black stick-no-bills ${
+                          uploadStatus.includes("failed") || uploadStatus.includes("error")
+                            ? "bg-orange-50 text-orange-700"
+                            : uploadStatus.includes("successfully")
+                              ? "bg-green-50 text-green-700"
+                              : "bg-blue-50 text-blue-700"
+                        }`}
+                      >
+                        {uploadStatus}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
+
+              {/* Submit Button - Full Width */}
+              <form onSubmit={handleSubmit}>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-2 border-black rounded-full text-5xl"
+                >
+                  {submitting ? "SHARING..." : "SHARE"}
+                </button>
+              </form>
             </div>
           </div>
         </div>
