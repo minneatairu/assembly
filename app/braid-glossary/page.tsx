@@ -42,6 +42,7 @@ export default function BraidGlossaryPage() {
     imageUrl: "",
     contributorName: "",
     linkUrl: "",
+    agreeToShare: false,
   })
 
   // Check audio support on mount
@@ -335,6 +336,12 @@ export default function BraidGlossaryPage() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!formData.agreeToShare) {
+      setError("Please agree to share your braid in the glossary to continue.")
+      return
+    }
+
     setSubmitting(true)
     setError(null)
     setUploadStatus(null)
@@ -380,6 +387,7 @@ export default function BraidGlossaryPage() {
         imageUrl: "",
         contributorName: "",
         linkUrl: "",
+        agreeToShare: false,
       })
 
       // Clear audio
@@ -406,8 +414,14 @@ export default function BraidGlossaryPage() {
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value, type } = e.target
+
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked
+      setFormData((prev) => ({ ...prev, [name]: checked }))
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -686,6 +700,23 @@ export default function BraidGlossaryPage() {
                       </div>
                     )}
 
+                    {/* Agreement Checkbox */}
+                    <div className="flex items-start gap-3 p-4 bg-gray-50 border-2 border-black border-t-0">
+                      <input
+                        type="checkbox"
+                        id="agreeToShare"
+                        name="agreeToShare"
+                        checked={formData.agreeToShare}
+                        onChange={handleInputChange}
+                        className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                        required
+                      />
+                      <label htmlFor="agreeToShare" className="text-sm stick-no-bills text-black leading-relaxed">
+                        I agree to submit and share my braid information in the public glossary for educational and
+                        cultural preservation purposes.
+                      </label>
+                    </div>
+
                     {/* Status Messages */}
                     {error && (
                       <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mt-6 stick-no-bills">
@@ -714,7 +745,7 @@ export default function BraidGlossaryPage() {
               <form onSubmit={handleSubmit}>
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || !formData.agreeToShare}
                   className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-2 border-black rounded-full text-5xl"
                 >
                   {submitting ? "SHARING..." : "SHARE"}
@@ -966,7 +997,7 @@ export default function BraidGlossaryPage() {
             <div className="stick-no-bills text-black">Loading braids...</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {braids.map((braid, index) => (
               <div
                 key={braid.id}
