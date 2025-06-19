@@ -521,9 +521,7 @@ export default function BraidGlossaryPage() {
       )}
 
       {/* Sticky Menu Bar */}
-      <div
-        className={`fixed top-0 left-0 right-0 z-20 bg-gradient-to-br from-slate-50 to-slate-100 ${demoStatus.isDemo ? "top-12" : ""}`}
-      >
+      <div className={`fixed top-0 left-0 right-0 z-20 ${demoStatus.isDemo ? "top-12" : ""}`}>
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
             <div className="flex gap-4 border-2 border-black rounded-full p-4">
@@ -716,82 +714,6 @@ export default function BraidGlossaryPage() {
                       className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     />
 
-                    {/* Account Creation Toggle */}
-                    <div className="mt-6 mb-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <input
-                          type="checkbox"
-                          id="createAccount"
-                          checked={showAccountCreation}
-                          onChange={(e) => setShowAccountCreation(e.target.checked)}
-                          className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
-                        />
-                        <label htmlFor="createAccount" className="text-sm stick-no-bills text-black font-medium">
-                          CREATE ACCOUNT TO TRACK YOUR SUBMISSIONS
-                        </label>
-                      </div>
-
-                      {showAccountCreation && (
-                        <div className="space-y-0 border-2 border-black rounded-lg overflow-hidden">
-                          {/* First Name */}
-                          <input
-                            type="text"
-                            name="firstName"
-                            value={accountData.firstName}
-                            onChange={(e) => setAccountData((prev) => ({ ...prev, firstName: e.target.value }))}
-                            placeholder="First name"
-                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
-                            required={showAccountCreation}
-                          />
-
-                          {/* Last Name */}
-                          <input
-                            type="text"
-                            name="lastName"
-                            value={accountData.lastName}
-                            onChange={(e) => setAccountData((prev) => ({ ...prev, lastName: e.target.value }))}
-                            placeholder="Last name"
-                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
-                            required={showAccountCreation}
-                          />
-
-                          {/* Email */}
-                          <input
-                            type="email"
-                            name="email"
-                            value={accountData.email}
-                            onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}
-                            placeholder="Email address"
-                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
-                            required={showAccountCreation}
-                          />
-
-                          {/* Password */}
-                          <input
-                            type="password"
-                            name="password"
-                            value={accountData.password}
-                            onChange={(e) => setAccountData((prev) => ({ ...prev, password: e.target.value }))}
-                            placeholder="Password (min 6 characters)"
-                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
-                            minLength={6}
-                            required={showAccountCreation}
-                          />
-
-                          {/* Confirm Password */}
-                          <input
-                            type="password"
-                            name="confirmPassword"
-                            value={accountData.confirmPassword}
-                            onChange={(e) => setAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                            placeholder="Confirm password"
-                            className="w-full h-16 px-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
-                            required={showAccountCreation}
-                          />
-                        </div>
-                      )}
-                    </div>
-
                     {/* Audio Recording */}
                     {audioSupported && (
                       <div className="mt-0">
@@ -871,7 +793,7 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Agreement Checkbox - Full Width */}
-              <div className="flex items-start gap-3 p-4 bg-gray-50 mb-6">
+              <div className="flex items-start gap-3 p-4 mb-6">
                 <input
                   type="checkbox"
                   id="agreeToShare"
@@ -887,6 +809,82 @@ export default function BraidGlossaryPage() {
                   I agree to submit and share my braid information in the public glossary for educational and cultural
                   preservation purposes.
                 </label>
+              </div>
+
+              {/* Account Creation Toggle */}
+              <div className="mt-6 mb-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <input
+                    type="checkbox"
+                    id="createAccount"
+                    checked={showAccountCreation}
+                    onChange={(e) => setShowAccountCreation(e.target.checked)}
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                  />
+                  <label htmlFor="createAccount" className="text-sm stick-no-bills text-black font-medium">
+                    CREATE ACCOUNT TO TRACK YOUR SUBMISSIONS
+                  </label>
+                </div>
+
+                {showAccountCreation && (
+                  <div className="space-y-0 border-2 border-black rounded-lg overflow-hidden">
+                    {/* First Name */}
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={accountData.firstName}
+                      onChange={(e) => setAccountData((prev) => ({ ...prev, firstName: e.target.value }))}
+                      placeholder="First name"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      required={showAccountCreation}
+                    />
+
+                    {/* Last Name */}
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={accountData.lastName}
+                      onChange={(e) => setAccountData((prev) => ({ ...prev, lastName: e.target.value }))}
+                      placeholder="Last name"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      required={showAccountCreation}
+                    />
+
+                    {/* Email */}
+                    <input
+                      type="email"
+                      name="email"
+                      value={accountData.email}
+                      onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}
+                      placeholder="Email address"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      required={showAccountCreation}
+                    />
+
+                    {/* Password */}
+                    <input
+                      type="password"
+                      name="password"
+                      value={accountData.password}
+                      onChange={(e) => setAccountData((prev) => ({ ...prev, password: e.target.value }))}
+                      placeholder="Password (min 6 characters)"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      minLength={6}
+                      required={showAccountCreation}
+                    />
+
+                    {/* Confirm Password */}
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={accountData.confirmPassword}
+                      onChange={(e) => setAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                      placeholder="Confirm password"
+                      className="w-full h-16 px-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      required={showAccountCreation}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Submit Button - Full Width */}
