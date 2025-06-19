@@ -637,79 +637,143 @@ export default function BraidGlossaryPage() {
         {/* Gallery Grid */}
         {!loading && braids.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {braids.map((braid) => (
-              <div
-                key={braid.id}
-                className="bg-white border-2 border-black rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                onClick={() => setShowDetailModal(braid)}
-              >
-                {/* Image */}
-                <div className="relative" style={{ aspectRatio: "3/4" }}>
-                  {braid.image_url ? (
-                    <img
-                      src={braid.image_url || "/placeholder.svg"}
-                      alt={braid.braid_name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.src =
-                          "/placeholder.svg?height=300&width=225&text=" + encodeURIComponent(braid.braid_name)
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500 stick-no-bills text-sm text-center p-4">{braid.braid_name}</span>
+            {braids.map((braid) => {
+              // Determine if this braid has multiple images
+              const hasMultipleImages = (braid as any).image_urls && (braid as any).image_urls.length > 1
+              const totalImages = hasMultipleImages ? (braid as any).image_urls.length : braid.image_url ? 1 : 0
+
+              return (
+                <div
+                  key={braid.id}
+                  className="bg-white border-2 border-black rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                  onClick={() => setShowDetailModal(braid)}
+                >
+                  {/* Image or Title Area */}
+                  <div className="relative" style={{ aspectRatio: "3/4" }}>
+                    {braid.submission_type === "photo" && braid.image_url ? (
+                      <>
+                        <img
+                          src={braid.image_url || "/placeholder.svg"}
+                          alt={braid.braid_name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src =
+                              "/placeholder.svg?height=300&width=225&text=" + encodeURIComponent(braid.braid_name)
+                          }}
+                        />
+
+                        {/* Multiple images navigation */}
+                        {hasMultipleImages && (
+                          <div className="absolute top-2 left-2">
+                            <div className="bg-black/70 text-white px-2 py-1 rounded text-xs stick-no-bills mb-1">
+                              1 / {totalImages}
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  // Handle previous image navigation
+                                }}
+                                className="w-8 h-8 bg-black/70 text-white rounded flex items-center justify-center hover:bg-black/90 transition-colors"
+                                title="Previous image"
+                              >
+                                ←
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  // Handle next image navigation
+                                }}
+                                className="w-8 h-8 bg-black/70 text-white rounded flex items-center justify-center hover:bg-black/90 transition-colors"
+                                title="Next image"
+                              >
+                                →
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      // Title display for link and memory submissions
+                      <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center p-4">
+                        <h3 className="text-2xl sm:text-xl md:text-2xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                          {braid.submission_type === "memory"
+                            ? (braid as any).memory_title || braid.braid_name || "Untitled Memory"
+                            : braid.submission_type === "link"
+                              ? (braid as any).link_title || braid.braid_name || "Untitled Link"
+                              : braid.braid_name}
+                        </h3>
+                      </div>
+                    )}
+
+                    {/* Audio button overlay */}
+                    {braid.audio_url && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleAudio(braid.id, braid.audio_url!)
+                        }}
+                        className="absolute top-2 right-2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
+                        title="Play pronunciation"
+                      >
+                        {playingAudio[braid.id.toString()] ? "⏸" : "▶"}
+                      </button>
+                    )}
+
+                    {/* Submission type indicator */}
+                    <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills uppercase">
+                      {braid.submission_type}
                     </div>
-                  )}
+                  </div>
 
-                  {/* Audio button overlay */}
-                  {braid.audio_url && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        toggleAudio(braid.id, braid.audio_url!)
-                      }}
-                      className="absolute top-2 right-2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
-                      title="Play pronunciation"
-                    >
-                      {playingAudio[braid.id.toString()] ? "⏸" : "▶"}
-                    </button>
-                  )}
-                </div>
+                  {/* Content */}
+                  <div className="p-4">
+                    {/* Show braid name for photo submissions, or subtitle for others */}
+                    {braid.submission_type === "photo" ? (
+                      <h3 className="text-lg font-bold stick-no-bills text-black uppercase mb-2">{braid.braid_name}</h3>
+                    ) : (
+                      <p className="text-sm stick-no-bills text-gray-600 mb-2">
+                        {braid.submission_type === "memory"
+                          ? (braid as any).memory_description?.substring(0, 100) + "..." || "Memory submission"
+                          : braid.submission_type === "link"
+                            ? (braid as any).link_description?.substring(0, 100) + "..." || "Link submission"
+                            : ""}
+                      </p>
+                    )}
 
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="text-lg font-bold stick-no-bills text-black uppercase mb-2">{braid.braid_name}</h3>
+                    {braid.alt_names && braid.submission_type === "photo" && (
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        {braid.alt_names
+                          .split(",")
+                          .slice(0, 2)
+                          .map((name, index) => (
+                            <span
+                              key={index}
+                              className="px-2 py-1 bg-green-400 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
+                            >
+                              {name.trim()}
+                            </span>
+                          ))}
+                      </div>
+                    )}
 
-                  {braid.alt_names && (
-                    <div className="flex flex-wrap gap-1 mb-2">
-                      {braid.alt_names
-                        .split(",")
-                        .slice(0, 2)
-                        .map((name, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-green-400 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
-                          >
-                            {name.trim()}
-                          </span>
-                        ))}
-                    </div>
-                  )}
-
-                  <div className="space-y-1 stick-no-bills text-xs text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-black uppercase">REGION:</span>
-                      <span className="text-black uppercase">{braid.region}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-black uppercase">BY:</span>
-                      <span className="text-black uppercase">{braid.contributor_name}</span>
+                    <div className="space-y-1 stick-no-bills text-xs text-gray-600">
+                      {braid.region && (
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-black uppercase">REGION:</span>
+                          <span className="text-black uppercase">{braid.region}</span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-black uppercase">BY:</span>
+                        <span className="text-black uppercase">{braid.contributor_name}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 
