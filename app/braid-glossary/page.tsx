@@ -930,7 +930,7 @@ export default function BraidGlossaryPage() {
                             name="linkTitle"
                             value={formData.linkTitle ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Braid title"
+                            placeholder="Title"
                             className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
                           />
                           <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 stick-no-bills text-sm">
@@ -963,7 +963,6 @@ export default function BraidGlossaryPage() {
                         </div>
 
                         {/* Basic Info for Link */}
-                        {/*
                         <div className="grid grid-cols-2 gap-4">
                           <input
                             type="text"
@@ -984,21 +983,11 @@ export default function BraidGlossaryPage() {
                             required
                           />
                         </div>
-                        */}
-                        <input
-                          type="text"
-                          name="contributorName"
-                          value={formData.contributorName ?? ""}
-                          onChange={handleInputChange}
-                          placeholder="Your name"
-                          className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
-                          required
-                        />
                       </div>
                     </div>
                   ) : (
                     // Memory Form - Full Width
-                    <div className="bg-gray-50 p-8 space-y-6">
+                    <div className="bg-blue-50 p-8 space-y-6">
                       <div className="text-center mb-6">
                         <h3 className="text-xl stick-no-bills text-black font-medium">SHARE A MEMORY</h3>
                         <p className="text-sm stick-no-bills text-gray-600 mt-2">
@@ -1013,7 +1002,7 @@ export default function BraidGlossaryPage() {
                           name="memoryTitle"
                           value={formData.memoryTitle ?? ""}
                           onChange={handleInputChange}
-                          placeholder="Braid memory title"
+                          placeholder="Memory title"
                           className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
                           required={submissionType === "memory"}
                         />
@@ -1085,7 +1074,6 @@ export default function BraidGlossaryPage() {
                         )}
 
                         {/* Basic Info for Memory */}
-                        {/*
                         <div className="grid grid-cols-2 gap-4">
                           <input
                             type="text"
@@ -1105,16 +1093,6 @@ export default function BraidGlossaryPage() {
                             required
                           />
                         </div>
-                        */}
-                        <input
-                          type="text"
-                          name="contributorName"
-                          value={formData.contributorName ?? ""}
-                          onChange={handleInputChange}
-                          placeholder="Your name"
-                          className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
-                          required
-                        />
                       </div>
                     </div>
                   )}
@@ -1462,5 +1440,5 @@ export default function BraidGlossaryPage() {
                     <span className="text-black uppercase">{showDetailModal.region}</span>
                   </div>
 
-                  <div className="flex items-center gap-2">\
-                    <span className=
+                  <div className="flex items-center gap-2">
+                    <span className\
