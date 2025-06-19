@@ -562,13 +562,6 @@ export default function BraidGlossaryPage() {
                 <img src="/main.svg" alt="Main" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
-                onClick={() => window.location.reload()}
-                className="hover:opacity-70 transition-opacity"
-                title="Refresh page"
-              >
-                <img src="/refresh.svg" alt="Refresh" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-              </button>
-              <button
                 onClick={() => setShowInfoModal(true)}
                 className="hover:opacity-70 transition-opacity"
                 title="Learn more about the braid glossary"
@@ -597,14 +590,7 @@ export default function BraidGlossaryPage() {
       {/* Main Content */}
       <div className="pt-32 px-8 pb-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold stick-no-bills text-black uppercase mb-4">
-            BRAID GLOSSARY
-          </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl stick-no-bills text-gray-600 max-w-3xl mx-auto">
-            A crowdsourced collection of braided hairstyles across cultures and traditions
-          </p>
-        </div>
+        <div className="text-center mb-12">{/* Remove this entire header section */}</div>
 
         {/* Demo Status Banner */}
         {demoStatus.isDemo && (
@@ -781,280 +767,83 @@ export default function BraidGlossaryPage() {
               {/* Conditional Layout Based on Submission Type */}
               {submissionType === "photo" ? (
                 // Two-column layout for photo submissions
-                <div className="flex">
+                <div className="flex h-full">
                   {/* Left Side - Photo Upload Area */}
                   <div className="w-1/2">
                     <div
                       className={`relative bg-green-400 border-r-2 border-black transition-colors ${
                         isDragOver ? "bg-green-500" : ""
-                      } flex flex-col items-center justify-center cursor-pointer overflow-visible`}
-                      style={{ height: "384px", aspectRatio: "1/1" }}
+                      } flex flex-col items-center justify-center cursor-pointer overflow-visible h-full`}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
                       onClick={() => document.getElementById("file-input")?.click()}
                     >
-                      {formData.imageFiles.length > 0 || formData.imageUrl ? (
-                        <div className="w-full h-full relative">
-                          {formData.imageFiles.length > 0 ? (
-                            <div className="w-full h-full relative">
-                              {/* Main image */}
-                              <div className="relative w-full h-full">
-                                <img
-                                  src={URL.createObjectURL(formData.imageFiles[0]) || "/placeholder.svg"}
-                                  alt="Main preview"
-                                  className="w-full h-full object-cover"
-                                />
-
-                                {/* Thumbnails overlay - only show if more than 1 image */}
-                                {formData.imageFiles.length > 1 && (
-                                  <div className="absolute bottom-2 right-2 flex gap-1 max-w-[120px] flex-wrap">
-                                    {formData.imageFiles.slice(1).map((file, index) => (
-                                      <div
-                                        key={index + 1}
-                                        className="relative group cursor-pointer"
-                                        draggable
-                                        onDragStart={(e) => {
-                                          e.dataTransfer.setData("text/plain", (index + 1).toString())
-                                        }}
-                                        onDragOver={(e) => e.preventDefault()}
-                                        onDrop={(e) => {
-                                          e.preventDefault()
-                                          e.stopPropagation()
-                                          const draggedIndex = Number.parseInt(e.dataTransfer.getData("text/plain"))
-                                          const targetIndex = index + 1
-
-                                          if (draggedIndex !== targetIndex) {
-                                            const newFiles = [...formData.imageFiles]
-                                            const draggedFile = newFiles[draggedIndex]
-                                            newFiles.splice(draggedIndex, 1)
-                                            newFiles.splice(targetIndex, 0, draggedFile)
-                                            setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
-                                          }
-                                        }}
-                                        onClick={(e) => {
-                                          e.stopPropagation()
-                                          // Move clicked thumbnail to main position
-                                          const newFiles = [...formData.imageFiles]
-                                          const clickedFile = newFiles[index + 1]
-                                          const mainFile = newFiles[0]
-                                          newFiles[0] = clickedFile
-                                          newFiles[index + 1] = mainFile
-                                          setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
-                                        }}
-                                      >
-                                        <img
-                                          src={URL.createObjectURL(file) || "/placeholder.svg"}
-                                          alt={`Thumbnail ${index + 2}`}
-                                          className="w-8 h-8 object-cover border border-white/50 rounded"
-                                        />
-                                        {/* Delete button */}
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation()
-                                            const newFiles = [...formData.imageFiles]
-                                            newFiles.splice(index + 1, 1)
-                                            setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
-                                          }}
-                                          className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                          title="Delete image"
-                                        >
-                                          ×
-                                        </button>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-
-                                {/* Main image delete button */}
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    const newFiles = [...formData.imageFiles]
-                                    newFiles.splice(0, 1)
-                                    setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
-                                  }}
-                                  className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full text-sm flex items-center justify-center hover:bg-red-600 transition-colors"
-                                  title="Delete main image"
-                                >
-                                  ×
-                                </button>
-
-                                {/* Image counter */}
-                                {formData.imageFiles.length > 1 && (
-                                  <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
-                                    {formData.imageFiles.length} files
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="w-full h-full relative">
-                              <img
-                                src={formData.imageUrl || "/placeholder.svg"}
-                                alt="Preview"
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement
-                                  target.src = "/placeholder.svg?height=300&width=300&text=Invalid+Image"
-                                }}
-                              />
-                              {/* URL image delete button */}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  setFormData((prev) => ({ ...prev, imageUrl: "" }))
-                                }}
-                                className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full text-sm flex items-center justify-center hover:bg-red-600 transition-colors"
-                                title="Remove image URL"
-                              >
-                                ×
-                              </button>
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                            <p className="text-white text-center font-medium stick-no-bills">
-                              Click to {formData.imageFiles.length > 0 ? "change" : "add"} images
-                            </p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-center">
-                          <p className="text-black text-center font-medium stick-no-bills mb-2 text-lg">
-                            CLICK TO UPLOAD
-                          </p>
-                          <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 4 files)</p>
-                        </div>
-                      )}
-                      <input
-                        id="file-input"
-                        type="file"
-                        onChange={handleFileChange}
-                        accept="image/*,image/gif"
-                        multiple
-                        className="hidden"
-                      />
+                      {/* Upload content with 3rem responsive text */}
+                      <div className="text-center">
+                        <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
+                          CLICK TO UPLOAD
+                        </p>
+                        <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 4 files)</p>
+                      </div>
                     </div>
                   </div>
 
                   {/* Right Side - Form Fields for Photo */}
-                  <div className="w-1/2">
-                    <div className="space-y-0">
-                      {/* Braid Name */}
+                  <div className="w-1/2 flex flex-col">
+                    <div className="flex-1 flex flex-col">
+                      {/* Make input fields fill the height */}
                       <input
                         type="text"
                         name="braidName"
                         value={formData.braidName ?? ""}
                         onChange={handleInputChange}
                         placeholder="Braid name"
-                        className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
+                        className="flex-1 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
                         required
                       />
 
-                      {/* Alternative Names */}
                       <input
                         type="text"
                         name="altNames"
                         value={formData.altNames ?? ""}
                         onChange={handleInputChange}
                         placeholder="Alternative names"
-                        className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
+                        className="flex-1 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
                       />
 
-                      {/* Region */}
                       <input
                         type="text"
                         name="region"
                         value={formData.region ?? ""}
                         onChange={handleInputChange}
                         placeholder="Cultural origin"
-                        className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
+                        className="flex-1 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
                         required
                       />
 
-                      {/* Contributor */}
                       <input
                         type="text"
                         name="contributorName"
                         value={formData.contributorName ?? ""}
                         onChange={handleInputChange}
                         placeholder="Contributor name"
-                        className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
+                        className="flex-1 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
                         required
                       />
 
                       {/* Audio Recording */}
                       {audioSupported && (
-                        <div>
-                          <div className="flex items-center gap-3">
-                            {!isRecording && !audioBlob && (
-                              <button
-                                type="button"
-                                onClick={startRecording}
-                                className="w-full h-16 px-4 bg-gray-50 hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills"
-                              >
-                                Record pronunciation
-                              </button>
-                            )}
-
-                            {isRecording && (
-                              <div className="flex items-center gap-3 w-full">
-                                <button
-                                  type="button"
-                                  onClick={stopRecording}
-                                  className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white hover:bg-gray-700 text-sm font-medium stick-no-bills border-2 border-black"
-                                >
-                                  Stop
-                                </button>
-                                <span className="text-red-600 text-sm font-mono stick-no-bills">
-                                  🔴 {formatTime(recordingTime)}
-                                </span>
-                              </div>
-                            )}
-
-                            {audioBlob && (
-                              <div className="flex items-center gap-3 w-full">
-                                <button
-                                  type="button"
-                                  onClick={clearRecording}
-                                  className="px-3 py-1 bg-gray-400 text-white hover:bg-gray-500 text-sm stick-no-bills border-2 border-black"
-                                >
-                                  Clear
-                                </button>
-                                <span className="text-green-600 text-sm stick-no-bills">
-                                  ✓ Recorded ({formatTime(recordingTime)})
-                                </span>
-                              </div>
-                            )}
-                          </div>
-
-                          {audioUrl && (
-                            <audio controls className="w-full mt-4">
-                              <source src={audioUrl} type="audio/webm" />
-                              Your browser does not support audio playback.
-                            </audio>
+                        <div className="flex-1 flex items-center">
+                          {!isRecording && !audioBlob && (
+                            <button
+                              type="button"
+                              onClick={startRecording}
+                              className="w-full h-full px-4 bg-gray-50 hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills text-3xl sm:text-2xl md:text-3xl"
+                            >
+                              Record pronunciation
+                            </button>
                           )}
-                        </div>
-                      )}
-
-                      {/* Status Messages */}
-                      {error && (
-                        <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mt-6 stick-no-bills">
-                          {error}
-                        </div>
-                      )}
-
-                      {uploadStatus && (
-                        <div
-                          className={`p-4 text-sm mt-6 border-2 border-black stick-no-bills ${
-                            uploadStatus.includes("failed") || uploadStatus.includes("error")
-                              ? "bg-orange-50 text-orange-700"
-                              : uploadStatus.includes("successfully")
-                                ? "bg-green-50 text-green-700"
-                                : "bg-blue-50 text-blue-700"
-                          }`}
-                        >
-                          {uploadStatus}
                         </div>
                       )}
                     </div>
@@ -1075,7 +864,7 @@ export default function BraidGlossaryPage() {
                             value={formData.linkTitle ?? ""}
                             onChange={handleInputChange}
                             placeholder="Title"
-                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           />
                           <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 stick-no-bills text-sm">
                             Optional
@@ -1089,7 +878,7 @@ export default function BraidGlossaryPage() {
                           value={formData.linkUrl ?? ""}
                           onChange={handleInputChange}
                           placeholder="URL"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required={submissionType === "link"}
                         />
 
@@ -1101,7 +890,7 @@ export default function BraidGlossaryPage() {
                             onChange={handleInputChange}
                             placeholder="Description"
                             rows={4}
-                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
+                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
                           />
                           <span className="absolute right-4 top-4 text-gray-400 stick-no-bills text-sm">Optional</span>
                         </div>
@@ -1113,7 +902,7 @@ export default function BraidGlossaryPage() {
                           value={formData.contributorName ?? ""}
                           onChange={handleInputChange}
                           placeholder="Your name"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required
                         />
                       </div>
@@ -1129,7 +918,7 @@ export default function BraidGlossaryPage() {
                           value={formData.memoryTitle ?? ""}
                           onChange={handleInputChange}
                           placeholder="Memory title"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required={submissionType === "memory"}
                         />
 
@@ -1140,7 +929,7 @@ export default function BraidGlossaryPage() {
                           onChange={handleInputChange}
                           placeholder="Share your memory, story, or tradition..."
                           rows={8}
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
                           required={submissionType === "memory"}
                         />
 
@@ -1206,7 +995,7 @@ export default function BraidGlossaryPage() {
                           value={formData.contributorName ?? ""}
                           onChange={handleInputChange}
                           placeholder="Your name"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required
                         />
                       </div>
