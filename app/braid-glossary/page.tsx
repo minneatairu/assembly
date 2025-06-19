@@ -612,23 +612,29 @@ export default function BraidGlossaryPage() {
           </div>
         )}
 
-        {/* Gallery Grid */}
+        {/* Gallery Grid - Masonry Layout */}
         {!loading && braids.length > 0 && (
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="columns-2 gap-6 space-y-6">
               {braids.map((braid) => {
                 // Determine if this braid has multiple images
                 const hasMultipleImages = (braid as any).image_urls && (braid as any).image_urls.length > 1
                 const totalImages = hasMultipleImages ? (braid as any).image_urls.length : braid.image_url ? 1 : 0
+                const isTextSubmission = braid.submission_type === "link" || braid.submission_type === "memory"
 
                 return (
                   <div
                     key={braid.id}
-                    className="bg-white overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    className="bg-white overflow-hidden hover:shadow-lg transition-shadow cursor-pointer break-inside-avoid mb-6"
                     onClick={() => setShowDetailModal(braid)}
                   >
                     {/* Image or Title Area */}
-                    <div className="relative" style={{ aspectRatio: "3/4" }}>
+                    <div 
+                      className="relative" 
+                      style={{ 
+                        aspectRatio: isTextSubmission ? "1/1" : "3/4" 
+                      }}
+                    >
                       {braid.submission_type === "photo" && braid.image_url ? (
                         <>
                           <img
@@ -674,9 +680,9 @@ export default function BraidGlossaryPage() {
                           )}
                         </>
                       ) : (
-                        // Title display for link and memory submissions
+                        // Title display for link and memory submissions - 1:1 aspect ratio
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center p-4">
-                          <h3 className="text-2xl sm:text-xl md:text-2xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                          <h3 className="text-xl sm:text-lg md:text-xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
                             {braid.submission_type === "memory"
                               ? (braid as any).memory_title || braid.braid_name || "Untitled Memory"
                               : braid.submission_type === "link"
@@ -787,7 +793,7 @@ export default function BraidGlossaryPage() {
 
             <div className="p-0">
               {/* Submission Type Dropdown - Always Visible */}
-              <div className="border-b-2 border-black">
+              <div className="border-b-2 border-black relative">
                 <select
                   value={submissionType}
                   onChange={(e) => setSubmissionType(e.target.value as "photo" | "link" | "memory")}
@@ -797,7 +803,7 @@ export default function BraidGlossaryPage() {
                   <option value="link">Link Submission</option>
                   <option value="memory">Memory Submission</option>
                 </select>
-                <div className="absolute right-4 top-4 pointer-events-none">
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
                     <path
                       d="M1 1L6 6L11 1"
@@ -810,6 +816,16 @@ export default function BraidGlossaryPage() {
                 </div>
               </div>
 
+              {/* Hidden file input */}
+              <input
+                id="file-input"
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+
               {/* Conditional Layout Based on Submission Type */}
               {submissionType === "photo" ? (
                 // Two-column layout for photo submissions
@@ -819,19 +835,37 @@ export default function BraidGlossaryPage() {
                     <div
                       className={`relative bg-green-400 border-r-2 border-black transition-colors ${
                         isDragOver ? "bg-green-500" : ""
-                      } flex flex-col items-center justify-center cursor-pointer overflow-visible h-full`}
+                      } flex flex-col items-center justify-center cursor-pointer overflow-visible h-full min-h-[500px]`}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
                       onClick={() => document.getElementById("file-input")?.click()}
                     >
-                      {/* Upload content with 3rem responsive text */}
-                      <div className="text-center">
-                        <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
-                          CLICK TO UPLOAD
-                        </p>
-                        <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 4 files)</p>
-                      </div>
+                      {/* Show uploaded files or upload prompt */}
+                      {formData.imageFiles.length > 0 ? (
+                        <div className="text-center p-4">
+                          <p className="text-black text-lg stick-no-bills mb-4">
+                            {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? 's' : ''} selected
+                          </p>
+                          <div className="space-y-2">
+                            {formData.imageFiles.map((file, index) => (
+                              <div key={index} className="text-black text-sm stick-no-bills">
+                                {file.name}
+                              </div>
+                            ))}
+                          </div>
+                          <p className="text-black text-sm stick-no-bills mt-4">
+                            Click to change files
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
+                            CLICK TO UPLOAD
+                          </p>
+                          <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 4 files)</p>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -889,6 +923,30 @@ export default function BraidGlossaryPage() {
                             >
                               Record pronunciation
                             </button>
+                          )}
+                          {isRecording && (
+                            <div className="w-full h-full px-4 bg-red-50 flex items-center justify-between">
+                              <span className="text-red-600 stick-no-bills text-2xl">Recording...</span>
+                              <button
+                                type="button"
+                                onClick={stopRecording}
+                                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 stick-no-bills"
+                              >
+                                Stop
+                              </button>
+                            </div>
+                          )}
+                          {audioBlob && (
+                            <div className="w-full h-full px-4 bg-green-50 flex items-center justify-between">
+                              <span className="text-green-600 stick-no-bills text-2xl">Recorded!</span>
+                              <button
+                                type="button"
+                                onClick={clearRecording}
+                                className="px-4 py-2 bg-gray-400 text-white hover:bg-gray-500 stick-no-bills"
+                              >
+                                Clear
+                              </button>
+                            </div>
                           )}
                         </div>
                       )}
@@ -1373,54 +1431,4 @@ export default function BraidGlossaryPage() {
                 {/* Tags */}
                 {showDetailModal.alt_names && (
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {showDetailModal.alt_names.split(",").map((name, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase"
-                      >
-                        {name.trim()}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Details - Inline Format */}
-                <div className="space-y-1 stick-no-bills text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-black uppercase">REGION:</span>
-                    <span className="text-black uppercase">{showDetailModal.region}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-black uppercase">CONTRIBUTOR:</span>
-                    <span className="text-black uppercase">{showDetailModal.contributor_name}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-black uppercase">ADDED:</span>
-                    <span className="text-black uppercase">
-                      {new Date(showDetailModal.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Audio */}
-                {showDetailModal.audio_url && (
-                  <div className="mt-6">
-                    <h4 className="stick-no-bills text-black font-medium mb-2 uppercase">Pronunciation</h4>
-                    <button
-                      onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                      className="flex items-center gap-2 px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors stick-no-bills"
-                    >
-                      {playingAudio[showDetailModal.id.toString()] ? "⏸ Stop" : "▶ Play"}
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+                    {showDetailModal.alt_names
