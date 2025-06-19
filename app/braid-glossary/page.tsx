@@ -1065,15 +1065,8 @@ export default function BraidGlossaryPage() {
                 <div className="w-full">
                   {submissionType === "link" ? (
                     // Link Form - Full Width
-                    <div className="bg-gray-50 p-8 space-y-6">
-                      <div className="text-center mb-6">
-                        <h3 className="text-xl stick-no-bills text-black font-medium">SHARE A LINK</h3>
-                        <p className="text-sm stick-no-bills text-gray-600 mt-2">
-                          Share a link to a braid tutorial, article, or resource
-                        </p>
-                      </div>
-
-                      <div className="max-w-2xl mx-auto space-y-6">
+                    <div className="bg-white p-8">
+                      <div className="max-w-2xl mx-auto space-y-0">
                         {/* Link Title */}
                         <div className="relative">
                           <input
@@ -1082,7 +1075,7 @@ export default function BraidGlossaryPage() {
                             value={formData.linkTitle ?? ""}
                             onChange={handleInputChange}
                             placeholder="Title"
-                            className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
+                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           />
                           <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 stick-no-bills text-sm">
                             Optional
@@ -1096,7 +1089,7 @@ export default function BraidGlossaryPage() {
                           value={formData.linkUrl ?? ""}
                           onChange={handleInputChange}
                           placeholder="URL"
-                          className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required={submissionType === "link"}
                         />
 
@@ -1108,45 +1101,27 @@ export default function BraidGlossaryPage() {
                             onChange={handleInputChange}
                             placeholder="Description"
                             rows={4}
-                            className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400 resize-none"
+                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
                           />
                           <span className="absolute right-4 top-4 text-gray-400 stick-no-bills text-sm">Optional</span>
                         </div>
 
                         {/* Basic Info for Link */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            name="braidName"
-                            value={formData.braidName ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Braid name"
-                            className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
-                            required
-                          />
-                          <input
-                            type="text"
-                            name="contributorName"
-                            value={formData.contributorName ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Your name"
-                            className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
-                            required
-                          />
-                        </div>
+                        <input
+                          type="text"
+                          name="contributorName"
+                          value={formData.contributorName ?? ""}
+                          onChange={handleInputChange}
+                          placeholder="Your name"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                          required
+                        />
                       </div>
                     </div>
                   ) : (
                     // Memory Form - Full Width
-                    <div className="bg-blue-50 p-8 space-y-6">
-                      <div className="text-center mb-6">
-                        <h3 className="text-xl stick-no-bills text-black font-medium">SHARE A MEMORY</h3>
-                        <p className="text-sm stick-no-bills text-gray-600 mt-2">
-                          Tell us about a braiding experience, tradition, or story
-                        </p>
-                      </div>
-
-                      <div className="max-w-2xl mx-auto space-y-6">
+                    <div className="bg-white p-8">
+                      <div className="max-w-2xl mx-auto space-y-0">
                         {/* Memory Title */}
                         <input
                           type="text"
@@ -1154,7 +1129,7 @@ export default function BraidGlossaryPage() {
                           value={formData.memoryTitle ?? ""}
                           onChange={handleInputChange}
                           placeholder="Memory title"
-                          className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required={submissionType === "memory"}
                         />
 
@@ -1165,7 +1140,7 @@ export default function BraidGlossaryPage() {
                           onChange={handleInputChange}
                           placeholder="Share your memory, story, or tradition..."
                           rows={8}
-                          className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400 resize-none"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
                           required={submissionType === "memory"}
                         />
 
@@ -1225,25 +1200,15 @@ export default function BraidGlossaryPage() {
                         )}
 
                         {/* Basic Info for Memory */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            name="braidName"
-                            value={formData.braidName ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Braid name (if applicable)"
-                            className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
-                          />
-                          <input
-                            type="text"
-                            name="contributorName"
-                            value={formData.contributorName ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Your name"
-                            className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
-                            required
-                          />
-                        </div>
+                        <input
+                          type="text"
+                          name="contributorName"
+                          value={formData.contributorName ?? ""}
+                          onChange={handleInputChange}
+                          placeholder="Your name"
+                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                          required
+                        />
                       </div>
                     </div>
                   )}
