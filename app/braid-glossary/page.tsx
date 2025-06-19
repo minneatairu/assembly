@@ -61,6 +61,9 @@ export default function BraidGlossaryPage() {
     lastName: "",
   })
 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentImageIndices, setCurrentImageIndices] = useState<{ [key: string]: number }>({})
+
   // Check audio support on mount
   useEffect(() => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -545,8 +548,6 @@ export default function BraidGlossaryPage() {
     }
   }, [audioUrl])
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Sticky Menu Bar */}
@@ -621,6 +622,7 @@ export default function BraidGlossaryPage() {
                 const hasMultipleImages = (braid as any).image_urls && (braid as any).image_urls.length > 1
                 const totalImages = hasMultipleImages ? (braid as any).image_urls.length : braid.image_url ? 1 : 0
                 const isTextSubmission = braid.submission_type === "link" || braid.submission_type === "memory"
+                const currentImageIndex = currentImageIndices[braid.id.toString()] || 0
 
                 return (
                   <div
@@ -638,7 +640,9 @@ export default function BraidGlossaryPage() {
                       {braid.submission_type === "photo" && braid.image_url ? (
                         <>
                           <img
-                            src={braid.image_url || "/placeholder.svg"}
+                            src={
+                              (braid as any).image_urls?.[currentImageIndex] || braid.image_url || "/placeholder.svg"
+                            }
                             alt={braid.braid_name}
                             className="w-full h-full object-cover"
                             onError={(e) => {
@@ -651,16 +655,18 @@ export default function BraidGlossaryPage() {
                           {/* Multiple images navigation */}
                           {hasMultipleImages && (
                             <div className="absolute top-2 left-2">
-                              <div className="bg-black/70 text-white px-2 py-1 rounded text-xs stick-no-bills mb-1">
-                                1 / {totalImages}
+                              <div className="bg-black text-white px-2 py-1 text-xs stick-no-bills mb-1">
+                                {currentImageIndex + 1} / {totalImages}
                               </div>
                               <div className="flex flex-col gap-1">
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    // Handle previous image navigation
+                                    const currentIndex = currentImageIndices[braid.id.toString()] || 0
+                                    const newIndex = currentIndex > 0 ? currentIndex - 1 : totalImages - 1
+                                    setCurrentImageIndices((prev) => ({ ...prev, [braid.id.toString()]: newIndex }))
                                   }}
-                                  className="w-8 h-8 bg-black/70 text-white rounded flex items-center justify-center hover:bg-black/90 transition-colors"
+                                  className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
                                   title="Previous image"
                                 >
                                   ←
@@ -668,9 +674,11 @@ export default function BraidGlossaryPage() {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    // Handle next image navigation
+                                    const currentIndex = currentImageIndices[braid.id.toString()] || 0
+                                    const newIndex = currentIndex < totalImages - 1 ? currentIndex + 1 : 0
+                                    setCurrentImageIndices((prev) => ({ ...prev, [braid.id.toString()]: newIndex }))
                                   }}
-                                  className="w-8 h-8 bg-black/70 text-white rounded flex items-center justify-center hover:bg-black/90 transition-colors"
+                                  className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
                                   title="Next image"
                                 >
                                   →
@@ -1379,7 +1387,7 @@ export default function BraidGlossaryPage() {
                         {currentImageIndex > 0 && (
                           <button
                             onClick={() => setCurrentImageIndex((prev) => prev - 1)}
-                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70"
+                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black text-white w-8 h-8 flex items-center justify-center hover:bg-gray-800"
                             style={{ zIndex: 101 }}
                           >
                             ←
@@ -1389,7 +1397,7 @@ export default function BraidGlossaryPage() {
                         {currentImageIndex < (showDetailModal as any).image_urls.length - 1 && (
                           <button
                             onClick={() => setCurrentImageIndex((prev) => prev + 1)}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70"
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black text-white w-8 h-8 flex items-center justify-center hover:bg-gray-800"
                             style={{ zIndex: 101 }}
                           >
                             →
@@ -1398,7 +1406,7 @@ export default function BraidGlossaryPage() {
 
                         {/* Image counter */}
                         <div
-                          className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills"
+                          className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 text-xs stick-no-bills"
                           style={{ zIndex: 101 }}
                         >
                           {currentImageIndex + 1} / {(showDetailModal as any).image_urls.length}
