@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from "react"
 import { db, type Braid } from "@/lib/db"
 
 export default function BraidGlossaryPage() {
+  // Add Memory to the submission type
+  const [submissionType, setSubmissionType] = useState<"photo" | "link" | "memory">("photo")
   const [showForm, setShowForm] = useState(false)
   const [showInfoModal, setShowInfoModal] = useState(false)
   const [braids, setBraids] = useState<Braid[]>([])
@@ -17,7 +19,7 @@ export default function BraidGlossaryPage() {
   const [showDetailModal, setShowDetailModal] = useState<Braid | null>(null)
 
   // Submission type state
-  const [submissionType, setSubmissionType] = useState<"photo" | "link">("photo")
+  // const [submissionType, setSubmissionType] = useState<"photo" | "link">("photo")
 
   // Audio recording states
   const [isRecording, setIsRecording] = useState(false)
@@ -37,6 +39,7 @@ export default function BraidGlossaryPage() {
   // Drag and drop states
   const [isDragOver, setIsDragOver] = useState(false)
 
+  // Add memory-specific form fields to the formData state:
   const [formData, setFormData] = useState({
     braidName: "",
     altNames: "",
@@ -47,6 +50,8 @@ export default function BraidGlossaryPage() {
     linkUrl: "",
     linkTitle: "",
     linkDescription: "",
+    memoryTitle: "",
+    memoryDescription: "",
     agreeToShare: false,
   })
 
@@ -392,6 +397,12 @@ export default function BraidGlossaryPage() {
       return
     }
 
+    // Add validation for memory submissions
+    if (submissionType === "memory" && (!formData.memoryTitle.trim() || !formData.memoryDescription.trim())) {
+      setError("Please provide both a title and description for memory submissions.")
+      return
+    }
+
     setSubmitting(true)
     setError(null)
     setUploadStatus(null)
@@ -414,16 +425,18 @@ export default function BraidGlossaryPage() {
         // Continue even if audio upload fails
       }
 
-      // Add braid to database
+      // Add memory-specific fields to the database submission
       const newBraid = await db.addBraid({
         braid_name: formData.braidName,
         alt_names: formData.altNames || undefined,
         region: formData.region,
         image_url: imageUrls.length > 0 ? imageUrls[0] : undefined,
-        image_urls: imageUrls.length > 1 ? imageUrls : undefined, // Store multiple URLs
+        image_urls: imageUrls.length > 1 ? imageUrls : undefined,
         public_url: submissionType === "link" ? formData.linkUrl : undefined,
         link_title: submissionType === "link" ? formData.linkTitle : undefined,
         link_description: submissionType === "link" ? formData.linkDescription : undefined,
+        memory_title: submissionType === "memory" ? formData.memoryTitle : undefined,
+        memory_description: submissionType === "memory" ? formData.memoryDescription : undefined,
         contributor_name: formData.contributorName,
         audio_url: audioUrl || undefined,
         audio_notes: "Pronunciation guide", // Fixed description for pronunciation
@@ -433,7 +446,7 @@ export default function BraidGlossaryPage() {
       // Update local state
       setBraids((prev) => [newBraid, ...prev])
 
-      // Reset form
+      // Add memory fields to form reset
       setFormData({
         braidName: "",
         altNames: "",
@@ -444,6 +457,8 @@ export default function BraidGlossaryPage() {
         linkUrl: "",
         linkTitle: "",
         linkDescription: "",
+        memoryTitle: "",
+        memoryDescription: "",
         agreeToShare: false,
       })
 
@@ -590,16 +605,42 @@ export default function BraidGlossaryPage() {
               <img src="/closing.svg" alt="Close" className="w-10 h-10 sm:w-12 sm:h-12" />
             </button>
 
+            {/* Replace the form modal content section with: */}
             <div className="p-0">
+              {/* Submission Type Dropdown - Always Visible */}
+              <div className="border-b-2 border-black">
+                <select
+                  value={submissionType}
+                  onChange={(e) => setSubmissionType(e.target.value as "photo" | "link" | "memory")}
+                  className="w-full h-16 px-4 bg-gray-50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-lg appearance-none cursor-pointer"
+                >
+                  <option value="photo">Photo Submission</option>
+                  <option value="link">Link Submission</option>
+                  <option value="memory">Memory Submission</option>
+                </select>
+                <div className="absolute right-4 top-4 pointer-events-none">
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                    <path
+                      d="M1 1L6 6L11 1"
+                      stroke="#000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+
               <div className="flex">
-                {/* Left Side - Upload Area or Link Form */}
+                {/* Left Side - Upload Area, Link Form, or Memory Form */}
                 <div className="w-1/2">
                   {submissionType === "photo" ? (
+                    // Keep existing photo upload area
                     <div
                       className={`relative bg-green-400 border-r-2 border-black transition-colors ${
                         isDragOver ? "bg-green-500" : ""
                       } flex flex-col items-center justify-center cursor-pointer overflow-visible`}
-                      style={{ height: "384px", aspectRatio: "1/1" }} // Make it square
+                      style={{ height: "384px", aspectRatio: "1/1" }}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
@@ -746,32 +787,9 @@ export default function BraidGlossaryPage() {
                         className="hidden"
                       />
                     </div>
-                  ) : (
-                    /* Link Form */
+                  ) : submissionType === "link" ? (
+                    // Keep existing link form
                     <div className="bg-gray-50 border-r-2 border-black p-8 space-y-6" style={{ height: "384px" }}>
-                      {/* Submission Type Dropdown */}
-                      <div className="relative">
-                        <select
-                          value={submissionType}
-                          onChange={(e) => setSubmissionType(e.target.value as "photo" | "link")}
-                          className="w-full p-4 bg-white border border-gray-300 text-gray-700 stick-no-bills text-lg appearance-none cursor-pointer"
-                        >
-                          <option value="photo">Photo</option>
-                          <option value="link">Link</option>
-                        </select>
-                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                          <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                            <path
-                              d="M1 1L6 6L11 1"
-                              stroke="#9CA3AF"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-
                       {/* Link Title */}
                       <div className="relative">
                         <input
@@ -811,25 +829,47 @@ export default function BraidGlossaryPage() {
                         <span className="absolute right-4 top-4 text-gray-400 stick-no-bills text-sm">Optional</span>
                       </div>
                     </div>
+                  ) : (
+                    // New Memory Form
+                    <div className="bg-blue-50 border-r-2 border-black p-8 space-y-6" style={{ height: "384px" }}>
+                      <div className="text-center mb-6">
+                        <h3 className="text-xl stick-no-bills text-black font-medium">SHARE A MEMORY</h3>
+                        <p className="text-sm stick-no-bills text-gray-600 mt-2">
+                          Tell us about a braiding experience, tradition, or story
+                        </p>
+                      </div>
+
+                      {/* Memory Title */}
+                      <div className="relative">
+                        <input
+                          type="text"
+                          name="memoryTitle"
+                          value={formData.memoryTitle}
+                          onChange={handleInputChange}
+                          placeholder="Memory title"
+                          className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
+                          required={submissionType === "memory"}
+                        />
+                      </div>
+
+                      {/* Memory Description */}
+                      <div className="relative flex-1">
+                        <textarea
+                          name="memoryDescription"
+                          value={formData.memoryDescription}
+                          onChange={handleInputChange}
+                          placeholder="Share your memory, story, or tradition..."
+                          rows={6}
+                          className="w-full h-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400 resize-none"
+                          required={submissionType === "memory"}
+                        />
+                      </div>
+                    </div>
                   )}
                 </div>
 
                 {/* Right Side - Form Fields */}
                 <div className="w-1/2">
-                  {/* Submission Type Selector - Only show for photo mode */}
-                  {submissionType === "photo" && (
-                    <div className="border-b-2 border-black">
-                      <select
-                        value={submissionType}
-                        onChange={(e) => setSubmissionType(e.target.value as "photo" | "link")}
-                        className="w-full h-16 px-4 bg-gray-50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black appearance-none cursor-pointer"
-                      >
-                        <option value="photo">Photo Submission</option>
-                        <option value="link">Link Submission</option>
-                      </select>
-                    </div>
-                  )}
-
                   <div className="space-y-0">
                     {/* Braid Name */}
                     <input
