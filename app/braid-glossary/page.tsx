@@ -654,7 +654,7 @@ export default function BraidGlossaryPage() {
 
                           {/* Multiple images navigation */}
                           {hasMultipleImages && (
-                            <div className="absolute top-2 left-2">
+                            <div className="absolute top-0 left-0">
                               <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1">
                                 {currentImageIndex + 1} / {totalImages}
                               </div>
@@ -801,7 +801,7 @@ export default function BraidGlossaryPage() {
 
             <div className="p-0">
               {/* Submission Type Dropdown - Always Visible */}
-              <div className="border-b-2 border-black relative">
+              <div className="border-b-2 border-black relative w-1/4">
                 <select
                   value={submissionType}
                   onChange={(e) => setSubmissionType(e.target.value as "photo" | "link" | "memory")}
@@ -1406,7 +1406,7 @@ export default function BraidGlossaryPage() {
 
                         {/* Image counter */}
                         <div
-                          className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills"
+                          className="absolute top-0 left-0 bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills"
                           style={{ zIndex: 101 }}
                         >
                           {currentImageIndex + 1} / {(showDetailModal as any).image_urls.length}
