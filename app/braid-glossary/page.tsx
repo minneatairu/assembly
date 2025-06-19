@@ -884,21 +884,21 @@ export default function BraidGlossaryPage() {
 
               {/* Image Carousel with Stacked Effect */}
               {showDetailModal.image_url && (
-                <div className="w-full aspect-square relative overflow-hidden rounded-lg border-2 border-black">
+                <div className="w-full aspect-square relative">
                   {(showDetailModal as any).image_urls && (showDetailModal as any).image_urls.length > 1 ? (
                     <div className="relative w-full h-full">
                       {/* Background layers - visible parts of other images */}
                       {(showDetailModal as any).image_urls.map((url: string, index: number) => {
                         if (index === currentImageIndex) return null
-                        const offset = Math.min((index - currentImageIndex) * 12, 24) // Limit offset to prevent overflow
+                        const offset = (index - currentImageIndex) * 12
                         const zIndex = (showDetailModal as any).image_urls.length - Math.abs(index - currentImageIndex)
 
                         return (
                           <div
                             key={index}
-                            className="absolute inset-2 border-2 border-black rounded-lg overflow-hidden"
+                            className="absolute inset-0 border-2 border-black rounded-lg overflow-hidden"
                             style={{
-                              transform: `translate(${Math.abs(offset)}px, ${Math.abs(offset)}px)`,
+                              transform: `translate(${offset}px, ${offset}px)`,
                               zIndex: zIndex,
                             }}
                           >
@@ -916,7 +916,10 @@ export default function BraidGlossaryPage() {
                       })}
 
                       {/* Main image (current) */}
-                      <div className="relative w-full h-full rounded-lg overflow-hidden" style={{ zIndex: 100 }}>
+                      <div
+                        className="relative w-full h-full border-2 border-black rounded-lg overflow-hidden"
+                        style={{ zIndex: 100 }}
+                      >
                         <img
                           src={(showDetailModal as any).image_urls[currentImageIndex] || "/placeholder.svg"}
                           alt={showDetailModal.braid_name}
@@ -967,7 +970,7 @@ export default function BraidGlossaryPage() {
                     <img
                       src={showDetailModal.image_url || "/placeholder.svg"}
                       alt={showDetailModal.braid_name}
-                      className="w-full h-full object-cover cursor-pointer"
+                      className="w-full h-full object-cover cursor-pointer border-2 border-black rounded-lg"
                       onClick={() => handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name)}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
@@ -1081,10 +1084,10 @@ export default function BraidGlossaryPage() {
                       <>
                         {/* Third layer (most background) */}
                         {(braid as any).image_urls.length > 2 && (
-                          <div className="absolute inset-1 bg-white/30 border-2 border-black transform translate-x-3 translate-y-3 rounded-t-[50px] -z-20"></div>
+                          <div className="absolute inset-0 bg-white/30 border-2 border-black transform translate-x-4 translate-y-4 rounded-t-[50px] -z-20"></div>
                         )}
                         {/* Second layer (middle) */}
-                        <div className="absolute inset-1 bg-white/20 border-2 border-black transform translate-x-2 translate-y-2 rounded-t-[50px] -z-10"></div>
+                        <div className="absolute inset-0 bg-white/20 border-2 border-black transform translate-x-2 translate-y-2 rounded-t-[50px] -z-10"></div>
                         <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
                           {(braid as any).image_urls.length} photos
                         </div>
