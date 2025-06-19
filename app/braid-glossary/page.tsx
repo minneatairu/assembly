@@ -517,6 +517,20 @@ export default function BraidGlossaryPage() {
           <div className="flex items-center justify-start gap-4">
             <div className="flex gap-4 border-2 border-black rounded-full p-4">
               <button
+                onClick={() => (window.location.href = "/")}
+                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                title="Go to Data Assembly home"
+              >
+                <img src="/home.svg" alt="Home" className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                title="Refresh page"
+              >
+                <img src="/refresh.svg" alt="Refresh" className="w-6 h-6" />
+              </button>
+              <button
                 onClick={() => setShowInfoModal(true)}
                 className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
                 title="Learn more about the braid glossary"
@@ -1199,6 +1213,13 @@ export default function BraidGlossaryPage() {
                         target.src = "/placeholder.svg?height=400&width=300"
                       }}
                     />
+                    {/* Zoom icon overlay */}
+                    <div
+                      className="absolute bottom-2 left-2 bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors cursor-pointer"
+                      onClick={() => handleImageClick(braid.image_url!, braid.braid_name)}
+                    >
+                      <img src="/zoom.svg" alt="Zoom" className="w-4 h-4 filter invert" />
+                    </div>
                     {/* Stack effect for multiple images */}
                     {(braid as any).image_urls && (braid as any).image_urls.length > 1 && (
                       <>
