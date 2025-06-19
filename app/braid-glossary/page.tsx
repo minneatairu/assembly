@@ -259,11 +259,14 @@ export default function BraidGlossaryPage() {
   const fetchBraids = async () => {
     try {
       setError(null)
+      console.log("Fetching braids...")
       const data = await db.getBraids()
+      console.log("Fetched braids:", data)
       setBraids(data)
 
       // Check demo status
       const status = db.getDemoStatus()
+      console.log("Demo status:", status)
       setDemoStatus(status)
     } catch (error) {
       console.error("Error fetching braids:", error)
@@ -589,6 +592,154 @@ export default function BraidGlossaryPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="pt-32 px-8 pb-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold stick-no-bills text-black uppercase mb-4">
+            BRAID GLOSSARY
+          </h1>
+          <p className="text-lg sm:text-xl lg:text-2xl stick-no-bills text-gray-600 max-w-3xl mx-auto">
+            A crowdsourced collection of braided hairstyles across cultures and traditions
+          </p>
+        </div>
+
+        {/* Demo Status Banner */}
+        {demoStatus.isDemo && (
+          <div className="mb-8 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg text-center">
+            <p className="stick-no-bills text-blue-800">
+              <strong>Demo Mode:</strong> {demoStatus.reason || "Running in demonstration mode"}
+            </p>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <div className="stick-no-bills text-black text-xl">Loading braids...</div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="text-center py-12">
+            <div className="stick-no-bills text-red-600 text-xl mb-4">{error}</div>
+            <button
+              onClick={fetchBraids}
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 stick-no-bills"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {/* Debug Info */}
+        {!loading && (
+          <div className="mb-4 p-4 bg-gray-100 border rounded text-sm">
+            <p>
+              <strong>Debug Info:</strong>
+            </p>
+            <p>Braids count: {braids.length}</p>
+            <p>Demo mode: {demoStatus.isDemo ? "Yes" : "No"}</p>
+            <p>Loading: {loading ? "Yes" : "No"}</p>
+            <p>Error: {error || "None"}</p>
+          </div>
+        )}
+
+        {/* Gallery Grid */}
+        {!loading && braids.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {braids.map((braid) => (
+              <div
+                key={braid.id}
+                className="bg-white border-2 border-black rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => setShowDetailModal(braid)}
+              >
+                {/* Image */}
+                <div className="relative" style={{ aspectRatio: "3/4" }}>
+                  {braid.image_url ? (
+                    <img
+                      src={braid.image_url || "/placeholder.svg"}
+                      alt={braid.braid_name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src =
+                          "/placeholder.svg?height=300&width=225&text=" + encodeURIComponent(braid.braid_name)
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-500 stick-no-bills text-sm text-center p-4">{braid.braid_name}</span>
+                    </div>
+                  )}
+
+                  {/* Audio button overlay */}
+                  {braid.audio_url && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleAudio(braid.id, braid.audio_url!)
+                      }}
+                      className="absolute top-2 right-2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
+                      title="Play pronunciation"
+                    >
+                      {playingAudio[braid.id.toString()] ? "⏸" : "▶"}
+                    </button>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="text-lg font-bold stick-no-bills text-black uppercase mb-2">{braid.braid_name}</h3>
+
+                  {braid.alt_names && (
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {braid.alt_names
+                        .split(",")
+                        .slice(0, 2)
+                        .map((name, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-green-400 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
+                          >
+                            {name.trim()}
+                          </span>
+                        ))}
+                    </div>
+                  )}
+
+                  <div className="space-y-1 stick-no-bills text-xs text-gray-600">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-black uppercase">REGION:</span>
+                      <span className="text-black uppercase">{braid.region}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-black uppercase">BY:</span>
+                      <span className="text-black uppercase">{braid.contributor_name}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && braids.length === 0 && !error && (
+          <div className="text-center py-12">
+            <div className="stick-no-bills text-black text-xl mb-4">No braids found</div>
+            <p className="stick-no-bills text-gray-600 mb-6">Be the first to contribute to the glossary!</p>
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-green-400 text-black py-3 px-6 hover:bg-green-500 transition-colors stick-no-bills border-2 border-black rounded-full text-lg font-bold"
+            >
+              ADD A BRAID
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Form Modal */}
@@ -1441,4 +1592,35 @@ export default function BraidGlossaryPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className\
+                    <span className="font-medium text-black uppercase">CONTRIBUTOR:</span>
+                    <span className="text-black uppercase">{showDetailModal.contributor_name}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-black uppercase">ADDED:</span>
+                    <span className="text-black uppercase">
+                      {new Date(showDetailModal.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Audio */}
+                {showDetailModal.audio_url && (
+                  <div className="mt-6">
+                    <h4 className="stick-no-bills text-black font-medium mb-2 uppercase">Pronunciation</h4>
+                    <button
+                      onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
+                      className="flex items-center gap-2 px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors stick-no-bills"
+                    >
+                      {playingAudio[showDetailModal.id.toString()] ? "⏸ Stop" : "▶ Play"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
