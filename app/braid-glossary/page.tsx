@@ -36,6 +36,9 @@ export default function BraidGlossaryPage() {
   // Drag and drop states
   const [isDragOver, setIsDragOver] = useState(false)
 
+  // Custom dropdown state
+  const [showDropdown, setShowDropdown] = useState(false)
+
   // Add memory-specific form fields to the formData state:
   const [formData, setFormData] = useState({
     braidName: "",
@@ -127,8 +130,8 @@ export default function BraidGlossaryPage() {
       (file) => file.type.startsWith("image/") || file.type === "image/gif",
     )
 
-    if (allFiles.length > 4) {
-      setError("Please select only 4 images maximum for upload.")
+    if (allFiles.length > 5) {
+      setError("Please select only 5 images maximum for upload.")
       return
     }
 
@@ -526,8 +529,8 @@ export default function BraidGlossaryPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const allFiles = Array.from(e.target.files || [])
 
-    if (allFiles.length > 4) {
-      setError("Please select only 4 images maximum for upload.")
+    if (allFiles.length > 5) {
+      setError("Please select only 5 images maximum for upload.")
       // Reset the file input
       e.target.value = ""
       return
@@ -570,6 +573,12 @@ export default function BraidGlossaryPage() {
       })
     }
   }, [audioUrl, imagePreviews])
+
+  const submissionOptions = [
+    { value: "photo", label: "Photo Submission" },
+    { value: "link", label: "Link Submission" },
+    { value: "memory", label: "Memory Submission" },
+  ]
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -657,7 +666,7 @@ export default function BraidGlossaryPage() {
                     <div
                       className="relative"
                       style={{
-                        aspectRatio: isTextSubmission ? "16/9" : "3/4",
+                        aspectRatio: isTextSubmission ? "16/9" : "1/1",
                       }}
                     >
                       {braid.submission_type === "photo" && braid.image_url ? (
@@ -671,7 +680,7 @@ export default function BraidGlossaryPage() {
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
                               target.src =
-                                "/placeholder.svg?height=300&width=225&text=" + encodeURIComponent(braid.braid_name)
+                                "/placeholder.svg?height=300&width=300&text=" + encodeURIComponent(braid.braid_name)
                             }}
                           />
 
@@ -730,7 +739,7 @@ export default function BraidGlossaryPage() {
                             e.stopPropagation()
                             toggleAudio(braid.id, braid.audio_url!)
                           }}
-                          className="absolute top-2 right-2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
+                          className="absolute top-2 right-2 w-8 h-8 bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors"
                           title="Play pronunciation"
                         >
                           {playingAudio[braid.id.toString()] ? "⏸" : "▶"}
@@ -738,7 +747,7 @@ export default function BraidGlossaryPage() {
                       )}
 
                       {/* Submission type indicator */}
-                      <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills uppercase">
+                      <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills uppercase">
                         {braid.submission_type}
                       </div>
                     </div>
@@ -814,7 +823,7 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-5xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
+          <div className="bg-white w-full max-w-5xl relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
@@ -823,19 +832,20 @@ export default function BraidGlossaryPage() {
             </button>
 
             <div className="p-0">
-              {/* Submission Type Dropdown - Always Visible */}
+              {/* Custom Submission Type Dropdown */}
               <div className="border-b-2 border-black relative w-1/4">
-                <select
-                  value={submissionType}
-                  onChange={(e) => setSubmissionType(e.target.value as "photo" | "link" | "memory")}
-                  className="w-full h-16 px-4 bg-gray-50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl appearance-none cursor-pointer"
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="w-full h-16 px-4 bg-green-400 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl text-left flex items-center justify-between hover:bg-green-500 transition-colors"
                 >
-                  <option value="photo">Photo Submission</option>
-                  <option value="link">Link Submission</option>
-                  <option value="memory">Memory Submission</option>
-                </select>
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                  <span>{submissionOptions.find(opt => opt.value === submissionType)?.label}</span>
+                  <svg 
+                    width="12" 
+                    height="8" 
+                    viewBox="0 0 12 8" 
+                    fill="none"
+                    className={`transition-transform ${showDropdown ? 'rotate-180' : ''}`}
+                  >
                     <path
                       d="M1 1L6 6L11 1"
                       stroke="#000"
@@ -844,7 +854,26 @@ export default function BraidGlossaryPage() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </div>
+                </button>
+                
+                {showDropdown && (
+                  <div className="absolute top-full left-0 w-full bg-green-400 border-2 border-black border-t-0 z-20">
+                    {submissionOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSubmissionType(option.value as "photo" | "link" | "memory")
+                          setShowDropdown(false)
+                        }}
+                        className={`w-full h-16 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors border-b border-black last:border-b-0 ${
+                          submissionType === option.value ? 'bg-green-500' : ''
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Hidden file input */}
@@ -877,11 +906,11 @@ export default function BraidGlossaryPage() {
                         <div className="w-full h-full p-4 overflow-y-auto">
                           {formData.imageFiles.length === 1 ? (
                             // Single image - full display
-                            <div className="relative w-full aspect-[4/3] mb-4">
+                            <div className="relative w-full aspect-square mb-4">
                               <img
                                 src={imagePreviews[0] || "/placeholder.svg"}
                                 alt="Preview"
-                                className="w-full h-full object-cover rounded border-2 border-black"
+                                className="w-full h-full object-cover border-2 border-black"
                               />
                               <button
                                 onClick={(e) => {
@@ -894,7 +923,7 @@ export default function BraidGlossaryPage() {
                                   const fileInput = document.getElementById("file-input") as HTMLInputElement
                                   if (fileInput) fileInput.value = ""
                                 }}
-                                className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 text-sm font-bold"
+                                className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
                                 title="Remove image"
                               >
                                 ×
@@ -904,11 +933,11 @@ export default function BraidGlossaryPage() {
                             // Multiple images - slideshow with thumbnails
                             <div className="space-y-4">
                               {/* Main image display */}
-                              <div className="relative w-full aspect-[4/3]">
+                              <div className="relative w-full aspect-square">
                                 <img
                                   src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
                                   alt={`Preview ${currentImageIndex + 1}`}
-                                  className="w-full h-full object-cover rounded border-2 border-black"
+                                  className="w-full h-full object-cover border-2 border-black"
                                 />
                                 <button
                                   onClick={(e) => {
@@ -933,7 +962,7 @@ export default function BraidGlossaryPage() {
                                       if (fileInput) fileInput.value = ""
                                     }
                                   }}
-                                  className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 text-sm font-bold"
+                                  className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
                                   title="Remove image"
                                 >
                                   ×
@@ -946,7 +975,7 @@ export default function BraidGlossaryPage() {
                                       e.stopPropagation()
                                       setCurrentImageIndex((prev) => prev - 1)
                                     }}
-                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
+                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors"
                                     title="Previous image"
                                   >
                                     ←
@@ -959,7 +988,7 @@ export default function BraidGlossaryPage() {
                                       e.stopPropagation()
                                       setCurrentImageIndex((prev) => prev + 1)
                                     }}
-                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors"
                                     title="Next image"
                                   >
                                     →
@@ -967,7 +996,7 @@ export default function BraidGlossaryPage() {
                                 )}
 
                                 {/* Image counter */}
-                                <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-xs stick-no-bills">
+                                <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills">
                                   {currentImageIndex + 1} of {formData.imageFiles.length}
                                 </div>
                               </div>
@@ -981,7 +1010,7 @@ export default function BraidGlossaryPage() {
                                       e.stopPropagation()
                                       setCurrentImageIndex(index)
                                     }}
-                                    className={`relative flex-shrink-0 w-16 h-16 rounded border-2 transition-all ${
+                                    className={`relative flex-shrink-0 w-16 h-16 border-2 transition-all ${
                                       index === currentImageIndex
                                         ? "border-black ring-2 ring-green-400"
                                         : "border-gray-300 hover:border-gray-500"
@@ -991,10 +1020,10 @@ export default function BraidGlossaryPage() {
                                     <img
                                       src={preview || "/placeholder.svg"}
                                       alt={`Thumbnail ${index + 1}`}
-                                      className="w-full h-full object-cover rounded"
+                                      className="w-full h-full object-cover"
                                     />
                                     {index === currentImageIndex && (
-                                      <div className="absolute inset-0 bg-green-400/20 rounded"></div>
+                                      <div className="absolute inset-0 bg-green-400/20"></div>
                                     )}
                                   </button>
                                 ))}
@@ -1006,7 +1035,7 @@ export default function BraidGlossaryPage() {
                             <p className="text-black text-sm stick-no-bills mb-2">
                               {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
                             </p>
-                            <p className="text-black text-xs stick-no-bills">Click to add more files (max 4 total)</p>
+                            <p className="text-black text-xs stick-no-bills">Click to add more files (max 5 total)</p>
                           </div>
                         </div>
                       ) : (
@@ -1014,7 +1043,7 @@ export default function BraidGlossaryPage() {
                           <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
                             CLICK TO UPLOAD
                           </p>
-                          <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 4 files)</p>
+                          <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
                         </div>
                       )}
                     </div>
@@ -1190,7 +1219,7 @@ export default function BraidGlossaryPage() {
 
                         {/* Audio Recording for Memory */}
                         {audioSupported && (
-                          <div className="bg-white p-4 border border-gray-300 rounded">
+                          <div className="bg-white p-4 border border-gray-300">
                             <h4 className="stick-no-bills text-black font-medium mb-3">Record Your Story (Optional)</h4>
                             <div className="flex items-center gap-3">
                               {!isRecording && !audioBlob && (
@@ -1405,252 +1434,4 @@ export default function BraidGlossaryPage() {
               <div className="space-y-12 stick-no-bills text-black">
                 <div>
                   <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                    The Braid Glossary is a crowdsourced, living dataset created to give Da Braidr (AI)—Minne Atairu's
-                    text-to-braid generator—the semantic footing it currently lacks. It catalogues the names and visual
-                    patterns of braided hairstyles across the African diaspora, capturing both widely used English terms
-                    and the indigenous or localized names spoken in braiding communities.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-medium mb-2 text-black uppercase">
-                    WHY IT MATTERS
-                  </h3>
-                  <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                    Research on multimodal models demonstrates that these systems learn by aligning caption tokens with
-                    visual features, and that culturally specific vocabularies are often sparse, mislabeled, or entirely
-                    absent (e.g., Buolamwini & Gebru, 2018; Birhane, Prabhu & Kahembwe, 2021). For Black braiding,
-                    metaphorical style names such as lemonade braids, butterfly locs, and Fulani feed-ins further
-                    confound models tuned to privilege literal, descriptive pairings. Consequently, when users prompt Da
-                    Braidr with these terms, the system frequently defaults to generic or inaccurate outputs. (See
-                    example.)
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-medium mb-2 text-black uppercase">
-                    WHAT THE GLOSSARY DOES
-                  </h3>
-                  <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                    Your contribution helps us build an explicit mapping layer between braid names and their
-                    corresponding visual forms. Each entry in the glossary pairs a culturally specific term with vetted
-                    reference images, which we use to refine Da Braidr's training data and embedding space. This process
-                    improves name recognition and generation accuracy—without requiring users to translate or flatten
-                    their cultural vocabulary into machine-readable terms.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Image Modal */}
-      {showImageModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="relative max-w-4xl max-h-[90vh] w-full animate-in zoom-in-95 duration-300">
-            <button
-              onClick={closeImageModal}
-              className="sticky top-4 right-4 ml-auto z-10 hover:opacity-70 transition-opacity"
-            >
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-            <img
-              src={showImageModal.url || "/placeholder.svg"}
-              alt={showImageModal.caption}
-              className="w-full h-full object-contain"
-              onClick={closeImageModal}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Detail Modal */}
-      {showDetailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
-            <button
-              onClick={() => setShowDetailModal(null)}
-              className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
-            >
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-
-            <div className="space-y-6">
-              {/* Image Carousel with Stacked Effect */}
-              {showDetailModal.image_url && (
-                <div className="w-full relative" style={{ aspectRatio: "3/4" }}>
-                  {(showDetailModal as any).image_urls && (showDetailModal as any).image_urls.length > 1 ? (
-                    <div className="relative w-full h-full">
-                      {/* Background layers - visible parts of other images */}
-                      {(showDetailModal as any).image_urls.map((url: string, index: number) => {
-                        if (index === currentImageIndex) return null
-                        const offset = (index - currentImageIndex) * 12
-                        const zIndex = (showDetailModal as any).image_urls.length - Math.abs(index - currentImageIndex)
-
-                        return (
-                          <div
-                            key={index}
-                            className="absolute inset-0 overflow-hidden"
-                            style={{
-                              transform: `translate(${offset}px, ${offset}px)`,
-                              zIndex: zIndex,
-                            }}
-                          >
-                            <img
-                              src={url || "/placeholder.svg"}
-                              alt={`${showDetailModal.braid_name} ${index + 1}`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement
-                                target.src = "/placeholder.svg?height=400&width=300"
-                              }}
-                            />
-                          </div>
-                        )
-                      })}
-
-                      {/* Main image (current) */}
-                      <div className="relative w-full h-full overflow-hidden" style={{ zIndex: 100 }}>
-                        <img
-                          src={(showDetailModal as any).image_urls[currentImageIndex] || "/placeholder.svg"}
-                          alt={showDetailModal.braid_name}
-                          className="w-full h-full object-cover cursor-pointer"
-                          onClick={() =>
-                            handleImageClick(
-                              (showDetailModal as any).image_urls[currentImageIndex],
-                              showDetailModal.braid_name,
-                            )
-                          }
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            target.src = "/placeholder.svg?height=400&width=300"
-                          }}
-                        />
-
-                        {/* Navigation buttons */}
-                        {currentImageIndex > 0 && (
-                          <button
-                            onClick={() => setCurrentImageIndex((prev) => prev - 1)}
-                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black text-white w-8 h-8 flex items-center justify-center hover:bg-gray-800"
-                            style={{ zIndex: 101 }}
-                          >
-                            ←
-                          </button>
-                        )}
-
-                        {currentImageIndex < (showDetailModal as any).image_urls.length - 1 && (
-                          <button
-                            onClick={() => setCurrentImageIndex((prev) => prev + 1)}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black text-white w-8 h-8 flex items-center justify-center hover:bg-gray-800"
-                            style={{ zIndex: 101 }}
-                          >
-                            →
-                          </button>
-                        )}
-
-                        {/* Image counter */}
-                        <div
-                          className="absolute top-0 left-0 bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills"
-                          style={{ zIndex: 101 }}
-                        >
-                          {currentImageIndex + 1} / {(showDetailModal as any).image_urls.length}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <img
-                      src={showDetailModal.image_url || "/placeholder.svg"}
-                      alt={showDetailModal.braid_name}
-                      className="w-full h-full object-cover cursor-pointer"
-                      onClick={() => handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name)}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.src = "/placeholder.svg?height=400&width=300"
-                      }}
-                    />
-                  )}
-                </div>
-              )}
-
-              <div className="p-6">
-                {/* Title */}
-                <h2 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase mb-4">
-                  {showDetailModal.braid_name}
-                </h2>
-
-                {/* Tags */}
-                {showDetailModal.alt_names && (
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {showDetailModal.alt_names.split(",").map((name, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-gray-200 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
-                      >
-                        {name.trim()}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Region */}
-                {showDetailModal.region && (
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="font-medium text-black uppercase stick-no-bills">Region:</span>
-                    <span className="text-black uppercase stick-no-bills">{showDetailModal.region}</span>
-                  </div>
-                )}
-
-                {/* Contributor */}
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="font-medium text-black uppercase stick-no-bills">By:</span>
-                  <span className="text-black uppercase stick-no-bills">{showDetailModal.contributor_name}</span>
-                </div>
-
-                {/* Link Information */}
-                {showDetailModal.submission_type === "link" && (
-                  <div className="space-y-4">
-                    <h4 className="text-xl font-medium text-black uppercase stick-no-bills">Link Details</h4>
-                    <a
-                      href={(showDetailModal as any).public_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline stick-no-bills"
-                    >
-                      {(showDetailModal as any).link_title || (showDetailModal as any).public_url}
-                    </a>
-                    <p className="text-gray-700 stick-no-bills">
-                      {(showDetailModal as any).link_description || "No description provided."}
-                    </p>
-                  </div>
-                )}
-
-                {/* Memory Information */}
-                {showDetailModal.submission_type === "memory" && (
-                  <div className="space-y-4">
-                    <h4 className="text-xl font-medium text-black uppercase stick-no-bills">Memory Details</h4>
-                    <p className="text-gray-700 stick-no-bills">
-                      {(showDetailModal as any).memory_description || "No memory shared."}
-                    </p>
-                  </div>
-                )}
-
-                {/* Audio Playback */}
-                {showDetailModal.audio_url && (
-                  <div className="mt-6">
-                    <button
-                      onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 stick-no-bills"
-                    >
-                      {playingAudio[showDetailModal.id.toString()] ? "Pause Pronunciation" : "Play Pronunciation"}
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+                    The Braid Glossary is a crowds\
