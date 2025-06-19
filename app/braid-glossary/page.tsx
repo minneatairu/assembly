@@ -676,7 +676,7 @@ export default function BraidGlossaryPage() {
                               (braid as any).image_urls?.[currentImageIndex] || braid.image_url || "/placeholder.svg"
                             }
                             alt={braid.braid_name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-opacity duration-300 ease-in-out"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
                               target.src =
@@ -721,7 +721,7 @@ export default function BraidGlossaryPage() {
                         </>
                       ) : (
                         // Title display for link and memory submissions - 1:1 aspect ratio
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center p-4">
+                        <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
                           <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
                             {braid.submission_type === "memory"
                               ? (braid as any).memory_title || braid.braid_name || "Untitled Memory"
@@ -747,7 +747,7 @@ export default function BraidGlossaryPage() {
                       )}
 
                       {/* Submission type indicator */}
-                      <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills uppercase">
+                      <div className="absolute bottom-0 right-0 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills uppercase">
                         {braid.submission_type}
                       </div>
                     </div>
@@ -822,8 +822,8 @@ export default function BraidGlossaryPage() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-5xl relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-white animate-in fade-in duration-300 overflow-y-auto">
+          <div className="bg-white w-full max-w-5xl relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black my-8">
             <button
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
@@ -937,7 +937,7 @@ export default function BraidGlossaryPage() {
                                 <img
                                   src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
                                   alt={`Preview ${currentImageIndex + 1}`}
-                                  className="w-full h-full object-cover border-2 border-black"
+                                  className="w-full h-full object-cover border-2 border-black transition-opacity duration-300 ease-in-out"
                                 />
                                 <button
                                   onClick={(e) => {
