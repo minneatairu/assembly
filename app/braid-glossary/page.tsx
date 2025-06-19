@@ -575,7 +575,7 @@ export default function BraidGlossaryPage() {
                     className={`relative bg-green-400 border-r-2 border-black transition-colors ${
                       isDragOver ? "bg-green-500" : ""
                     } flex flex-col items-center justify-center cursor-pointer overflow-visible`}
-                    style={{ height: "384px" }} // 6 input fields × 64px each = 384px
+                    style={{ height: "384px", aspectRatio: "1/1" }} // Make it square
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -585,51 +585,119 @@ export default function BraidGlossaryPage() {
                       <div className="w-full h-full relative">
                         {formData.imageFiles.length > 0 ? (
                           <div className="w-full h-full relative">
-                            {/* Stack effect for multiple images */}
-                            {formData.imageFiles.length > 1 && (
-                              <>
-                                {/* Fourth layer (bottom) */}
-                                {formData.imageFiles.length > 3 && (
-                                  <div className="absolute inset-0 bg-gray-400 border-2 border-black transform translate-x-6 translate-y-6 -z-30"></div>
-                                )}
-                                {/* Third layer */}
-                                {formData.imageFiles.length > 2 && (
-                                  <div className="absolute inset-0 bg-gray-300 border-2 border-black transform translate-x-4 translate-y-4 -z-20"></div>
-                                )}
-                                {/* Second layer (middle) */}
-                                <div className="absolute inset-0 bg-gray-200 border-2 border-black transform translate-x-2 translate-y-2 -z-10">
-                                  <img
-                                    src={URL.createObjectURL(formData.imageFiles[1]) || "/placeholder.svg"}
-                                    alt="Preview 2"
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                              </>
-                            )}
-                            {/* Top layer (main image) */}
+                            {/* Main image */}
                             <div className="relative w-full h-full">
                               <img
                                 src={URL.createObjectURL(formData.imageFiles[0]) || "/placeholder.svg"}
-                                alt="Preview"
+                                alt="Main preview"
                                 className="w-full h-full object-cover"
                               />
+
+                              {/* Thumbnails overlay - only show if more than 1 image */}
                               {formData.imageFiles.length > 1 && (
-                                <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
+                                <div className="absolute bottom-2 right-2 flex gap-1 max-w-[120px] flex-wrap">
+                                  {formData.imageFiles.slice(1).map((file, index) => (
+                                    <div
+                                      key={index + 1}
+                                      className="relative group cursor-pointer"
+                                      draggable
+                                      onDragStart={(e) => {
+                                        e.dataTransfer.setData("text/plain", (index + 1).toString())
+                                      }}
+                                      onDragOver={(e) => e.preventDefault()}
+                                      onDrop={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        const draggedIndex = Number.parseInt(e.dataTransfer.getData("text/plain"))
+                                        const targetIndex = index + 1
+
+                                        if (draggedIndex !== targetIndex) {
+                                          const newFiles = [...formData.imageFiles]
+                                          const draggedFile = newFiles[draggedIndex]
+                                          newFiles.splice(draggedIndex, 1)
+                                          newFiles.splice(targetIndex, 0, draggedFile)
+                                          setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
+                                        }
+                                      }}
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        // Move clicked thumbnail to main position
+                                        const newFiles = [...formData.imageFiles]
+                                        const clickedFile = newFiles[index + 1]
+                                        const mainFile = newFiles[0]
+                                        newFiles[0] = clickedFile
+                                        newFiles[index + 1] = mainFile
+                                        setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
+                                      }}
+                                    >
+                                      <img
+                                        src={URL.createObjectURL(file) || "/placeholder.svg"}
+                                        alt={`Thumbnail ${index + 2}`}
+                                        className="w-8 h-8 object-cover border border-white/50 rounded"
+                                      />
+                                      {/* Delete button */}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          const newFiles = [...formData.imageFiles]
+                                          newFiles.splice(index + 1, 1)
+                                          setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
+                                        }}
+                                        className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                        title="Delete image"
+                                      >
+                                        ×
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* Main image delete button */}
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  const newFiles = [...formData.imageFiles]
+                                  newFiles.splice(0, 1)
+                                  setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
+                                }}
+                                className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full text-sm flex items-center justify-center hover:bg-red-600 transition-colors"
+                                title="Delete main image"
+                              >
+                                ×
+                              </button>
+
+                              {/* Image counter */}
+                              {formData.imageFiles.length > 1 && (
+                                <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
                                   {formData.imageFiles.length} files
                                 </div>
                               )}
                             </div>
                           </div>
                         ) : (
-                          <img
-                            src={formData.imageUrl || "/placeholder.svg"}
-                            alt="Preview"
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              target.src = "/placeholder.svg?height=300&width=300&text=Invalid+Image"
-                            }}
-                          />
+                          <div className="w-full h-full relative">
+                            <img
+                              src={formData.imageUrl || "/placeholder.svg"}
+                              alt="Preview"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement
+                                target.src = "/placeholder.svg?height=300&width=300&text=Invalid+Image"
+                              }}
+                            />
+                            {/* URL image delete button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setFormData((prev) => ({ ...prev, imageUrl: "" }))
+                              }}
+                              className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full text-sm flex items-center justify-center hover:bg-red-600 transition-colors"
+                              title="Remove image URL"
+                            >
+                              ×
+                            </button>
+                          </div>
                         )}
                         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                           <p className="text-white text-center font-medium stick-no-bills">
@@ -1187,116 +1255,30 @@ export default function BraidGlossaryPage() {
               >
                 {/* Index Number */}
                 <div className="absolute top-8 right-8 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
-                  <span className="text-black stick-no-bills text-sm font-bold">{braids.length - index}</span>
+                  <span className="text-black stick-no-bills text-sm font-bold">{braids.length}</span>
                 </div>
 
                 {/* Image */}
-                {braid.image_url ? (
-                  <div className="overflow-hidden relative" style={{ aspectRatio: "3/4" }}>
-                    <img
-                      src={braid.image_url || "/placeholder.svg"}
-                      alt={braid.braid_name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.src = "/placeholder.svg?height=400&width=300"
-                      }}
-                    />
-                    {/* Zoom icon overlay */}
-                    <div
-                      className="absolute bottom-2 left-2 cursor-pointer hover:opacity-70 transition-opacity"
-                      onClick={() => handleImageClick(braid.image_url!, braid.braid_name)}
-                    >
-                      <img src="/zoom.svg" alt="Zoom" className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 filter invert" />
-                    </div>
-                    {/* Stack effect for multiple images */}
-                    {(braid as any).image_urls && (braid as any).image_urls.length > 1 && (
-                      <>
-                        {/* Third layer (most background) */}
-                        {(braid as any).image_urls.length > 2 && (
-                          <div className="absolute inset-0 bg-white/30 border-2 border-black transform translate-x-4 translate-y-4 -z-20"></div>
-                        )}
-                        {/* Second layer (middle) */}
-                        <div className="absolute inset-0 bg-white/20 border-2 border-black transform translate-x-2 translate-y-2 -z-10"></div>
-                        <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
-                          {(braid as any).image_urls.length} photos
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <div className="bg-gray-300 flex items-center justify-center" style={{ aspectRatio: "3/4" }}>
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-black"
-                    >
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                      <circle cx="8.5" cy="8.5" r="1.5" />
-                      <polyline points="21,15 16,10 5,21" />
-                    </svg>
-                  </div>
-                )}
+                <img
+                  src={braid.image_url || "/placeholder.svg"}
+                  alt={braid.braid_name}
+                  className="w-full h-64 object-cover cursor-pointer"
+                  onClick={() => setShowDetailModal(braid)}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=256&width=384"
+                  }}
+                />
 
-                {/* Content */}
-                <div className="p-4 sm:p-6 lg:p-8">
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-12 stick-no-bills text-black uppercase leading-tight">
-                    {braid.braid_name}
-                  </h3>
-
-                  {/* Tags and Plus Button Row */}
-                  <div className="flex items-end justify-between">
-                    <div className="flex flex-wrap gap-2">
-                      {braid.alt_names && (
-                        <>
-                          <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
-                            {braid.alt_names.split(",")[0].trim()}
-                          </span>
-                          {braid.alt_names.split(",").length > 2 && (
-                            <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
-                              +{braid.alt_names.split(",").length - 1}
-                            </span>
-                          )}
-                          {braid.alt_names.split(",").length === 2 && (
-                            <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
-                              {braid.alt_names.split(",")[1].trim()}
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>
-
-                    {/* Plus Button */}
-                    <button
-                      onClick={() => {
-                        setShowDetailModal(braid)
-                        setCurrentImageIndex(0)
-                      }}
-                      className="hover:opacity-70 transition-opacity"
-                      title="View details"
-                    >
-                      <img src="/submit.svg" alt="View details" className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9" />
-                    </button>
-                  </div>
+                {/* Braid Name */}
+                <div className="p-4">
+                  <h3 className="text-lg font-medium stick-no-bills text-black uppercase">{braid.braid_name}</h3>
+                  <p className="text-sm stick-no-bills text-black">
+                    {braid.alt_names ? braid.alt_names : "No alternative names"}
+                  </p>
                 </div>
               </div>
             ))}
-          </div>
-        )}
-
-        {!loading && braids.length === 0 && (
-          <div className="text-center py-12">
-            <div className="stick-no-bills text-black mb-4">No braids submitted yet</div>
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-blue-600 text-white py-2 px-6 hover:bg-blue-700 transition-colors stick-no-bills text-base font-light"
-            >
-              Be the first to submit!
-            </button>
           </div>
         )}
       </div>
