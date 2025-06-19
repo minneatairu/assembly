@@ -52,6 +52,9 @@ export default function BraidGlossaryPage() {
     agreeToShare: false,
   })
 
+  // Add image preview state
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
+
   const [showAccountCreation, setShowAccountCreation] = useState(false)
   const [accountData, setAccountData] = useState({
     email: "",
@@ -130,6 +133,13 @@ export default function BraidGlossaryPage() {
     }
 
     if (allFiles.length > 0) {
+      // Clean up existing preview URLs
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url))
+
+      // Create new preview URLs
+      const newPreviews = allFiles.map((file) => URL.createObjectURL(file))
+      setImagePreviews(newPreviews)
+
       setFormData((prev) => ({ ...prev, imageFiles: allFiles, imageUrl: "" }))
       setUploadStatus(null)
       setError(null)
@@ -465,6 +475,10 @@ export default function BraidGlossaryPage() {
         agreeToShare: false,
       })
 
+      // Clean up image previews
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url))
+      setImagePreviews([])
+
       // Reset account data
       setAccountData({
         email: "",
@@ -519,6 +533,13 @@ export default function BraidGlossaryPage() {
       return
     }
 
+    // Clean up existing preview URLs
+    imagePreviews.forEach((url) => URL.revokeObjectURL(url))
+
+    // Create new preview URLs
+    const newPreviews = allFiles.map((file) => URL.createObjectURL(file))
+    setImagePreviews(newPreviews)
+
     setFormData((prev) => ({ ...prev, imageFiles: allFiles, imageUrl: "" }))
     setUploadStatus(null)
     setError(null)
@@ -538,6 +559,8 @@ export default function BraidGlossaryPage() {
       if (audioUrl) {
         URL.revokeObjectURL(audioUrl)
       }
+      // Cleanup image previews
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url))
       // Cleanup audio refs
       Object.values(audioRefs.current).forEach((audio) => {
         if (audio) {
@@ -546,7 +569,7 @@ export default function BraidGlossaryPage() {
         }
       })
     }
-  }, [audioUrl])
+  }, [audioUrl, imagePreviews])
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -851,18 +874,48 @@ export default function BraidGlossaryPage() {
                     >
                       {/* Show uploaded files or upload prompt */}
                       {formData.imageFiles.length > 0 ? (
-                        <div className="text-center p-4">
-                          <p className="text-black text-lg stick-no-bills mb-4">
-                            {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
-                          </p>
-                          <div className="space-y-2">
-                            {formData.imageFiles.map((file, index) => (
-                              <div key={index} className="text-black text-sm stick-no-bills">
-                                {file.name}
+                        <div className="w-full h-full p-4 overflow-y-auto">
+                          <div className="grid grid-cols-2 gap-2 mb-4">
+                            {imagePreviews.map((preview, index) => (
+                              <div key={index} className="relative aspect-square">
+                                <img
+                                  src={preview || "/placeholder.svg"}
+                                  alt={`Preview ${index + 1}`}
+                                  className="w-full h-full object-cover rounded border-2 border-black"
+                                />
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    // Remove this specific image
+                                    const newFiles = formData.imageFiles.filter((_, i) => i !== index)
+                                    const newPreviews = imagePreviews.filter((_, i) => i !== index)
+
+                                    // Clean up the removed preview URL
+                                    URL.revokeObjectURL(imagePreviews[index])
+
+                                    setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
+                                    setImagePreviews(newPreviews)
+
+                                    if (newFiles.length === 0) {
+                                      // Reset file input if no files left
+                                      const fileInput = document.getElementById("file-input") as HTMLInputElement
+                                      if (fileInput) fileInput.value = ""
+                                    }
+                                  }}
+                                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 text-xs font-bold"
+                                  title="Remove image"
+                                >
+                                  ×
+                                </button>
                               </div>
                             ))}
                           </div>
-                          <p className="text-black text-sm stick-no-bills mt-4">Click to change files</p>
+                          <div className="text-center">
+                            <p className="text-black text-sm stick-no-bills mb-2">
+                              {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
+                            </p>
+                            <p className="text-black text-xs stick-no-bills">Click to add more files (max 4 total)</p>
+                          </div>
                         </div>
                       ) : (
                         <div className="text-center">
