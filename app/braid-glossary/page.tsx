@@ -1176,7 +1176,7 @@ export default function BraidGlossaryPage() {
             {braids.map((braid, index) => (
               <div
                 key={braid.id}
-                className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative rounded-[50px]"
+                className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative"
               >
                 {/* Index Number */}
                 <div className="absolute top-8 right-8 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
@@ -1185,7 +1185,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Image */}
                 {braid.image_url ? (
-                  <div className="overflow-hidden rounded-t-[50px] relative" style={{ aspectRatio: "3/4" }}>
+                  <div className="overflow-hidden relative" style={{ aspectRatio: "3/4" }}>
                     <img
                       src={braid.image_url || "/placeholder.svg"}
                       alt={braid.braid_name}
@@ -1200,10 +1200,10 @@ export default function BraidGlossaryPage() {
                       <>
                         {/* Third layer (most background) */}
                         {(braid as any).image_urls.length > 2 && (
-                          <div className="absolute inset-0 bg-white/30 border-2 border-black transform translate-x-4 translate-y-4 rounded-t-[50px] -z-20"></div>
+                          <div className="absolute inset-0 bg-white/30 border-2 border-black transform translate-x-4 translate-y-4 -z-20"></div>
                         )}
                         {/* Second layer (middle) */}
-                        <div className="absolute inset-0 bg-white/20 border-2 border-black transform translate-x-2 translate-y-2 rounded-t-[50px] -z-10"></div>
+                        <div className="absolute inset-0 bg-white/20 border-2 border-black transform translate-x-2 translate-y-2 -z-10"></div>
                         <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
                           {(braid as any).image_urls.length} photos
                         </div>
@@ -1211,10 +1211,7 @@ export default function BraidGlossaryPage() {
                     )}
                   </div>
                 ) : (
-                  <div
-                    className="bg-gray-300 flex items-center justify-center rounded-t-[50px]"
-                    style={{ aspectRatio: "3/4" }}
-                  >
+                  <div className="bg-gray-300 flex items-center justify-center" style={{ aspectRatio: "3/4" }}>
                     <svg
                       width="24"
                       height="24"
