@@ -511,17 +511,8 @@ export default function BraidGlossaryPage() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Demo Mode Banner */}
-      {demoStatus.isDemo && (
-        <div className="fixed top-0 left-0 right-0 bg-yellow-100 border-b border-yellow-300 px-4 py-2 text-center z-30">
-          <span className="text-yellow-800 stick-no-bills text-sm">
-            🚧 Demo Mode: {demoStatus.reason} - Submissions are temporary
-          </span>
-        </div>
-      )}
-
       {/* Sticky Menu Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-20 ${demoStatus.isDemo ? "top-12" : ""}`}>
+      <div className="fixed top-0 left-0 right-0 z-20">
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
             <div className="flex gap-4 border-2 border-black rounded-full p-4">
@@ -571,9 +562,9 @@ export default function BraidGlossaryPage() {
             </button>
 
             <div className="p-12">
-              <div className="flex mb-6">
+              <div className="flex">
                 {/* Left Side - Upload Area */}
-                <div className="w-1/2 pr-6">
+                <div className="w-1/2">
                   <div
                     className={`relative aspect-square bg-green-400 border-2 border-black rounded-[30px] transition-colors ${
                       isDragOver ? "border-blue-400 bg-green-500" : "border-black"
@@ -659,7 +650,7 @@ export default function BraidGlossaryPage() {
                 </div>
 
                 {/* Right Side - Form Fields */}
-                <div className="w-1/2 pl-6">
+                <div className="w-1/2">
                   <div className="space-y-0">
                     {/* Braid Name */}
                     <input
@@ -716,8 +707,8 @@ export default function BraidGlossaryPage() {
 
                     {/* Audio Recording */}
                     {audioSupported && (
-                      <div className="mt-0">
-                        <div className="flex items-center gap-3 mb-6">
+                      <div>
+                        <div className="flex items-center gap-3">
                           {!isRecording && !audioBlob && (
                             <button
                               type="button"
@@ -760,7 +751,7 @@ export default function BraidGlossaryPage() {
                         </div>
 
                         {audioUrl && (
-                          <audio controls className="w-full mb-6">
+                          <audio controls className="w-full mt-4">
                             <source src={audioUrl} type="audio/webm" />
                             Your browser does not support audio playback.
                           </audio>
@@ -793,14 +784,12 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Agreement Checkbox - Full Width */}
-              <div className="flex items-start gap-3 p-4 mb-6">
+              <div className="flex items-start gap-3 mt-6 mb-4">
                 <input
                   type="checkbox"
                   id="agreeToShare"
                   name="agreeToShare"
                   checked={formData.agreeToShare}
-                  onChange={handleInputChange}
-                  className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
                   onChange={handleInputChange}
                   className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
                   required
@@ -812,7 +801,7 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Account Creation Toggle */}
-              <div className="mt-6 mb-4">
+              <div className="mb-6">
                 <div className="flex items-center gap-3 mb-4">
                   <input
                     type="checkbox"
@@ -1163,7 +1152,7 @@ export default function BraidGlossaryPage() {
                       href={showDetailModal.public_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline uppercase text-xs break-all"
+                      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs uppercase"
                     >
                       VISIT LINK
                     </a>
@@ -1176,7 +1165,7 @@ export default function BraidGlossaryPage() {
       )}
 
       {/* Gallery */}
-      <div className={`pt-32 px-8 w-full ${demoStatus.isDemo ? "pt-40" : ""}`}>
+      <div className="pt-32 px-8 w-full">
         {loading ? (
           <div className="text-center py-12">
             <div className="stick-no-bills text-black">Loading braids...</div>
