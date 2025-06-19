@@ -436,7 +436,7 @@ export default function BraidGlossaryPage() {
         link_title: submissionType === "link" ? formData.linkTitle : undefined,
         link_description: submissionType === "link" ? formData.linkDescription : undefined,
         memory_title: submissionType === "memory" ? formData.memoryTitle : undefined,
-        memory_description: submissionType === "memory" ? formData.memoryDescription : undefined,
+        memory_description: formData.memoryDescription || undefined,
         contributor_name: formData.contributorName,
         audio_url: audioUrl || undefined,
         audio_notes: "Pronunciation guide", // Fixed description for pronunciation
@@ -629,10 +629,10 @@ export default function BraidGlossaryPage() {
                     onClick={() => setShowDetailModal(braid)}
                   >
                     {/* Image or Title Area */}
-                    <div 
-                      className="relative" 
-                      style={{ 
-                        aspectRatio: isTextSubmission ? "1/1" : "3/4" 
+                    <div
+                      className="relative"
+                      style={{
+                        aspectRatio: isTextSubmission ? "16/9" : "3/4",
                       }}
                     >
                       {braid.submission_type === "photo" && braid.image_url ? (
@@ -682,7 +682,7 @@ export default function BraidGlossaryPage() {
                       ) : (
                         // Title display for link and memory submissions - 1:1 aspect ratio
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center p-4">
-                          <h3 className="text-xl sm:text-lg md:text-xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                          <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
                             {braid.submission_type === "memory"
                               ? (braid as any).memory_title || braid.braid_name || "Untitled Memory"
                               : braid.submission_type === "link"
@@ -716,7 +716,7 @@ export default function BraidGlossaryPage() {
                     <div className="p-4">
                       {/* Show braid name for photo submissions, or subtitle for others */}
                       {braid.submission_type === "photo" ? (
-                        <h3 className="text-lg font-bold stick-no-bills text-black uppercase mb-2">
+                        <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase mb-2">
                           {braid.braid_name}
                         </h3>
                       ) : (
@@ -845,7 +845,7 @@ export default function BraidGlossaryPage() {
                       {formData.imageFiles.length > 0 ? (
                         <div className="text-center p-4">
                           <p className="text-black text-lg stick-no-bills mb-4">
-                            {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? 's' : ''} selected
+                            {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
                           </p>
                           <div className="space-y-2">
                             {formData.imageFiles.map((file, index) => (
@@ -854,9 +854,7 @@ export default function BraidGlossaryPage() {
                               </div>
                             ))}
                           </div>
-                          <p className="text-black text-sm stick-no-bills mt-4">
-                            Click to change files
-                          </p>
+                          <p className="text-black text-sm stick-no-bills mt-4">Click to change files</p>
                         </div>
                       ) : (
                         <div className="text-center">
@@ -1424,11 +1422,82 @@ export default function BraidGlossaryPage() {
 
               <div className="p-6">
                 {/* Title */}
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase mb-4">
+                <h2 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase mb-4">
                   {showDetailModal.braid_name}
                 </h2>
 
                 {/* Tags */}
                 {showDetailModal.alt_names && (
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {showDetailModal.alt_names
+                    {showDetailModal.alt_names.split(",").map((name, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-gray-200 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
+                      >
+                        {name.trim()}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Region */}
+                {showDetailModal.region && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="font-medium text-black uppercase stick-no-bills">Region:</span>
+                    <span className="text-black uppercase stick-no-bills">{showDetailModal.region}</span>
+                  </div>
+                )}
+
+                {/* Contributor */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="font-medium text-black uppercase stick-no-bills">By:</span>
+                  <span className="text-black uppercase stick-no-bills">{showDetailModal.contributor_name}</span>
+                </div>
+
+                {/* Link Information */}
+                {showDetailModal.submission_type === "link" && (
+                  <div className="space-y-4">
+                    <h4 className="text-xl font-medium text-black uppercase stick-no-bills">Link Details</h4>
+                    <a
+                      href={(showDetailModal as any).public_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline stick-no-bills"
+                    >
+                      {(showDetailModal as any).link_title || (showDetailModal as any).public_url}
+                    </a>
+                    <p className="text-gray-700 stick-no-bills">
+                      {(showDetailModal as any).link_description || "No description provided."}
+                    </p>
+                  </div>
+                )}
+
+                {/* Memory Information */}
+                {showDetailModal.submission_type === "memory" && (
+                  <div className="space-y-4">
+                    <h4 className="text-xl font-medium text-black uppercase stick-no-bills">Memory Details</h4>
+                    <p className="text-gray-700 stick-no-bills">
+                      {(showDetailModal as any).memory_description || "No memory shared."}
+                    </p>
+                  </div>
+                )}
+
+                {/* Audio Playback */}
+                {showDetailModal.audio_url && (
+                  <div className="mt-6">
+                    <button
+                      onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 stick-no-bills"
+                    >
+                      {playingAudio[showDetailModal.id.toString()] ? "Pause Pronunciation" : "Play Pronunciation"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
