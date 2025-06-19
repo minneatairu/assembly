@@ -515,7 +515,7 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-0 left-0 right-0 z-20">
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
-            <div className="flex gap-4">
+            <div className="flex gap-4 border-2 border-black rounded-full p-4">
               <button
                 onClick={() => (window.location.href = "/")}
                 className="hover:opacity-70 transition-opacity"
@@ -532,26 +532,17 @@ export default function BraidGlossaryPage() {
               </button>
               <button
                 onClick={() => setShowInfoModal(true)}
-                className="hover:opacity-70 transition-opacity stick-no-bills text-2xl sm:text-3xl lg:text-4xl font-bold"
+                className="hover:opacity-70 transition-opacity"
                 title="Learn more about the braid glossary"
               >
-                ?
+                <img src="/infor.svg" alt="Info" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
                 onClick={() => (window.location.href = "/profile")}
                 className="hover:opacity-70 transition-opacity"
                 title="Login to your account"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="32px"
-                  viewBox="0 -960 960 960"
-                  width="32px"
-                  fill="#1f1f1f"
-                  className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
-                >
-                  <path d="M620-520q25 0 42.5-17.5T680-580q0-25-17.5-42.5T620-640q-25 0-42.5 17.5T560-580q0 25 17.5 42.5T620-520Zm-280 0q25 0 42.5-17.5T400-580q0-25-17.5-42.5T340-640q-25 0-42.5 17.5T280-580q0 25 17.5 42.5T340-520Zm140 260q68 0 123.5-38.5T684-400H276q25 63 80.5 101.5T480-260Zm0 180q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54 54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Z" />
-                </svg>
+                <img src="/accounting.svg" alt="Account" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
                 onClick={() => setShowForm(true)}
@@ -675,7 +666,7 @@ export default function BraidGlossaryPage() {
                       value={formData.braidName}
                       onChange={handleInputChange}
                       placeholder="Braid name"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       required
                     />
 
@@ -686,7 +677,7 @@ export default function BraidGlossaryPage() {
                       value={formData.altNames}
                       onChange={handleInputChange}
                       placeholder="Alternative names"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                     />
 
                     {/* Region */}
@@ -696,7 +687,7 @@ export default function BraidGlossaryPage() {
                       value={formData.region}
                       onChange={handleInputChange}
                       placeholder="Cultural origin"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       required
                     />
 
@@ -707,7 +698,7 @@ export default function BraidGlossaryPage() {
                       value={formData.contributorName}
                       onChange={handleInputChange}
                       placeholder="Contributor name"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       required
                     />
 
@@ -718,7 +709,7 @@ export default function BraidGlossaryPage() {
                       value={formData.linkUrl}
                       onChange={handleInputChange}
                       placeholder="Link to more info"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                     />
 
                     {/* Audio Recording */}
@@ -840,7 +831,7 @@ export default function BraidGlossaryPage() {
                       value={accountData.firstName}
                       onChange={(e) => setAccountData((prev) => ({ ...prev, firstName: e.target.value }))}
                       placeholder="First name"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       required={showAccountCreation}
                     />
 
@@ -851,7 +842,7 @@ export default function BraidGlossaryPage() {
                       value={accountData.lastName}
                       onChange={(e) => setAccountData((prev) => ({ ...prev, lastName: e.target.value }))}
                       placeholder="Last name"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       required={showAccountCreation}
                     />
 
@@ -862,7 +853,7 @@ export default function BraidGlossaryPage() {
                       value={accountData.email}
                       onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}
                       placeholder="Email address"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       required={showAccountCreation}
                     />
 
@@ -873,7 +864,7 @@ export default function BraidGlossaryPage() {
                       value={accountData.password}
                       onChange={(e) => setAccountData((prev) => ({ ...prev, password: e.target.value }))}
                       placeholder="Password (min 6 characters)"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       minLength={6}
                       required={showAccountCreation}
                     />
@@ -885,7 +876,7 @@ export default function BraidGlossaryPage() {
                       value={accountData.confirmPassword}
                       onChange={(e) => setAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
                       placeholder="Confirm password"
-                      className="w-full h-16 px-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
                       required={showAccountCreation}
                     />
                   </div>
