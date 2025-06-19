@@ -45,6 +45,15 @@ export default function BraidGlossaryPage() {
     agreeToShare: false,
   })
 
+  const [showAccountCreation, setShowAccountCreation] = useState(false)
+  const [accountData, setAccountData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+  })
+
   // Check audio support on mount
   useEffect(() => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -346,6 +355,22 @@ export default function BraidGlossaryPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Validate account creation if enabled
+    if (showAccountCreation) {
+      if (!accountData.email || !accountData.password || !accountData.firstName || !accountData.lastName) {
+        setError("Please fill in all account fields.")
+        return
+      }
+      if (accountData.password.length < 6) {
+        setError("Password must be at least 6 characters long.")
+        return
+      }
+      if (accountData.password !== accountData.confirmPassword) {
+        setError("Passwords do not match.")
+        return
+      }
+    }
+
     if (!formData.agreeToShare) {
       setError("Please agree to share your braid in the glossary to continue.")
       return
@@ -398,6 +423,16 @@ export default function BraidGlossaryPage() {
         linkUrl: "",
         agreeToShare: false,
       })
+
+      // Reset account data
+      setAccountData({
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+      })
+      setShowAccountCreation(false)
 
       // Clear audio
       clearRecording()
@@ -666,6 +701,82 @@ export default function BraidGlossaryPage() {
                       className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
                     />
 
+                    {/* Account Creation Toggle */}
+                    <div className="mt-6 mb-4">
+                      <div className="flex items-center gap-3 mb-4">
+                        <input
+                          type="checkbox"
+                          id="createAccount"
+                          checked={showAccountCreation}
+                          onChange={(e) => setShowAccountCreation(e.target.checked)}
+                          className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                        />
+                        <label htmlFor="createAccount" className="text-sm stick-no-bills text-black font-medium">
+                          CREATE ACCOUNT TO TRACK YOUR SUBMISSIONS
+                        </label>
+                      </div>
+
+                      {showAccountCreation && (
+                        <div className="space-y-0 border-2 border-black rounded-lg overflow-hidden">
+                          {/* First Name */}
+                          <input
+                            type="text"
+                            name="firstName"
+                            value={accountData.firstName}
+                            onChange={(e) => setAccountData((prev) => ({ ...prev, firstName: e.target.value }))}
+                            placeholder="First name"
+                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                            required={showAccountCreation}
+                          />
+
+                          {/* Last Name */}
+                          <input
+                            type="text"
+                            name="lastName"
+                            value={accountData.lastName}
+                            onChange={(e) => setAccountData((prev) => ({ ...prev, lastName: e.target.value }))}
+                            placeholder="Last name"
+                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                            required={showAccountCreation}
+                          />
+
+                          {/* Email */}
+                          <input
+                            type="email"
+                            name="email"
+                            value={accountData.email}
+                            onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}
+                            placeholder="Email address"
+                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                            required={showAccountCreation}
+                          />
+
+                          {/* Password */}
+                          <input
+                            type="password"
+                            name="password"
+                            value={accountData.password}
+                            onChange={(e) => setAccountData((prev) => ({ ...prev, password: e.target.value }))}
+                            placeholder="Password (min 6 characters)"
+                            className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                            minLength={6}
+                            required={showAccountCreation}
+                          />
+
+                          {/* Confirm Password */}
+                          <input
+                            type="password"
+                            name="confirmPassword"
+                            value={accountData.confirmPassword}
+                            onChange={(e) => setAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                            placeholder="Confirm password"
+                            className="w-full h-16 px-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                            required={showAccountCreation}
+                          />
+                        </div>
+                      )}
+                    </div>
+
                     {/* Audio Recording */}
                     {audioSupported && (
                       <div className="mt-0">
@@ -745,12 +856,14 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Agreement Checkbox - Full Width */}
-              <div className="flex items-start gap-3 p-4 bg-gray-50 border-2 border-black mb-6">
+              <div className="flex items-start gap-3 p-4 bg-gray-50 mb-6">
                 <input
                   type="checkbox"
                   id="agreeToShare"
                   name="agreeToShare"
                   checked={formData.agreeToShare}
+                  onChange={handleInputChange}
+                  className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
                   onChange={handleInputChange}
                   className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
                   required
@@ -854,7 +967,7 @@ export default function BraidGlossaryPage() {
       {/* Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-6 sm:p-8 lg:p-12 w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
+          <div className="bg-white p-6 sm:p-8 lg:p-12 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
             <button
               onClick={() => setShowDetailModal(null)}
               className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
@@ -884,19 +997,19 @@ export default function BraidGlossaryPage() {
 
               {/* Image Carousel with Stacked Effect */}
               {showDetailModal.image_url && (
-                <div className="w-full max-w-md mx-auto aspect-square relative px-8 py-8">
+                <div className="w-full aspect-square relative">
                   {(showDetailModal as any).image_urls && (showDetailModal as any).image_urls.length > 1 ? (
                     <div className="relative w-full h-full">
                       {/* Background layers - visible parts of other images */}
                       {(showDetailModal as any).image_urls.map((url: string, index: number) => {
                         if (index === currentImageIndex) return null
-                        const offset = (index - currentImageIndex) * 8 // Reduced from 12 to 8
+                        const offset = (index - currentImageIndex) * 12
                         const zIndex = (showDetailModal as any).image_urls.length - Math.abs(index - currentImageIndex)
 
                         return (
                           <div
                             key={index}
-                            className="absolute inset-4 border-2 border-black rounded-lg overflow-hidden" // Changed from inset-0 to inset-4
+                            className="absolute inset-0 border-2 border-black rounded-lg overflow-hidden"
                             style={{
                               transform: `translate(${offset}px, ${offset}px)`,
                               zIndex: zIndex,
@@ -917,7 +1030,7 @@ export default function BraidGlossaryPage() {
 
                       {/* Main image (current) */}
                       <div
-                        className="relative w-full h-full border-2 border-black rounded-lg overflow-hidden bg-white" // Added bg-white
+                        className="relative w-full h-full border-2 border-black rounded-lg overflow-hidden"
                         style={{ zIndex: 100 }}
                       >
                         <img
