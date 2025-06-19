@@ -1,6 +1,10 @@
 import { neon } from "@neondatabase/serverless"
 
-const sql = neon(process.env.NEON_DATABASE_URL!)
+const DB_URL = process.env.NEON_NEON_DATABASE_URL // ✅ use the standard single variable
+const getSql = () => {
+  if (!DB_URL) throw new Error("DB_URL_NOT_SET")
+  return neon(DB_URL)
+}
 
 export interface Braid {
   id: number
@@ -104,22 +108,20 @@ class Database {
 
   async getBraids(): Promise<Braid[]> {
     try {
-      const result = await sql`
-        SELECT * FROM braids 
+      const sql = getSql()
+      const rows = await sql`
+        SELECT * FROM braids
         ORDER BY created_at DESC
       `
-
-      // If no data in database, return demo data
-      if (!result || result.length === 0) {
+      if (!rows || rows.length === 0) {
         this.isDemo = true
-        this.demoReason = "No data in database"
+        this.demoReason = "No rows in database"
         return DEMO_BRAIDS
       }
-
       this.isDemo = false
-      return result as Braid[]
-    } catch (error) {
-      console.error("Database error, falling back to demo data:", error)
+      return rows as Braid[]
+    } catch (err) {
+      console.error("DB error, using demo data:", err)
       this.isDemo = true
       this.demoReason = "Database connection failed"
       return DEMO_BRAIDS
@@ -128,6 +130,7 @@ class Database {
 
   async addBraid(braid: NewBraid): Promise<Braid> {
     try {
+      const sql = getSql()
       const result = await sql`
         INSERT INTO braids (
           braid_name, alt_names, region, image_url, image_urls,
