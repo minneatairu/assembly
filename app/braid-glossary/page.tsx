@@ -553,7 +553,7 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-5xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
+          <div className="bg-white w-full max-w-5xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200 stick-no-bills text-5xl transform rotate-45"
@@ -566,8 +566,8 @@ export default function BraidGlossaryPage() {
                 {/* Left Side - Upload Area */}
                 <div className="w-1/2">
                   <div
-                    className={`relative bg-green-400 border-2 border-black transition-colors ${
-                      isDragOver ? "border-blue-400 bg-green-500" : "border-black"
+                    className={`relative bg-green-400 border-r-2 border-black transition-colors ${
+                      isDragOver ? "bg-green-500" : ""
                     } flex flex-col items-center justify-center cursor-pointer overflow-visible`}
                     style={{ height: "384px" }} // 6 input fields × 64px each = 384px
                     onDragOver={handleDragOver}
@@ -605,7 +605,7 @@ export default function BraidGlossaryPage() {
                               <img
                                 src={URL.createObjectURL(formData.imageFiles[0]) || "/placeholder.svg"}
                                 alt="Preview"
-                                className="w-full h-full object-cover border-2 border-black"
+                                className="w-full h-full object-cover"
                               />
                               {formData.imageFiles.length > 1 && (
                                 <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
@@ -660,7 +660,7 @@ export default function BraidGlossaryPage() {
                       value={formData.braidName}
                       onChange={handleInputChange}
                       placeholder="Braid name"
-                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                       required
                     />
 
@@ -671,7 +671,7 @@ export default function BraidGlossaryPage() {
                       value={formData.altNames}
                       onChange={handleInputChange}
                       placeholder="Alternative names"
-                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                     />
 
                     {/* Region */}
@@ -681,7 +681,7 @@ export default function BraidGlossaryPage() {
                       value={formData.region}
                       onChange={handleInputChange}
                       placeholder="Cultural origin"
-                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                       required
                     />
 
@@ -692,7 +692,7 @@ export default function BraidGlossaryPage() {
                       value={formData.contributorName}
                       onChange={handleInputChange}
                       placeholder="Contributor name"
-                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                       required
                     />
 
@@ -703,7 +703,7 @@ export default function BraidGlossaryPage() {
                       value={formData.linkUrl}
                       onChange={handleInputChange}
                       placeholder="Link to more info"
-                      className="w-full h-16 px-4 bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black border-t-0"
+                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black"
                     />
 
                     {/* Audio Recording */}
@@ -714,7 +714,7 @@ export default function BraidGlossaryPage() {
                             <button
                               type="button"
                               onClick={startRecording}
-                              className="w-full h-16 px-4 bg-gray-50 border-2 border-black hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills border-t-0"
+                              className="w-full h-16 px-4 bg-gray-50 hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills"
                             >
                               Record pronunciation
                             </button>
@@ -785,7 +785,7 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Agreement Checkbox - Full Width */}
-              <div className="flex items-start gap-3 mt-6 mb-4">
+              <div className="flex items-start gap-3 p-4">
                 <input
                   type="checkbox"
                   id="agreeToShare"
@@ -802,7 +802,7 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Account Creation Toggle */}
-              <div className="mb-6">
+              <div className="p-4">
                 <div className="flex items-center gap-3 mb-4">
                   <input
                     type="checkbox"
@@ -882,7 +882,7 @@ export default function BraidGlossaryPage() {
                 <button
                   type="submit"
                   disabled={submitting || !formData.agreeToShare}
-                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-2 border-black text-5xl"
+                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-t-2 border-black text-5xl"
                 >
                   {submitting ? "SHARING..." : "SHARE"}
                 </button>
@@ -1000,7 +1000,7 @@ export default function BraidGlossaryPage() {
 
               {/* Image Carousel with Stacked Effect */}
               {showDetailModal.image_url && (
-                <div className="w-full aspect-square relative">
+                <div className="w-full relative" style={{ aspectRatio: "3/4" }}>
                   {(showDetailModal as any).image_urls && (showDetailModal as any).image_urls.length > 1 ? (
                     <div className="relative w-full h-full">
                       {/* Background layers - visible parts of other images */}
@@ -1024,7 +1024,7 @@ export default function BraidGlossaryPage() {
                               className="w-full h-full object-cover"
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement
-                                target.src = "/placeholder.svg?height=400&width=400"
+                                target.src = "/placeholder.svg?height=400&width=300"
                               }}
                             />
                           </div>
@@ -1048,7 +1048,7 @@ export default function BraidGlossaryPage() {
                           }
                           onError={(e) => {
                             const target = e.target as HTMLImageElement
-                            target.src = "/placeholder.svg?height=400&width=400"
+                            target.src = "/placeholder.svg?height=400&width=300"
                           }}
                         />
 
@@ -1090,7 +1090,7 @@ export default function BraidGlossaryPage() {
                       onClick={() => handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name)}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
-                        target.src = "/placeholder.svg?height=400&width=400"
+                        target.src = "/placeholder.svg?height=400&width=300"
                       }}
                     />
                   )}
@@ -1185,14 +1185,14 @@ export default function BraidGlossaryPage() {
 
                 {/* Image */}
                 {braid.image_url ? (
-                  <div className="aspect-square overflow-hidden rounded-t-[50px] relative">
+                  <div className="overflow-hidden rounded-t-[50px] relative" style={{ aspectRatio: "3/4" }}>
                     <img
                       src={braid.image_url || "/placeholder.svg"}
                       alt={braid.braid_name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
-                        target.src = "/placeholder.svg?height=300&width=300"
+                        target.src = "/placeholder.svg?height=400&width=300"
                       }}
                     />
                     {/* Stack effect for multiple images */}
@@ -1211,7 +1211,10 @@ export default function BraidGlossaryPage() {
                     )}
                   </div>
                 ) : (
-                  <div className="aspect-square bg-gray-300 flex items-center justify-center rounded-t-[50px]">
+                  <div
+                    className="bg-gray-300 flex items-center justify-center rounded-t-[50px]"
+                    style={{ aspectRatio: "3/4" }}
+                  >
                     <svg
                       width="24"
                       height="24"
