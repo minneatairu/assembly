@@ -12,15 +12,28 @@ export default function ProfilePage() {
     // Check if user is logged in and fetch their submissions
     const checkAuth = async () => {
       try {
-        const response = await fetch("/api/auth/me")
-        if (response.ok) {
-          const userData = await response.json()
-          setUser(userData.user)
-
-          // Fetch user's braids
-          const braids = await db.getUserBraids(userData.user.id)
-          setUserBraids(braids)
+        const res = await fetch("/api/auth/me")
+        if (!res.ok) {
+          // not logged in or server error
+          setLoading(false)
+          return
         }
+        let data: any = null
+        try {
+          data = await res.json()
+        } catch {
+          setLoading(false)
+          return
+        }
+        if (!data?.user) {
+          setLoading(false)
+          return
+        }
+        setUser(data.user)
+
+        // Fetch user's braids
+        const braids = await db.getUserBraids(data.user.id)
+        setUserBraids(braids)
       } catch (error) {
         console.error("Auth check failed:", error)
       } finally {

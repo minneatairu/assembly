@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless"
 
 // Use Neon database connection
-const DB_URL = process.env.NEON_NEON_NEON_NEON_DATABASE_URL
+const DB_URL = process.env.NEON_NEON_NEON_NEON_NEON_DATABASE_URL
 
 export type Braid = {
   id: string | number
@@ -179,5 +179,30 @@ export const db = {
       return { isDemo: true, reason: "No database URL configured" }
     }
     return { isDemo: false }
+  },
+
+  /**
+   * Return all braids submitted by a given user id
+   */
+  async getUserBraids(userId: number | string) {
+    if (!DB_URL) {
+      // demo mode → filter from local storage
+      demoStorage = getDemoStorage()
+      return demoStorage.filter((b) => (b as any).user_id === userId)
+    }
+
+    try {
+      const sql = neon(DB_URL)
+      const rows = await sql`
+        SELECT * FROM braids
+        WHERE user_id = ${userId}
+        ORDER BY created_at DESC
+      `
+      return rows as Braid[]
+    } catch (err) {
+      console.warn("getUserBraids db error, falling back to demo:", err)
+      demoStorage = getDemoStorage()
+      return demoStorage.filter((b) => (b as any).user_id === userId)
+    }
   },
 }
