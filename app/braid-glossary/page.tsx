@@ -895,49 +895,54 @@ export default function BraidGlossaryPage() {
       {/* Info Modal */}
       {showInfoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-6 sm:p-8 lg:p-12 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 rounded-[50px] border-2 border-black">
+          <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={closeInfoModal}
-              className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
+              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45 z-50"
             >
               +
             </button>
 
-            <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">ABOUT THE BRAID GLOSSARY</h2>
+            <div className="p-6 sm:p-8 lg:p-12">
+              <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">ABOUT THE BRAID GLOSSARY</h2>
 
-            <div className="space-y-12 stick-no-bills text-black">
-              <div>
-                <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                  The Braid Glossary is a crowdsourced, living dataset created to give Da Braidr (AI)—Minne Atairu's
-                  text-to-braid generator—the semantic footing it currently lacks. It catalogues the names and visual
-                  patterns of braided hairstyles across the African diaspora, capturing both widely used English terms
-                  and the indigenous or localized names spoken in braiding communities.
-                </p>
-              </div>
+              <div className="space-y-12 stick-no-bills text-black">
+                <div>
+                  <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
+                    The Braid Glossary is a crowdsourced, living dataset created to give Da Braidr (AI)—Minne Atairu's
+                    text-to-braid generator—the semantic footing it currently lacks. It catalogues the names and visual
+                    patterns of braided hairstyles across the African diaspora, capturing both widely used English terms
+                    and the indigenous or localized names spoken in braiding communities.
+                  </p>
+                </div>
 
-              <div>
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-medium mb-2 text-black uppercase">WHY IT MATTERS</h3>
-                <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                  Research on multimodal models demonstrates that these systems learn by aligning caption tokens with
-                  visual features, and that culturally specific vocabularies are often sparse, mislabeled, or entirely
-                  absent (e.g., Buolamwini & Gebru, 2018; Birhane, Prabhu & Kahembwe, 2021). For Black braiding,
-                  metaphorical style names such as lemonade braids, butterfly locs, and Fulani feed-ins further confound
-                  models tuned to privilege literal, descriptive pairings. Consequently, when users prompt Da Braidr
-                  with these terms, the system frequently defaults to generic or inaccurate outputs. (See example.)
-                </p>
-              </div>
+                <div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-medium mb-2 text-black uppercase">
+                    WHY IT MATTERS
+                  </h3>
+                  <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
+                    Research on multimodal models demonstrates that these systems learn by aligning caption tokens with
+                    visual features, and that culturally specific vocabularies are often sparse, mislabeled, or entirely
+                    absent (e.g., Buolamwini & Gebru, 2018; Birhane, Prabhu & Kahembwe, 2021). For Black braiding,
+                    metaphorical style names such as lemonade braids, butterfly locs, and Fulani feed-ins further
+                    confound models tuned to privilege literal, descriptive pairings. Consequently, when users prompt Da
+                    Braidr with these terms, the system frequently defaults to generic or inaccurate outputs. (See
+                    example.)
+                  </p>
+                </div>
 
-              <div>
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-medium mb-2 text-black uppercase">
-                  WHAT THE GLOSSARY DOES
-                </h3>
-                <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                  Your contribution helps us build an explicit mapping layer between braid names and their corresponding
-                  visual forms. Each entry in the glossary pairs a culturally specific term with vetted reference
-                  images, which we use to refine Da Braidr's training data and embedding space. This process improves
-                  name recognition and generation accuracy—without requiring users to translate or flatten their
-                  cultural vocabulary into machine-readable terms.
-                </p>
+                <div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-medium mb-2 text-black uppercase">
+                    WHAT THE GLOSSARY DOES
+                  </h3>
+                  <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
+                    Your contribution helps us build an explicit mapping layer between braid names and their
+                    corresponding visual forms. Each entry in the glossary pairs a culturally specific term with vetted
+                    reference images, which we use to refine Da Braidr's training data and embedding space. This process
+                    improves name recognition and generation accuracy—without requiring users to translate or flatten
+                    their cultural vocabulary into machine-readable terms.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -950,7 +955,7 @@ export default function BraidGlossaryPage() {
           <div className="relative max-w-4xl max-h-[90vh] w-full animate-in zoom-in-95 duration-300">
             <button
               onClick={closeImageModal}
-              className="absolute top-4 right-4 z-10 w-12 h-12 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors duration-200 border-2 border-white rounded-full stick-no-bills text-5xl transform rotate-45"
+              className="sticky top-4 right-4 ml-auto z-10 w-12 h-12 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors duration-200 border-2 border-white rounded-full stick-no-bills text-5xl transform rotate-45"
             >
               +
             </button>
@@ -970,34 +975,15 @@ export default function BraidGlossaryPage() {
       {/* Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-3 sm:p-4 lg:p-6 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
+          <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
+              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45 z-50"
             >
               +
             </button>
 
             <div className="space-y-6">
-              {/* Title */}
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase">
-                {showDetailModal.braid_name}
-              </h2>
-
-              {/* Tags */}
-              {showDetailModal.alt_names && (
-                <div className="flex flex-wrap gap-2">
-                  {showDetailModal.alt_names.split(",").map((name, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase"
-                    >
-                      {name.trim()}
-                    </span>
-                  ))}
-                </div>
-              )}
-
               {/* Image Carousel with Stacked Effect */}
               {showDetailModal.image_url && (
                 <div className="w-full relative" style={{ aspectRatio: "3/4" }}>
@@ -1012,7 +998,7 @@ export default function BraidGlossaryPage() {
                         return (
                           <div
                             key={index}
-                            className="absolute inset-0 border-2 border-black rounded-lg overflow-hidden"
+                            className="absolute inset-0 overflow-hidden"
                             style={{
                               transform: `translate(${offset}px, ${offset}px)`,
                               zIndex: zIndex,
@@ -1032,10 +1018,7 @@ export default function BraidGlossaryPage() {
                       })}
 
                       {/* Main image (current) */}
-                      <div
-                        className="relative w-full h-full border-2 border-black rounded-lg overflow-hidden"
-                        style={{ zIndex: 100 }}
-                      >
+                      <div className="relative w-full h-full overflow-hidden" style={{ zIndex: 100 }}>
                         <img
                           src={(showDetailModal as any).image_urls[currentImageIndex] || "/placeholder.svg"}
                           alt={showDetailModal.braid_name}
@@ -1086,7 +1069,7 @@ export default function BraidGlossaryPage() {
                     <img
                       src={showDetailModal.image_url || "/placeholder.svg"}
                       alt={showDetailModal.braid_name}
-                      className="w-full h-full object-cover cursor-pointer border-2 border-black rounded-lg"
+                      className="w-full h-full object-cover cursor-pointer"
                       onClick={() => handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name)}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
@@ -1097,68 +1080,89 @@ export default function BraidGlossaryPage() {
                 </div>
               )}
 
-              {/* Details - Inline Format */}
-              <div className="space-y-1 stick-no-bills text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-black uppercase">REGION:</span>
-                  <span className="text-black uppercase">{showDetailModal.region}</span>
-                </div>
+              <div className="p-6">
+                {/* Title */}
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase mb-4">
+                  {showDetailModal.braid_name}
+                </h2>
 
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-black uppercase">BY:</span>
-                  <span className="text-black uppercase">{showDetailModal.contributor_name}</span>
-                </div>
-
-                {(showDetailModal as any).audio_url && (
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-black uppercase">PRONUNCIATION:</span>
-                    <button
-                      onClick={() => toggleAudio(showDetailModal.id, (showDetailModal as any).audio_url)}
-                      className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs"
-                    >
-                      {playingAudio[showDetailModal.id.toString()] ? (
-                        <>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                          </svg>
-                          Stop
-                        </>
-                      ) : (
-                        <>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                          Play
-                        </>
-                      )}
-                    </button>
+                {/* Tags */}
+                {showDetailModal.alt_names && (
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {showDetailModal.alt_names.split(",").map((name, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase"
+                      >
+                        {name.trim()}
+                      </span>
+                    ))}
                   </div>
                 )}
 
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-black uppercase">PUBLISHED:</span>
-                  <span className="text-black uppercase">
-                    {new Date(showDetailModal.created_at).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                    })}
-                  </span>
-                </div>
-
-                {showDetailModal.public_url && (
+                {/* Details - Inline Format */}
+                <div className="space-y-1 stick-no-bills text-sm">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-black uppercase">LEARN MORE:</span>
-                    <a
-                      href={showDetailModal.public_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs uppercase"
-                    >
-                      VISIT LINK
-                    </a>
+                    <span className="font-medium text-black uppercase">REGION:</span>
+                    <span className="text-black uppercase">{showDetailModal.region}</span>
                   </div>
-                )}
+
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-black uppercase">BY:</span>
+                    <span className="text-black uppercase">{showDetailModal.contributor_name}</span>
+                  </div>
+
+                  {(showDetailModal as any).audio_url && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-black uppercase">PRONUNCIATION:</span>
+                      <button
+                        onClick={() => toggleAudio(showDetailModal.id, (showDetailModal as any).audio_url)}
+                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs"
+                      >
+                        {playingAudio[showDetailModal.id.toString()] ? (
+                          <>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                            </svg>
+                            Stop
+                          </>
+                        ) : (
+                          <>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                            Play
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-black uppercase">PUBLISHED:</span>
+                    <span className="text-black uppercase">
+                      {new Date(showDetailModal.created_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
+                    </span>
+                  </div>
+
+                  {showDetailModal.public_url && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-black uppercase">LEARN MORE:</span>
+                      <a
+                        href={showDetailModal.public_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs uppercase"
+                      >
+                        VISIT LINK
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
