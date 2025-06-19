@@ -540,10 +540,10 @@ export default function BraidGlossaryPage() {
               </button>
               <button
                 onClick={() => setShowForm(true)}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
+                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
                 title="Add a new braid"
               >
-                +
+                <img src="/add.svg" alt="Add" className="w-6 h-6" />
               </button>
             </div>
           </div>
@@ -556,9 +556,9 @@ export default function BraidGlossaryPage() {
           <div className="bg-white w-full max-w-5xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowForm(false)}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200 stick-no-bills text-5xl transform rotate-45"
+              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
             >
-              +
+              <img src="/cancel.svg" alt="Close" className="w-8 h-8" />
             </button>
 
             <div className="p-0">
@@ -898,9 +898,9 @@ export default function BraidGlossaryPage() {
           <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={closeInfoModal}
-              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45 z-50"
+              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors z-50"
             >
-              +
+              <img src="/cancel.svg" alt="Close" className="w-6 h-6" />
             </button>
 
             <div className="p-6 sm:p-8 lg:p-12">
@@ -955,9 +955,9 @@ export default function BraidGlossaryPage() {
           <div className="relative max-w-4xl max-h-[90vh] w-full animate-in zoom-in-95 duration-300">
             <button
               onClick={closeImageModal}
-              className="sticky top-4 right-4 ml-auto z-10 w-12 h-12 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors duration-200 border-2 border-white rounded-full stick-no-bills text-5xl transform rotate-45"
+              className="sticky top-4 right-4 ml-auto z-10 w-12 h-12 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors duration-200 border-2 border-white rounded-full"
             >
-              +
+              <img src="/cancel.svg" alt="Close" className="w-6 h-6 filter invert" />
             </button>
             <img
               src={showImageModal.url || "/placeholder.svg"}
@@ -978,9 +978,9 @@ export default function BraidGlossaryPage() {
           <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45 z-50"
+              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors z-50"
             >
-              +
+              <img src="/cancel.svg" alt="Close" className="w-6 h-6" />
             </button>
 
             <div className="space-y-6">
@@ -1266,10 +1266,10 @@ export default function BraidGlossaryPage() {
                         setShowDetailModal(braid)
                         setCurrentImageIndex(0)
                       }}
-                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-5xl font-bold"
+                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
                       title="View details"
                     >
-                      +
+                      <img src="/add.svg" alt="View details" className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
