@@ -968,74 +968,75 @@ export default function BraidGlossaryPage() {
                                   ×
                                 </button>
 
-                                {/* Navigation arrows */}
-                                {currentImageIndex > 0 && (
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      setCurrentImageIndex((prev) => prev - 1)
-                                    }}
-                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors"
-                                    title="Previous image"
-                                  >
-                                    ←
-                                  </button>
-                                )}
+                                {/* Image counter and navigation arrows - matching card slideshow style */}
+                                <div className="absolute top-0 left-0">
+                                  <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1">
+                                    {currentImageIndex + 1} / {formData.imageFiles.length}
+                                  </div>
+                                  <div className="flex flex-col gap-1">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        setCurrentImageIndex((prev) => prev - 1)
+                                      }}
+                                      className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                      title="Previous image"
+                                    >
+                                      ←
+                                    </button>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        setCurrentImageIndex((prev) => prev + 1)
+                                      }}
+                                      className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                      title="Next image"
+                                    >
+                                      →
+                                    </button>
+                                  </div>
+                                </div>
 
-                                {currentImageIndex < formData.imageFiles.length - 1 && (
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      setCurrentImageIndex((prev) => prev + 1)
-                                    }}
-                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors"
-                                    title="Next image"
-                                  >
-                                    →
-                                  </button>
-                                )}
-
-                                {/* Image counter */}
-                                <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills">
-                                  {currentImageIndex + 1} of {formData.imageFiles.length}
+                                {/* Thumbnail strip */}
+                                <div className="flex gap-2 overflow-x-auto pb-2">
+                                  {imagePreviews.map((preview, index) => (
+                                    <button
+                                      key={index}
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        setCurrentImageIndex(index)
+                                      }}
+                                      className={`relative flex-shrink-0 w-16 h-16 transition-all ${
+                                        index === currentImageIndex ? "opacity-100" : "opacity-70 hover:opacity-90"
+                                      }`}
+                                      title={`View image ${index + 1}`}
+                                    >
+                                      <img
+                                        src={preview || "/placeholder.svg"}
+                                        alt={`Thumbnail ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </button>
+                                  ))}
                                 </div>
                               </div>
 
-                              {/* Thumbnail strip */}
-                              <div className="flex gap-2 overflow-x-auto pb-2">
-                                {imagePreviews.map((preview, index) => (
-                                  <button
-                                    key={index}
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      setCurrentImageIndex(index)
-                                    }}
-                                    className={`relative flex-shrink-0 w-16 h-16 border-2 transition-all ${
-                                      index === currentImageIndex
-                                        ? "border-black ring-2 ring-green-400"
-                                        : "border-gray-300 hover:border-gray-500"
-                                    }`}
-                                    title={`View image ${index + 1}`}
-                                  >
-                                    <img
-                                      src={preview || "/placeholder.svg"}
-                                      alt={`Thumbnail ${index + 1}`}
-                                      className="w-full h-full object-cover"
-                                    />
-                                    {index === currentImageIndex && (
-                                      <div className="absolute inset-0 bg-green-400/20"></div>
-                                    )}
-                                  </button>
-                                ))}
+                              <div className="text-center">
+                                <p className="text-black text-sm stick-no-bills mb-2">
+                                  {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
+                                </p>
+                                <p className="text-black text-xs stick-no-bills">
+                                  Click to add more files (max 5 total)
+                                </p>
                               </div>
                             </div>
                           )}
 
                           <div className="text-center">
-                            <p className="text-black text-sm stick-no-bills mb-2">
-                              {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
+                            <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
+                              CLICK TO UPLOAD
                             </p>
-                            <p className="text-black text-xs stick-no-bills">Click to add more files (max 5 total)</p>
+                            <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
                           </div>
                         </div>
                       ) : (
