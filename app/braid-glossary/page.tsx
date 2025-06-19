@@ -521,18 +521,18 @@ export default function BraidGlossaryPage() {
                 className="hover:opacity-70 transition-opacity"
                 title="Go to Data Assembly home"
               >
-                <img src="/home.svg" alt="Home" className="w-6 h-6" />
+                <img src="/home.svg" alt="Home" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
                 onClick={() => window.location.reload()}
                 className="hover:opacity-70 transition-opacity"
                 title="Refresh page"
               >
-                <img src="/refresh.svg" alt="Refresh" className="w-6 h-6" />
+                <img src="/refresh.svg" alt="Refresh" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
                 onClick={() => setShowInfoModal(true)}
-                className="hover:opacity-70 transition-opacity stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
+                className="hover:opacity-70 transition-opacity stick-no-bills text-2xl sm:text-3xl lg:text-4xl font-bold"
                 title="Learn more about the braid glossary"
               >
                 ?
@@ -544,10 +544,11 @@ export default function BraidGlossaryPage() {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
+                  height="32px"
                   viewBox="0 -960 960 960"
-                  width="24px"
+                  width="32px"
                   fill="#1f1f1f"
+                  className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
                 >
                   <path d="M620-520q25 0 42.5-17.5T680-580q0-25-17.5-42.5T620-640q-25 0-42.5 17.5T560-580q0 25 17.5 42.5T620-520Zm-280 0q25 0 42.5-17.5T400-580q0-25-17.5-42.5T340-640q-25 0-42.5 17.5T280-580q0 25 17.5 42.5T340-520Zm140 260q68 0 123.5-38.5T684-400H276q25 63 80.5 101.5T480-260Zm0 180q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54 54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Z" />
                 </svg>
@@ -557,7 +558,7 @@ export default function BraidGlossaryPage() {
                 className="hover:opacity-70 transition-opacity"
                 title="Add a new braid"
               >
-                <img src="/add.svg" alt="Add" className="w-6 h-6" />
+                <img src="/add.svg" alt="Add" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
             </div>
           </div>
@@ -572,7 +573,7 @@ export default function BraidGlossaryPage() {
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
             >
-              <img src="/cancel.svg" alt="Close" className="w-8 h-8" />
+              <img src="/cancel.svg" alt="Close" className="w-10 h-10 sm:w-12 sm:h-12" />
             </button>
 
             <div className="p-0">
@@ -914,7 +915,7 @@ export default function BraidGlossaryPage() {
               onClick={closeInfoModal}
               className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
             >
-              <img src="/cancel.svg" alt="Close" className="w-6 h-6" />
+              <img src="/cancel.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
 
             <div className="p-6 sm:p-8 lg:p-12">
@@ -971,7 +972,7 @@ export default function BraidGlossaryPage() {
               onClick={closeImageModal}
               className="sticky top-4 right-4 ml-auto z-10 hover:opacity-70 transition-opacity"
             >
-              <img src="/cancel.svg" alt="Close" className="w-6 h-6 filter invert" />
+              <img src="/cancel.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
             <img
               src={showImageModal.url || "/placeholder.svg"}
@@ -991,7 +992,7 @@ export default function BraidGlossaryPage() {
               onClick={() => setShowDetailModal(null)}
               className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
             >
-              <img src="/cancel.svg" alt="Close" className="w-6 h-6" />
+              <img src="/cancel.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
 
             <div className="space-y-6">
@@ -1215,7 +1216,7 @@ export default function BraidGlossaryPage() {
                       className="absolute bottom-2 left-2 cursor-pointer hover:opacity-70 transition-opacity"
                       onClick={() => handleImageClick(braid.image_url!, braid.braid_name)}
                     >
-                      <img src="/zoom.svg" alt="Zoom" className="w-4 h-4 filter invert" />
+                      <img src="/zoom.svg" alt="Zoom" className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 filter invert" />
                     </div>
                     {/* Stack effect for multiple images */}
                     {(braid as any).image_urls && (braid as any).image_urls.length > 1 && (
@@ -1251,8 +1252,8 @@ export default function BraidGlossaryPage() {
                 )}
 
                 {/* Content */}
-                <div className="p-6 sm:p-8 lg:p-12">
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-20 stick-no-bills text-black uppercase leading-tight">
+                <div className="p-4 sm:p-6 lg:p-8">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-12 stick-no-bills text-black uppercase leading-tight">
                     {braid.braid_name}
                   </h3>
 
@@ -1287,7 +1288,7 @@ export default function BraidGlossaryPage() {
                       className="hover:opacity-70 transition-opacity"
                       title="View details"
                     >
-                      <img src="/add.svg" alt="View details" className="w-5 h-5" />
+                      <img src="/add.svg" alt="View details" className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9" />
                     </button>
                   </div>
                 </div>
