@@ -102,7 +102,7 @@ export default function BraidGlossaryPage() {
     e.preventDefault()
     setIsDragOver(false)
     const files = Array.from(e.dataTransfer.files)
-      .filter((file) => file.type.startsWith("image/"))
+      .filter((file) => file.type.startsWith("image/") || file.type === "image/gif")
       .slice(0, 4)
     if (files.length > 0) {
       setFormData((prev) => ({ ...prev, imageFiles: files, imageUrl: "" }))
@@ -587,7 +587,7 @@ export default function BraidGlossaryPage() {
                       id="file-input"
                       type="file"
                       onChange={handleFileChange}
-                      accept="image/*"
+                      accept="image/*,image/gif"
                       multiple
                       className="hidden"
                     />
@@ -874,7 +874,7 @@ export default function BraidGlossaryPage() {
                       {/* Background layers - visible parts of other images */}
                       {(showDetailModal as any).image_urls.map((url: string, index: number) => {
                         if (index === currentImageIndex) return null
-                        const offset = (index - currentImageIndex) * 8
+                        const offset = (index - currentImageIndex) * 16 // Changed from 8 to 16
                         const zIndex = (showDetailModal as any).image_urls.length - Math.abs(index - currentImageIndex)
 
                         return (
@@ -1066,8 +1066,12 @@ export default function BraidGlossaryPage() {
                     {/* Stack effect for multiple images */}
                     {(braid as any).image_urls && (braid as any).image_urls.length > 1 && (
                       <>
-                        <div className="absolute inset-0 bg-white/20 transform translate-x-1 translate-y-1 rounded-t-[50px] -z-10"></div>
-                        <div className="absolute inset-0 bg-white/40 transform translate-x-2 translate-y-2 rounded-t-[50px] -z-20"></div>
+                        {/* Third layer (most background) */}
+                        {(braid as any).image_urls.length > 2 && (
+                          <div className="absolute inset-0 bg-white/30 border-2 border-black transform translate-x-4 translate-y-4 rounded-t-[50px] -z-20"></div>
+                        )}
+                        {/* Second layer (middle) */}
+                        <div className="absolute inset-0 bg-white/20 border-2 border-black transform translate-x-2 translate-y-2 rounded-t-[50px] -z-10"></div>
                         <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
                           {(braid as any).image_urls.length} photos
                         </div>
