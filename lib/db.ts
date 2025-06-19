@@ -1,208 +1,174 @@
 import { neon } from "@neondatabase/serverless"
 
-// Use Neon database connection
-const DB_URL = process.env.NEON_NEON_NEON_NEON_NEON_DATABASE_URL
+const sql = neon(process.env.NEON_DATABASE_URL!)
 
-export type Braid = {
-  id: string | number
+export interface Braid {
+  id: number
   braid_name: string
   alt_names?: string
   region: string
   image_url?: string
+  image_urls?: string[]
   public_url?: string
+  link_title?: string
+  link_description?: string
+  memory_title?: string
+  memory_description?: string
   contributor_name: string
-  created_at: string
-  updated_at?: string
   audio_url?: string
   audio_notes?: string
+  submission_type: "photo" | "link" | "memory"
+  created_at: string
 }
 
-// Demo data for when database isn't configured
+export interface NewBraid {
+  braid_name: string
+  alt_names?: string
+  region: string
+  image_url?: string
+  image_urls?: string[]
+  public_url?: string
+  link_title?: string
+  link_description?: string
+  memory_title?: string
+  memory_description?: string
+  contributor_name: string
+  audio_url?: string
+  audio_notes?: string
+  submission_type: "photo" | "link" | "memory"
+}
+
+// Demo data fallback
 const DEMO_BRAIDS: Braid[] = [
   {
     id: 1,
     braid_name: "Box Braids",
-    alt_names: "Square Braids, Poetic Justice Braids",
+    alt_names: "Poetic Justice Braids, Square Braids",
     region: "West Africa",
-    image_url: "/placeholder.svg?height=200&width=300&text=Box+Braids",
-    public_url: null,
-    contributor_name: "Cultural Heritage Team",
-    created_at: "2024-01-01T00:00:00Z",
+    image_url: "/placeholder.svg?height=400&width=300&text=Box+Braids",
+    contributor_name: "Maya Johnson",
+    submission_type: "photo",
+    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: 2,
-    braid_name: "French Braid",
-    alt_names: "Tresse Française, Dutch Braid",
-    region: "Europe",
-    image_url: "/placeholder.svg?height=200&width=300&text=French+Braid",
-    public_url: null,
-    contributor_name: "Traditional Styles Collective",
-    created_at: "2024-01-02T00:00:00Z",
+    braid_name: "Goddess Braids Tutorial",
+    alt_names: "Crown Braids, Halo Braids",
+    region: "Ancient Egypt",
+    image_url: "/placeholder.svg?height=400&width=300&text=Goddess+Braids",
+    contributor_name: "Aisha Williams",
+    submission_type: "link",
+    public_url: "https://www.youtube.com/watch?v=example",
+    link_title: "Complete Goddess Braids Tutorial",
+    link_description:
+      "Step-by-step guide to creating beautiful goddess braids with cornrow base and loose braided extensions.",
+    created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: 3,
-    braid_name: "Cornrows",
-    alt_names: "Canerows, Boxer Braids",
-    region: "Africa",
-    image_url: "/placeholder.svg?height=200&width=300&text=Cornrows",
-    public_url: null,
-    contributor_name: "Heritage Documentation Project",
-    created_at: "2024-01-03T00:00:00Z",
+    braid_name: "Grandmother's Braiding Wisdom",
+    region: "Southern United States",
+    contributor_name: "Keisha Brown",
+    submission_type: "memory",
+    memory_title: "Sunday Braiding Sessions",
+    memory_description:
+      "Every Sunday after church, my grandmother would sit me between her knees on the living room floor. She would part my hair with the precision of an artist, her fingers moving through each section like she was weaving stories into my scalp. She taught me that braiding wasn't just about hair - it was about connection, tradition, and the sacred time we spent together. Those moments shaped who I am today.",
+    created_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: 4,
-    braid_name: "Fishtail Braid",
-    alt_names: "Herringbone Braid, Fishbone Braid",
-    region: "Scandinavia",
-    image_url: "/placeholder.svg?height=200&width=300&text=Fishtail+Braid",
-    public_url: null,
-    contributor_name: "Nordic Traditions Archive",
-    created_at: "2024-01-04T00:00:00Z",
+    braid_name: "Fulani Braids",
+    alt_names: "Tribal Braids, Fulani Cornrows",
+    region: "West Africa - Fulani People",
+    image_url: "/placeholder.svg?height=400&width=300&text=Fulani+Braids",
+    contributor_name: "Fatima Diallo",
+    submission_type: "photo",
+    created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: 5,
-    braid_name: "Fulani Braids",
-    alt_names: "Tribal Braids, Fulani Cornrows, Peul Braids",
-    region: "West Africa",
-    image_url: "/placeholder.svg?height=200&width=300&text=Fulani+Braids",
-    public_url: null,
-    contributor_name: "Fulani Cultural Center",
-    created_at: "2024-01-05T00:00:00Z",
-  },
-  {
-    id: 6,
-    braid_name: "Crown Braid",
-    alt_names: "Halo Braid, Milkmaid Braid",
-    region: "Eastern Europe",
-    image_url: "/placeholder.svg?height=200&width=300&text=Crown+Braid",
-    public_url: null,
-    contributor_name: "Folk Traditions Institute",
-    created_at: "2024-01-06T00:00:00Z",
+    braid_name: "Learning to Braid",
+    region: "Caribbean",
+    contributor_name: "Marley Thompson",
+    submission_type: "memory",
+    memory_title: "First Time Braiding My Sister",
+    memory_description:
+      "I was twelve when my mother finally trusted me to braid my little sister's hair for school. My hands shook as I tried to recreate the neat cornrows I had watched her do a thousand times. It took me three hours and looked nothing like mama's work, but my sister wore those crooked braids with pride. That day, I understood that braiding was about more than technique - it was about love, patience, and the trust someone places in your hands.",
+    created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
   },
 ]
 
-// Persistent demo storage using localStorage
-const getDemoStorage = (): Braid[] => {
-  if (typeof window === "undefined") return [...DEMO_BRAIDS]
+class Database {
+  private isDemo = false
+  private demoReason = ""
 
-  try {
-    const stored = localStorage.getItem("demo-braids")
-    if (stored) {
-      const parsed = JSON.parse(stored)
-      return Array.isArray(parsed) ? parsed : [...DEMO_BRAIDS]
-    }
-  } catch (error) {
-    console.warn("Error loading demo storage:", error)
-  }
-
-  return [...DEMO_BRAIDS]
-}
-
-const setDemoStorage = (braids: Braid[]) => {
-  if (typeof window === "undefined") return
-
-  try {
-    localStorage.setItem("demo-braids", JSON.stringify(braids))
-  } catch (error) {
-    console.warn("Error saving demo storage:", error)
-  }
-}
-
-// Initialize demo storage
-let demoStorage: Braid[] = getDemoStorage()
-
-// Database operations
-export const db = {
   async getBraids(): Promise<Braid[]> {
-    if (!DB_URL) {
-      // Demo mode - return persistent demo data
-      demoStorage = getDemoStorage()
-      return [...demoStorage].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    }
-
     try {
-      const sql = neon(DB_URL)
-      const result = await sql`SELECT * FROM braids ORDER BY created_at DESC`
-      return result as Braid[]
-    } catch (error) {
-      console.warn("Database error, falling back to demo mode:", error)
-      demoStorage = getDemoStorage()
-      return [...demoStorage]
-    }
-  },
-
-  async addBraid(braid: Omit<Braid, "id" | "created_at" | "updated_at">): Promise<Braid> {
-    if (!DB_URL) {
-      // Demo mode - add to persistent storage
-      const newBraid: Braid = {
-        ...braid,
-        id: Date.now(), // Simple ID generation for demo
-        created_at: new Date().toISOString(),
-      }
-      demoStorage = getDemoStorage()
-      demoStorage.unshift(newBraid)
-      setDemoStorage(demoStorage)
-      return newBraid
-    }
-
-    try {
-      const sql = neon(DB_URL)
       const result = await sql`
-        INSERT INTO braids (braid_name, alt_names, region, image_url, public_url, contributor_name, audio_url, audio_notes)
-        VALUES (${braid.braid_name}, ${braid.alt_names || null}, ${braid.region}, ${braid.image_url || null}, ${braid.public_url || null}, ${braid.contributor_name}, ${braid.audio_url || null}, ${braid.audio_notes || null})
-        RETURNING *
-      `
-      return result[0] as Braid
-    } catch (error) {
-      console.warn("Database error, falling back to demo mode:", error)
-      // Fallback to demo mode with persistence
-      const newBraid: Braid = {
-        ...braid,
-        id: Date.now(),
-        created_at: new Date().toISOString(),
-      }
-      demoStorage = getDemoStorage()
-      demoStorage.unshift(newBraid)
-      setDemoStorage(demoStorage)
-      return newBraid
-    }
-  },
-
-  // Check if database is configured
-  isConfigured(): boolean {
-    return !!DB_URL
-  },
-
-  // Get demo status
-  getDemoStatus(): { isDemo: boolean; reason?: string } {
-    if (!DB_URL) {
-      return { isDemo: true, reason: "No database URL configured" }
-    }
-    return { isDemo: false }
-  },
-
-  /**
-   * Return all braids submitted by a given user id
-   */
-  async getUserBraids(userId: number | string) {
-    if (!DB_URL) {
-      // demo mode → filter from local storage
-      demoStorage = getDemoStorage()
-      return demoStorage.filter((b) => (b as any).user_id === userId)
-    }
-
-    try {
-      const sql = neon(DB_URL)
-      const rows = await sql`
-        SELECT * FROM braids
-        WHERE user_id = ${userId}
+        SELECT * FROM braids 
         ORDER BY created_at DESC
       `
-      return rows as Braid[]
-    } catch (err) {
-      console.warn("getUserBraids db error, falling back to demo:", err)
-      demoStorage = getDemoStorage()
-      return demoStorage.filter((b) => (b as any).user_id === userId)
+
+      // If no data in database, return demo data
+      if (!result || result.length === 0) {
+        this.isDemo = true
+        this.demoReason = "No data in database"
+        return DEMO_BRAIDS
+      }
+
+      this.isDemo = false
+      return result as Braid[]
+    } catch (error) {
+      console.error("Database error, falling back to demo data:", error)
+      this.isDemo = true
+      this.demoReason = "Database connection failed"
+      return DEMO_BRAIDS
     }
-  },
+  }
+
+  async addBraid(braid: NewBraid): Promise<Braid> {
+    try {
+      const result = await sql`
+        INSERT INTO braids (
+          braid_name, alt_names, region, image_url, image_urls,
+          public_url, link_title, link_description, memory_title, memory_description,
+          contributor_name, audio_url, audio_notes, submission_type
+        ) VALUES (
+          ${braid.braid_name}, ${braid.alt_names || null}, ${braid.region}, 
+          ${braid.image_url || null}, ${braid.image_urls ? JSON.stringify(braid.image_urls) : null},
+          ${braid.public_url || null}, ${braid.link_title || null}, ${braid.link_description || null},
+          ${braid.memory_title || null}, ${braid.memory_description || null},
+          ${braid.contributor_name}, ${braid.audio_url || null}, ${braid.audio_notes || null},
+          ${braid.submission_type}
+        )
+        RETURNING *
+      `
+
+      this.isDemo = false
+      return result[0] as Braid
+    } catch (error) {
+      console.error("Failed to add braid to database:", error)
+
+      // In demo mode, simulate adding to demo data
+      const newBraid: Braid = {
+        id: Math.max(...DEMO_BRAIDS.map((b) => b.id)) + 1,
+        ...braid,
+        created_at: new Date().toISOString(),
+      }
+
+      DEMO_BRAIDS.unshift(newBraid)
+      this.isDemo = true
+      this.demoReason = "Database write failed"
+      return newBraid
+    }
+  }
+
+  getDemoStatus() {
+    return {
+      isDemo: this.isDemo,
+      reason: this.demoReason,
+    }
+  }
 }
+
+export const db = new Database()
