@@ -58,6 +58,40 @@
   font-family: "Boldonse", sans-serif;
 }
 
-label {
+/* label {
   background: grey;
+} */
+
+/* Custom square checkboxes */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #374151;
+  background-color: #f3f4f6;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
 }

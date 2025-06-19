@@ -792,7 +792,7 @@ export default function BraidGlossaryPage() {
                   name="agreeToShare"
                   checked={formData.agreeToShare}
                   onChange={handleInputChange}
-                  className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                  className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                   required
                 />
                 <label htmlFor="agreeToShare" className="text-sm stick-no-bills text-black leading-relaxed">
@@ -809,7 +809,7 @@ export default function BraidGlossaryPage() {
                     id="createAccount"
                     checked={showAccountCreation}
                     onChange={(e) => setShowAccountCreation(e.target.checked)}
-                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                    className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                   />
                   <label htmlFor="createAccount" className="text-sm stick-no-bills text-black font-medium">
                     CREATE ACCOUNT TO TRACK YOUR SUBMISSIONS
