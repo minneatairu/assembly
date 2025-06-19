@@ -875,28 +875,59 @@ export default function BraidGlossaryPage() {
                       {/* Show uploaded files or upload prompt */}
                       {formData.imageFiles.length > 0 ? (
                         <div className="w-full h-full p-4 overflow-y-auto">
-                          <div className="space-y-3 mb-4">
-                            {imagePreviews.map((preview, index) => (
-                              <div key={index} className="relative w-full aspect-[4/3]">
+                          {formData.imageFiles.length === 1 ? (
+                            // Single image - full display
+                            <div className="relative w-full aspect-[4/3] mb-4">
+                              <img
+                                src={imagePreviews[0] || "/placeholder.svg"}
+                                alt="Preview"
+                                className="w-full h-full object-cover rounded border-2 border-black"
+                              />
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  // Clean up the preview URL
+                                  URL.revokeObjectURL(imagePreviews[0])
+                                  setFormData((prev) => ({ ...prev, imageFiles: [] }))
+                                  setImagePreviews([])
+                                  // Reset file input
+                                  const fileInput = document.getElementById("file-input") as HTMLInputElement
+                                  if (fileInput) fileInput.value = ""
+                                }}
+                                className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 text-sm font-bold"
+                                title="Remove image"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ) : (
+                            // Multiple images - slideshow with thumbnails
+                            <div className="space-y-4">
+                              {/* Main image display */}
+                              <div className="relative w-full aspect-[4/3]">
                                 <img
-                                  src={preview || "/placeholder.svg"}
-                                  alt={`Preview ${index + 1}`}
+                                  src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
+                                  alt={`Preview ${currentImageIndex + 1}`}
                                   className="w-full h-full object-cover rounded border-2 border-black"
                                 />
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    // Remove this specific image
-                                    const newFiles = formData.imageFiles.filter((_, i) => i !== index)
-                                    const newPreviews = imagePreviews.filter((_, i) => i !== index)
+                                    // Remove the current image
+                                    const newFiles = formData.imageFiles.filter((_, i) => i !== currentImageIndex)
+                                    const newPreviews = imagePreviews.filter((_, i) => i !== currentImageIndex)
 
                                     // Clean up the removed preview URL
-                                    URL.revokeObjectURL(imagePreviews[index])
+                                    URL.revokeObjectURL(imagePreviews[currentImageIndex])
 
                                     setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
                                     setImagePreviews(newPreviews)
 
-                                    if (newFiles.length === 0) {
+                                    // Adjust current index if needed
+                                    if (currentImageIndex >= newFiles.length && newFiles.length > 0) {
+                                      setCurrentImageIndex(newFiles.length - 1)
+                                    } else if (newFiles.length === 0) {
+                                      setCurrentImageIndex(0)
                                       // Reset file input if no files left
                                       const fileInput = document.getElementById("file-input") as HTMLInputElement
                                       if (fileInput) fileInput.value = ""
@@ -907,12 +938,70 @@ export default function BraidGlossaryPage() {
                                 >
                                   ×
                                 </button>
+
+                                {/* Navigation arrows */}
+                                {currentImageIndex > 0 && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      setCurrentImageIndex((prev) => prev - 1)
+                                    }}
+                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
+                                    title="Previous image"
+                                  >
+                                    ←
+                                  </button>
+                                )}
+
+                                {currentImageIndex < formData.imageFiles.length - 1 && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      setCurrentImageIndex((prev) => prev + 1)
+                                    }}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-black/90 transition-colors"
+                                    title="Next image"
+                                  >
+                                    →
+                                  </button>
+                                )}
+
+                                {/* Image counter */}
                                 <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-xs stick-no-bills">
-                                  {index + 1} of {formData.imageFiles.length}
+                                  {currentImageIndex + 1} of {formData.imageFiles.length}
                                 </div>
                               </div>
-                            ))}
-                          </div>
+
+                              {/* Thumbnail strip */}
+                              <div className="flex gap-2 overflow-x-auto pb-2">
+                                {imagePreviews.map((preview, index) => (
+                                  <button
+                                    key={index}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      setCurrentImageIndex(index)
+                                    }}
+                                    className={`relative flex-shrink-0 w-16 h-16 rounded border-2 transition-all ${
+                                      index === currentImageIndex
+                                        ? "border-black ring-2 ring-green-400"
+                                        : "border-gray-300 hover:border-gray-500"
+                                    }`}
+                                    title={`View image ${index + 1}`}
+                                  >
+                                    <img
+                                      src={preview || "/placeholder.svg"}
+                                      alt={`Thumbnail ${index + 1}`}
+                                      className="w-full h-full object-cover rounded"
+                                    />
+                                    {index === currentImageIndex && (
+                                      <div className="absolute inset-0 bg-green-400/20 rounded"></div>
+                                    )}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
                           <div className="text-center">
                             <p className="text-black text-sm stick-no-bills mb-2">
                               {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
