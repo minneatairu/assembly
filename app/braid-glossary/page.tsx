@@ -561,14 +561,15 @@ export default function BraidGlossaryPage() {
               +
             </button>
 
-            <div className="p-12">
+            <div className="p-0">
               <div className="flex">
                 {/* Left Side - Upload Area */}
                 <div className="w-1/2">
                   <div
-                    className={`relative aspect-square bg-green-400 border-2 border-black rounded-[30px] transition-colors ${
+                    className={`relative bg-green-400 border-2 border-black transition-colors ${
                       isDragOver ? "border-blue-400 bg-green-500" : "border-black"
                     } flex flex-col items-center justify-center cursor-pointer overflow-visible`}
+                    style={{ height: "384px" }} // 6 input fields × 64px each = 384px
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -583,18 +584,18 @@ export default function BraidGlossaryPage() {
                               <>
                                 {/* Fourth layer (bottom) */}
                                 {formData.imageFiles.length > 3 && (
-                                  <div className="absolute inset-0 bg-gray-400 border-2 border-black rounded-[28px] transform translate-x-6 translate-y-6 -z-30"></div>
+                                  <div className="absolute inset-0 bg-gray-400 border-2 border-black transform translate-x-6 translate-y-6 -z-30"></div>
                                 )}
                                 {/* Third layer */}
                                 {formData.imageFiles.length > 2 && (
-                                  <div className="absolute inset-0 bg-gray-300 border-2 border-black rounded-[28px] transform translate-x-4 translate-y-4 -z-20"></div>
+                                  <div className="absolute inset-0 bg-gray-300 border-2 border-black transform translate-x-4 translate-y-4 -z-20"></div>
                                 )}
                                 {/* Second layer (middle) */}
-                                <div className="absolute inset-0 bg-gray-200 border-2 border-black rounded-[28px] transform translate-x-2 translate-y-2 -z-10">
+                                <div className="absolute inset-0 bg-gray-200 border-2 border-black transform translate-x-2 translate-y-2 -z-10">
                                   <img
                                     src={URL.createObjectURL(formData.imageFiles[1]) || "/placeholder.svg"}
                                     alt="Preview 2"
-                                    className="w-full h-full object-cover rounded-[26px]"
+                                    className="w-full h-full object-cover"
                                   />
                                 </div>
                               </>
@@ -604,7 +605,7 @@ export default function BraidGlossaryPage() {
                               <img
                                 src={URL.createObjectURL(formData.imageFiles[0]) || "/placeholder.svg"}
                                 alt="Preview"
-                                className="w-full h-full object-cover rounded-[28px] border-2 border-black"
+                                className="w-full h-full object-cover border-2 border-black"
                               />
                               {formData.imageFiles.length > 1 && (
                                 <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
@@ -617,14 +618,14 @@ export default function BraidGlossaryPage() {
                           <img
                             src={formData.imageUrl || "/placeholder.svg"}
                             alt="Preview"
-                            className="w-full h-full object-cover rounded-[28px]"
+                            className="w-full h-full object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
                               target.src = "/placeholder.svg?height=300&width=300&text=Invalid+Image"
                             }}
                           />
                         )}
-                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity rounded-[28px]">
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                           <p className="text-white text-center font-medium stick-no-bills">
                             Click to {formData.imageFiles.length > 0 ? "change" : "add"} images
                           </p>
@@ -816,7 +817,7 @@ export default function BraidGlossaryPage() {
                 </div>
 
                 {showAccountCreation && (
-                  <div className="space-y-0 border-2 border-black rounded-lg overflow-hidden">
+                  <div className="space-y-0 border-2 border-black overflow-hidden">
                     {/* First Name */}
                     <input
                       type="text"
@@ -881,7 +882,7 @@ export default function BraidGlossaryPage() {
                 <button
                   type="submit"
                   disabled={submitting || !formData.agreeToShare}
-                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-2 border-black rounded-full text-5xl"
+                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-2 border-black text-5xl"
                 >
                   {submitting ? "SHARING..." : "SHARE"}
                 </button>
