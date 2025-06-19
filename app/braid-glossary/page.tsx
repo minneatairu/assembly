@@ -795,7 +795,7 @@ export default function BraidGlossaryPage() {
                         <input
                           type="text"
                           name="linkTitle"
-                          value={formData.linkTitle}
+                          value={formData.linkTitle ?? ""}
                           onChange={handleInputChange}
                           placeholder="Title"
                           className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
@@ -809,7 +809,7 @@ export default function BraidGlossaryPage() {
                       <input
                         type="url"
                         name="linkUrl"
-                        value={formData.linkUrl}
+                        value={formData.linkUrl ?? ""}
                         onChange={handleInputChange}
                         placeholder="URL"
                         className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
@@ -820,7 +820,7 @@ export default function BraidGlossaryPage() {
                       <div className="relative">
                         <textarea
                           name="linkDescription"
-                          value={formData.linkDescription}
+                          value={formData.linkDescription ?? ""}
                           onChange={handleInputChange}
                           placeholder="Description"
                           rows={3}
@@ -844,7 +844,7 @@ export default function BraidGlossaryPage() {
                         <input
                           type="text"
                           name="memoryTitle"
-                          value={formData.memoryTitle}
+                          value={formData.memoryTitle ?? ""}
                           onChange={handleInputChange}
                           placeholder="Memory title"
                           className="w-full p-4 bg-white border border-gray-300 text-gray-700 placeholder-gray-400 stick-no-bills text-lg focus:outline-none focus:border-gray-400"
@@ -856,7 +856,7 @@ export default function BraidGlossaryPage() {
                       <div className="relative flex-1">
                         <textarea
                           name="memoryDescription"
-                          value={formData.memoryDescription}
+                          value={formData.memoryDescription ?? ""}
                           onChange={handleInputChange}
                           placeholder="Share your memory, story, or tradition..."
                           rows={6}
@@ -875,7 +875,7 @@ export default function BraidGlossaryPage() {
                     <input
                       type="text"
                       name="braidName"
-                      value={formData.braidName}
+                      value={formData.braidName ?? ""}
                       onChange={handleInputChange}
                       placeholder="Braid name"
                       className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
@@ -886,7 +886,7 @@ export default function BraidGlossaryPage() {
                     <input
                       type="text"
                       name="altNames"
-                      value={formData.altNames}
+                      value={formData.altNames ?? ""}
                       onChange={handleInputChange}
                       placeholder="Alternative names"
                       className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
@@ -896,7 +896,7 @@ export default function BraidGlossaryPage() {
                     <input
                       type="text"
                       name="region"
-                      value={formData.region}
+                      value={formData.region ?? ""}
                       onChange={handleInputChange}
                       placeholder="Cultural origin"
                       className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
@@ -907,7 +907,7 @@ export default function BraidGlossaryPage() {
                     <input
                       type="text"
                       name="contributorName"
-                      value={formData.contributorName}
+                      value={formData.contributorName ?? ""}
                       onChange={handleInputChange}
                       placeholder="Contributor name"
                       className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
