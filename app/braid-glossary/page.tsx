@@ -854,7 +854,7 @@ export default function BraidGlossaryPage() {
       {/* Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-white p-6 sm:p-8 lg:p-12 w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
+          <div className="bg-white p-6 sm:p-8 lg:p-12 w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black rounded-[50px]">
             <button
               onClick={() => setShowDetailModal(null)}
               className="absolute top-4 right-4 w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors stick-no-bills text-5xl transform rotate-45"
@@ -884,19 +884,19 @@ export default function BraidGlossaryPage() {
 
               {/* Image Carousel with Stacked Effect */}
               {showDetailModal.image_url && (
-                <div className="w-full aspect-square relative">
+                <div className="w-full max-w-md mx-auto aspect-square relative px-8 py-8">
                   {(showDetailModal as any).image_urls && (showDetailModal as any).image_urls.length > 1 ? (
                     <div className="relative w-full h-full">
                       {/* Background layers - visible parts of other images */}
                       {(showDetailModal as any).image_urls.map((url: string, index: number) => {
                         if (index === currentImageIndex) return null
-                        const offset = (index - currentImageIndex) * 12
+                        const offset = (index - currentImageIndex) * 8 // Reduced from 12 to 8
                         const zIndex = (showDetailModal as any).image_urls.length - Math.abs(index - currentImageIndex)
 
                         return (
                           <div
                             key={index}
-                            className="absolute inset-0 border-2 border-black rounded-lg overflow-hidden"
+                            className="absolute inset-4 border-2 border-black rounded-lg overflow-hidden" // Changed from inset-0 to inset-4
                             style={{
                               transform: `translate(${offset}px, ${offset}px)`,
                               zIndex: zIndex,
@@ -917,7 +917,7 @@ export default function BraidGlossaryPage() {
 
                       {/* Main image (current) */}
                       <div
-                        className="relative w-full h-full border-2 border-black rounded-lg overflow-hidden"
+                        className="relative w-full h-full border-2 border-black rounded-lg overflow-hidden bg-white" // Added bg-white
                         style={{ zIndex: 100 }}
                       >
                         <img
