@@ -655,7 +655,7 @@ export default function BraidGlossaryPage() {
                           {/* Multiple images navigation */}
                           {hasMultipleImages && (
                             <div className="absolute top-2 left-2">
-                              <div className="bg-black text-white px-2 py-1 text-xs stick-no-bills mb-1">
+                              <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1">
                                 {currentImageIndex + 1} / {totalImages}
                               </div>
                               <div className="flex flex-col gap-1">
@@ -805,7 +805,7 @@ export default function BraidGlossaryPage() {
                 <select
                   value={submissionType}
                   onChange={(e) => setSubmissionType(e.target.value as "photo" | "link" | "memory")}
-                  className="w-full h-16 px-4 bg-gray-50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-lg appearance-none cursor-pointer"
+                  className="w-full h-16 px-4 bg-gray-50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl appearance-none cursor-pointer"
                 >
                   <option value="photo">Photo Submission</option>
                   <option value="link">Link Submission</option>
@@ -1406,7 +1406,7 @@ export default function BraidGlossaryPage() {
 
                         {/* Image counter */}
                         <div
-                          className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 text-xs stick-no-bills"
+                          className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills"
                           style={{ zIndex: 101 }}
                         >
                           {currentImageIndex + 1} / {(showDetailModal as any).image_urls.length}
