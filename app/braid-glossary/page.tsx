@@ -875,9 +875,9 @@ export default function BraidGlossaryPage() {
                       {/* Show uploaded files or upload prompt */}
                       {formData.imageFiles.length > 0 ? (
                         <div className="w-full h-full p-4 overflow-y-auto">
-                          <div className="grid grid-cols-2 gap-2 mb-4">
+                          <div className="space-y-3 mb-4">
                             {imagePreviews.map((preview, index) => (
-                              <div key={index} className="relative aspect-square">
+                              <div key={index} className="relative w-full aspect-[4/3]">
                                 <img
                                   src={preview || "/placeholder.svg"}
                                   alt={`Preview ${index + 1}`}
@@ -902,11 +902,14 @@ export default function BraidGlossaryPage() {
                                       if (fileInput) fileInput.value = ""
                                     }
                                   }}
-                                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 text-xs font-bold"
+                                  className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 text-sm font-bold"
                                   title="Remove image"
                                 >
                                   ×
                                 </button>
+                                <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-xs stick-no-bills">
+                                  {index + 1} of {formData.imageFiles.length}
+                                </div>
                               </div>
                             ))}
                           </div>
