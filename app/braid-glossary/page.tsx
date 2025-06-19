@@ -515,31 +515,31 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-0 left-0 right-0 z-20">
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
-            <div className="flex gap-4 border-2 border-black rounded-full p-4">
+            <div className="flex gap-4">
               <button
                 onClick={() => (window.location.href = "/")}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                className="hover:opacity-70 transition-opacity"
                 title="Go to Data Assembly home"
               >
                 <img src="/home.svg" alt="Home" className="w-6 h-6" />
               </button>
               <button
                 onClick={() => window.location.reload()}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                className="hover:opacity-70 transition-opacity"
                 title="Refresh page"
               >
                 <img src="/refresh.svg" alt="Refresh" className="w-6 h-6" />
               </button>
               <button
                 onClick={() => setShowInfoModal(true)}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
+                className="hover:opacity-70 transition-opacity stick-no-bills text-xl sm:text-2xl lg:text-3xl font-bold"
                 title="Learn more about the braid glossary"
               >
                 ?
               </button>
               <button
                 onClick={() => (window.location.href = "/profile")}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                className="hover:opacity-70 transition-opacity"
                 title="Login to your account"
               >
                 <svg
@@ -554,7 +554,7 @@ export default function BraidGlossaryPage() {
               </button>
               <button
                 onClick={() => setShowForm(true)}
-                className="w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                className="hover:opacity-70 transition-opacity"
                 title="Add a new braid"
               >
                 <img src="/add.svg" alt="Add" className="w-6 h-6" />
@@ -912,7 +912,7 @@ export default function BraidGlossaryPage() {
           <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={closeInfoModal}
-              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors z-50"
+              className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
             >
               <img src="/cancel.svg" alt="Close" className="w-6 h-6" />
             </button>
@@ -969,7 +969,7 @@ export default function BraidGlossaryPage() {
           <div className="relative max-w-4xl max-h-[90vh] w-full animate-in zoom-in-95 duration-300">
             <button
               onClick={closeImageModal}
-              className="sticky top-4 right-4 ml-auto z-10 w-12 h-12 bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors duration-200 border-2 border-white rounded-full"
+              className="sticky top-4 right-4 ml-auto z-10 hover:opacity-70 transition-opacity"
             >
               <img src="/cancel.svg" alt="Close" className="w-6 h-6 filter invert" />
             </button>
@@ -979,9 +979,6 @@ export default function BraidGlossaryPage() {
               className="w-full h-full object-contain"
               onClick={closeImageModal}
             />
-            <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white p-4">
-              <h3 className="text-xl font-light stick-no-bills uppercase">{showImageModal.caption}</h3>
-            </div>
           </div>
         </div>
       )}
@@ -992,7 +989,7 @@ export default function BraidGlossaryPage() {
           <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="sticky top-4 right-4 ml-auto w-12 h-12 bg-white/70 hover:bg-white border-2 border-black rounded-full flex items-center justify-center transition-colors z-50"
+              className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
             >
               <img src="/cancel.svg" alt="Close" className="w-6 h-6" />
             </button>
@@ -1215,7 +1212,7 @@ export default function BraidGlossaryPage() {
                     />
                     {/* Zoom icon overlay */}
                     <div
-                      className="absolute bottom-2 left-2 bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors cursor-pointer"
+                      className="absolute bottom-2 left-2 cursor-pointer hover:opacity-70 transition-opacity"
                       onClick={() => handleImageClick(braid.image_url!, braid.braid_name)}
                     >
                       <img src="/zoom.svg" alt="Zoom" className="w-4 h-4 filter invert" />
@@ -1287,7 +1284,7 @@ export default function BraidGlossaryPage() {
                         setShowDetailModal(braid)
                         setCurrentImageIndex(0)
                       }}
-                      className="w-10 h-10 bg-white border-2 border-black rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                      className="hover:opacity-70 transition-opacity"
                       title="View details"
                     >
                       <img src="/add.svg" alt="View details" className="w-5 h-5" />
