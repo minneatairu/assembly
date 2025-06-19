@@ -1441,4 +1441,195 @@ export default function BraidGlossaryPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className\
+                    <span className="font-medium text-black uppercase">BY:</span>
+                    <span className="text-black uppercase">{showDetailModal.contributor_name}</span>
+                  </div>
+
+                  {(showDetailModal as any).audio_url && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-black uppercase">PRONUNCIATION:</span>
+                      <button
+                        onClick={() => toggleAudio(showDetailModal.id, (showDetailModal as any).audio_url)}
+                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs"
+                      >
+                        {playingAudio[showDetailModal.id.toString()] ? (
+                          <>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                            </svg>
+                            Stop
+                          </>
+                        ) : (
+                          <>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                            Play
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-black uppercase">PUBLISHED:</span>
+                    <span className="text-black uppercase">
+                      {new Date(showDetailModal.created_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
+                    </span>
+                  </div>
+
+                  {showDetailModal.public_url && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-black uppercase">LEARN MORE:</span>
+                      <a
+                        href={showDetailModal.public_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs uppercase"
+                      >
+                        VISIT LINK
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Gallery */}
+      <div className="pt-32 px-8 w-full">
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="stick-no-bills text-black">Loading braids...</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {braids.map((braid, index) => (
+              <div
+                key={braid.id}
+                className="bg-gray-200 border-2 border-black hover:opacity-90 transition-opacity relative"
+              >
+                {/* Index Number */}
+                <div className="absolute top-8 right-8 z-10 bg-green-400 rounded-full w-8 h-8 flex items-center justify-center">
+                  <span className="text-black stick-no-bills text-sm font-bold">{braids.length - index}</span>
+                </div>
+
+                {/* Image */}
+                {braid.image_url ? (
+                  <div className="overflow-hidden relative" style={{ aspectRatio: "3/4" }}>
+                    <img
+                      src={braid.image_url || "/placeholder.svg"}
+                      alt={braid.braid_name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = "/placeholder.svg?height=400&width=300"
+                      }}
+                    />
+                    {/* Zoom icon overlay */}
+                    <div
+                      className="absolute bottom-2 left-2 cursor-pointer hover:opacity-70 transition-opacity"
+                      onClick={() => handleImageClick(braid.image_url!, braid.braid_name)}
+                    >
+                      <img src="/zoom.svg" alt="Zoom" className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 filter invert" />
+                    </div>
+                    {/* Stack effect for multiple images */}
+                    {(braid as any).image_urls && (braid as any).image_urls.length > 1 && (
+                      <>
+                        {/* Third layer (most background) */}
+                        {(braid as any).image_urls.length > 2 && (
+                          <div className="absolute inset-0 bg-white/30 border-2 border-black transform translate-x-4 translate-y-4 -z-20"></div>
+                        )}
+                        {/* Second layer (middle) */}
+                        <div className="absolute inset-0 bg-white/20 border-2 border-black transform translate-x-2 translate-y-2 -z-10"></div>
+                        <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
+                          {(braid as any).image_urls.length} photos
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <div className="bg-gray-300 flex items-center justify-center" style={{ aspectRatio: "3/4" }}>
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="text-black"
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21,15 16,10 5,21" />
+                    </svg>
+                  </div>
+                )}
+
+                {/* Content */}
+                <div className="p-4 sm:p-6 lg:p-8">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-12 stick-no-bills text-black uppercase leading-tight">
+                    {braid.braid_name}
+                  </h3>
+
+                  {/* Tags and Plus Button Row */}
+                  <div className="flex items-end justify-between">
+                    <div className="flex flex-wrap gap-2">
+                      {braid.alt_names && (
+                        <>
+                          <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
+                            {braid.alt_names.split(",")[0].trim()}
+                          </span>
+                          {braid.alt_names.split(",").length > 2 && (
+                            <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
+                              +{braid.alt_names.split(",").length - 1}
+                            </span>
+                          )}
+                          {braid.alt_names.split(",").length === 2 && (
+                            <span className="px-3 py-1 bg-green-400 rounded-full text-sm stick-no-bills text-black font-medium uppercase">
+                              {braid.alt_names.split(",")[1].trim()}
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    {/* Plus Button */}
+                    <button
+                      onClick={() => {
+                        setShowDetailModal(braid)
+                        setCurrentImageIndex(0)
+                      }}
+                      className="hover:opacity-70 transition-opacity"
+                      title="View details"
+                    >
+                      <img src="/submit.svg" alt="View details" className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!loading && braids.length === 0 && (
+          <div className="text-center py-12">
+            <div className="stick-no-bills text-black mb-4">No braids submitted yet</div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-blue-600 text-white py-2 px-6 hover:bg-blue-700 transition-colors stick-no-bills text-base font-light"
+            >
+              Be the first to submit!
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
