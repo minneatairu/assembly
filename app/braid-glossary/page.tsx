@@ -801,7 +801,7 @@ export default function BraidGlossaryPage() {
                   className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                   required
                 />
-                <label htmlFor="agreeToShare" className="text-sm stick-no-bills text-black leading-relaxed">
+                <label htmlFor="agreeToShare" className="stick-no-bills text-black leading-relaxed">
                   I agree to submit and share my braid information in the public glossary for educational and cultural
                   preservation purposes.
                 </label>
@@ -817,7 +817,7 @@ export default function BraidGlossaryPage() {
                     onChange={(e) => setShowAccountCreation(e.target.checked)}
                     className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                   />
-                  <label htmlFor="createAccount" className="text-sm stick-no-bills text-black font-medium">
+                  <label htmlFor="createAccount" className="stick-no-bills text-black font-medium">
                     CREATE ACCOUNT TO TRACK YOUR SUBMISSIONS
                   </label>
                 </div>
