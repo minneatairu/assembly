@@ -521,7 +521,7 @@ export default function BraidGlossaryPage() {
                 className="hover:opacity-70 transition-opacity"
                 title="Go to Data Assembly home"
               >
-                <img src="/home.svg" alt="Home" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                <img src="/main.svg" alt="Main" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
                 onClick={() => window.location.reload()}
@@ -549,7 +549,7 @@ export default function BraidGlossaryPage() {
                 className="hover:opacity-70 transition-opacity"
                 title="Add a new braid"
               >
-                <img src="/add.svg" alt="Add" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                <img src="/submit.svg" alt="Submit" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
             </div>
           </div>
@@ -564,7 +564,7 @@ export default function BraidGlossaryPage() {
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
             >
-              <img src="/cancel.svg" alt="Close" className="w-10 h-10 sm:w-12 sm:h-12" />
+              <img src="/closing.svg" alt="Close" className="w-10 h-10 sm:w-12 sm:h-12" />
             </button>
 
             <div className="p-0">
@@ -906,7 +906,7 @@ export default function BraidGlossaryPage() {
               onClick={closeInfoModal}
               className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
             >
-              <img src="/cancel.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
+              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
 
             <div className="p-6 sm:p-8 lg:p-12">
@@ -963,7 +963,7 @@ export default function BraidGlossaryPage() {
               onClick={closeImageModal}
               className="sticky top-4 right-4 ml-auto z-10 hover:opacity-70 transition-opacity"
             >
-              <img src="/cancel.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
+              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
             <img
               src={showImageModal.url || "/placeholder.svg"}
@@ -983,7 +983,7 @@ export default function BraidGlossaryPage() {
               onClick={() => setShowDetailModal(null)}
               className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
             >
-              <img src="/cancel.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
+              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
 
             <div className="space-y-6">
@@ -1279,7 +1279,7 @@ export default function BraidGlossaryPage() {
                       className="hover:opacity-70 transition-opacity"
                       title="View details"
                     >
-                      <img src="/add.svg" alt="View details" className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9" />
+                      <img src="/submit.svg" alt="View details" className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9" />
                     </button>
                   </div>
                 </div>
