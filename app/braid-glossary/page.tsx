@@ -101,7 +101,9 @@ export default function BraidGlossaryPage() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragOver(false)
-    const files = Array.from(e.dataTransfer.files).filter((file) => file.type.startsWith("image/"))
+    const files = Array.from(e.dataTransfer.files)
+      .filter((file) => file.type.startsWith("image/"))
+      .slice(0, 4)
     if (files.length > 0) {
       setFormData((prev) => ({ ...prev, imageFiles: files, imageUrl: "" }))
       setUploadStatus(null)
@@ -425,7 +427,7 @@ export default function BraidGlossaryPage() {
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
+    const files = Array.from(e.target.files || []).slice(0, 4) // Limit to 4 files
     setFormData((prev) => ({ ...prev, imageFiles: files, imageUrl: "" }))
     setUploadStatus(null)
   }
@@ -524,7 +526,11 @@ export default function BraidGlossaryPage() {
                             {/* Stack effect for multiple images */}
                             {formData.imageFiles.length > 1 && (
                               <>
-                                {/* Third layer (bottom) */}
+                                {/* Fourth layer (bottom) */}
+                                {formData.imageFiles.length > 3 && (
+                                  <div className="absolute inset-0 bg-gray-400 border-2 border-black rounded-[28px] transform translate-x-6 translate-y-6 -z-30"></div>
+                                )}
+                                {/* Third layer */}
                                 {formData.imageFiles.length > 2 && (
                                   <div className="absolute inset-0 bg-gray-300 border-2 border-black rounded-[28px] transform translate-x-4 translate-y-4 -z-20"></div>
                                 )}
@@ -574,9 +580,7 @@ export default function BraidGlossaryPage() {
                         <p className="text-black text-center font-medium stick-no-bills mb-2 text-lg">
                           CLICK TO UPLOAD
                         </p>
-                        <p className="text-black text-sm stick-no-bills">
-                          (JPG, PNG, GIF, WebP - Multiple files supported)
-                        </p>
+                        <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 4 files)</p>
                       </div>
                     )}
                     <input
@@ -700,23 +704,6 @@ export default function BraidGlossaryPage() {
                       </div>
                     )}
 
-                    {/* Agreement Checkbox */}
-                    <div className="flex items-start gap-3 p-4 bg-gray-50 border-2 border-black border-t-0">
-                      <input
-                        type="checkbox"
-                        id="agreeToShare"
-                        name="agreeToShare"
-                        checked={formData.agreeToShare}
-                        onChange={handleInputChange}
-                        className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
-                        required
-                      />
-                      <label htmlFor="agreeToShare" className="text-sm stick-no-bills text-black leading-relaxed">
-                        I agree to submit and share my braid information in the public glossary for educational and
-                        cultural preservation purposes.
-                      </label>
-                    </div>
-
                     {/* Status Messages */}
                     {error && (
                       <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mt-6 stick-no-bills">
@@ -739,6 +726,23 @@ export default function BraidGlossaryPage() {
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* Agreement Checkbox - Full Width */}
+              <div className="flex items-start gap-3 p-4 bg-gray-50 border-2 border-black mb-6">
+                <input
+                  type="checkbox"
+                  id="agreeToShare"
+                  name="agreeToShare"
+                  checked={formData.agreeToShare}
+                  onChange={handleInputChange}
+                  className="mt-1 w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                  required
+                />
+                <label htmlFor="agreeToShare" className="text-sm stick-no-bills text-black leading-relaxed">
+                  I agree to submit and share my braid information in the public glossary for educational and cultural
+                  preservation purposes.
+                </label>
               </div>
 
               {/* Submit Button - Full Width */}
@@ -862,56 +866,95 @@ export default function BraidGlossaryPage() {
                 </div>
               )}
 
-              {/* Image Carousel */}
+              {/* Image Carousel with Stacked Effect */}
               {showDetailModal.image_url && (
-                <div className="w-full aspect-square overflow-hidden relative">
+                <div className="w-full aspect-square overflow-visible relative">
                   {(showDetailModal as any).image_urls && (showDetailModal as any).image_urls.length > 1 ? (
                     <div className="relative w-full h-full">
-                      <img
-                        src={(showDetailModal as any).image_urls[currentImageIndex] || "/placeholder.svg"}
-                        alt={showDetailModal.braid_name}
-                        className="w-full h-full object-cover cursor-pointer"
-                        onClick={() =>
-                          handleImageClick(
-                            (showDetailModal as any).image_urls[currentImageIndex],
-                            showDetailModal.braid_name,
-                          )
-                        }
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          target.src = "/placeholder.svg?height=400&width=400"
-                        }}
-                      />
+                      {/* Background layers - visible parts of other images */}
+                      {(showDetailModal as any).image_urls.map((url: string, index: number) => {
+                        if (index === currentImageIndex) return null
+                        const offset = (index - currentImageIndex) * 8
+                        const zIndex = (showDetailModal as any).image_urls.length - Math.abs(index - currentImageIndex)
 
-                      {/* Navigation buttons */}
-                      {currentImageIndex > 0 && (
-                        <button
-                          onClick={() => setCurrentImageIndex((prev) => prev - 1)}
-                          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70"
+                        return (
+                          <div
+                            key={index}
+                            className="absolute inset-0 border-2 border-black rounded-lg overflow-hidden"
+                            style={{
+                              transform: `translate(${offset}px, ${offset}px)`,
+                              zIndex: zIndex,
+                            }}
+                          >
+                            <img
+                              src={url || "/placeholder.svg"}
+                              alt={`${showDetailModal.braid_name} ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement
+                                target.src = "/placeholder.svg?height=400&width=400"
+                              }}
+                            />
+                          </div>
+                        )
+                      })}
+
+                      {/* Main image (current) */}
+                      <div
+                        className="relative w-full h-full border-2 border-black rounded-lg overflow-hidden"
+                        style={{ zIndex: 100 }}
+                      >
+                        <img
+                          src={(showDetailModal as any).image_urls[currentImageIndex] || "/placeholder.svg"}
+                          alt={showDetailModal.braid_name}
+                          className="w-full h-full object-cover cursor-pointer"
+                          onClick={() =>
+                            handleImageClick(
+                              (showDetailModal as any).image_urls[currentImageIndex],
+                              showDetailModal.braid_name,
+                            )
+                          }
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src = "/placeholder.svg?height=400&width=400"
+                          }}
+                        />
+
+                        {/* Navigation buttons */}
+                        {currentImageIndex > 0 && (
+                          <button
+                            onClick={() => setCurrentImageIndex((prev) => prev - 1)}
+                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70"
+                            style={{ zIndex: 101 }}
+                          >
+                            ←
+                          </button>
+                        )}
+
+                        {currentImageIndex < (showDetailModal as any).image_urls.length - 1 && (
+                          <button
+                            onClick={() => setCurrentImageIndex((prev) => prev + 1)}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70"
+                            style={{ zIndex: 101 }}
+                          >
+                            →
+                          </button>
+                        )}
+
+                        {/* Image counter */}
+                        <div
+                          className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills"
+                          style={{ zIndex: 101 }}
                         >
-                          ←
-                        </button>
-                      )}
-
-                      {currentImageIndex < (showDetailModal as any).image_urls.length - 1 && (
-                        <button
-                          onClick={() => setCurrentImageIndex((prev) => prev + 1)}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70"
-                        >
-                          →
-                        </button>
-                      )}
-
-                      {/* Image counter */}
-                      <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs stick-no-bills">
-                        {currentImageIndex + 1} / {(showDetailModal as any).image_urls.length}
+                          {currentImageIndex + 1} / {(showDetailModal as any).image_urls.length}
+                        </div>
                       </div>
                     </div>
                   ) : (
                     <img
                       src={showDetailModal.image_url || "/placeholder.svg"}
                       alt={showDetailModal.braid_name}
-                      className="w-full h-full object-cover cursor-pointer"
+                      className="w-full h-full object-cover cursor-pointer border-2 border-black rounded-lg"
                       onClick={() => handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name)}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
