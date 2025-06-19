@@ -592,15 +592,6 @@ export default function BraidGlossaryPage() {
         {/* Header */}
         <div className="text-center mb-12">{/* Remove this entire header section */}</div>
 
-        {/* Demo Status Banner */}
-        {demoStatus.isDemo && (
-          <div className="mb-8 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg text-center">
-            <p className="stick-no-bills text-blue-800">
-              <strong>Demo Mode:</strong> {demoStatus.reason || "Running in demonstration mode"}
-            </p>
-          </div>
-        )}
-
         {/* Loading State */}
         {loading && (
           <div className="text-center py-12">
@@ -618,19 +609,6 @@ export default function BraidGlossaryPage() {
             >
               Try Again
             </button>
-          </div>
-        )}
-
-        {/* Debug Info */}
-        {!loading && (
-          <div className="mb-4 p-4 bg-gray-100 border rounded text-sm">
-            <p>
-              <strong>Debug Info:</strong>
-            </p>
-            <p>Braids count: {braids.length}</p>
-            <p>Demo mode: {demoStatus.isDemo ? "Yes" : "No"}</p>
-            <p>Loading: {loading ? "Yes" : "No"}</p>
-            <p>Error: {error || "None"}</p>
           </div>
         )}
 
