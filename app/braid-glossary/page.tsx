@@ -620,7 +620,7 @@ export default function BraidGlossaryPage() {
                 </button>
                 {hoveredIcon === "home" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    Go to Data Assembly home
+                    HOME
                   </div>
                 )}
               </div>
@@ -636,7 +636,7 @@ export default function BraidGlossaryPage() {
                 </button>
                 {hoveredIcon === "info" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    Learn more about the braid glossary
+                    ABOUT
                   </div>
                 )}
               </div>
@@ -652,7 +652,7 @@ export default function BraidGlossaryPage() {
                 </button>
                 {hoveredIcon === "account" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    Cool features and tools
+                    YOUR ACCOUNT
                   </div>
                 )}
               </div>
@@ -668,7 +668,7 @@ export default function BraidGlossaryPage() {
                 </button>
                 {hoveredIcon === "email" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    Contact us via email
+                    CONTACT
                   </div>
                 )}
               </div>
@@ -684,7 +684,7 @@ export default function BraidGlossaryPage() {
                 </button>
                 {hoveredIcon === "filter" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    Filter submissions
+                    FILTER
                   </div>
                 )}
               </div>
@@ -700,7 +700,7 @@ export default function BraidGlossaryPage() {
                 </button>
                 {hoveredIcon === "submit" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    Add a new braid
+                    SUBMIT A BRAID
                   </div>
                 )}
               </div>
@@ -1605,22 +1605,17 @@ export default function BraidGlossaryPage() {
       {/* Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="min-h-screen flex items-start justify-center p-4">
-            <div className="relative">
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="relative w-full max-w-md">
               <button
                 onClick={() => setShowDetailModal(null)}
-                className="absolute -top-12 right-0 text-black hover:text-gray-600 z-10 transition-colors duration-200"
+                className="absolute -top-12 right-0 text-white bg-black hover:bg-gray-800 p-2 transition-colors duration-200 z-10"
               >
-                <svg
-                  className="w-12 h-12 sm:w-12 sm:h-12 lg:w-12 lg:h-12"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <div className="w-full max-w-md shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
+              <div className="shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
                 <div className="p-0">
                   {/* Image or Title Area - No padding */}
                   <div
