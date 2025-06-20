@@ -625,7 +625,7 @@ export default function BraidGlossaryPage() {
                 className="hover:opacity-70 transition-opacity"
                 title="Login to your account"
               >
-                <img src="/accounting.svg" alt="Account" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                <img src="/cool.svg" alt="Account" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
                 onClick={() => setShowFilter(true)}
@@ -854,13 +854,13 @@ export default function BraidGlossaryPage() {
 
       {/* Filter Modal */}
       {showFilter && (
-        <div className="fixed inset-0 z-30">
-          {/* Transparent overlay */}
-          <div className="absolute inset-0 bg-black/20" onClick={() => setShowFilter(false)} />
-
+        <div className="fixed inset-0 z-30" onClick={() => setShowFilter(false)}>
           {/* Filter dropdown positioned below menu */}
           <div className="absolute top-32 left-8">
-            <div className="bg-white w-80 shadow-xl border-2 border-black animate-in slide-in-from-top-4 duration-300">
+            <div
+              className="bg-white w-80 shadow-xl border-2 border-black animate-in slide-in-from-top-4 duration-300"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="p-6">
                 <h2 className="text-xl mb-4 stick-no-bills font-light uppercase">Filter Submissions</h2>
 
