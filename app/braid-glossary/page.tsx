@@ -703,6 +703,7 @@ export default function BraidGlossaryPage() {
                   </div>
                 )}
               </div>
+              {/* Remove this entire block: */}
 
               <div className="relative">
                 <button
@@ -995,60 +996,63 @@ export default function BraidGlossaryPage() {
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-white animate-in fade-in duration-300 overflow-y-auto">
           <div className="relative w-full max-w-5xl my-8">
-            <button
-              onClick={() => setShowForm(false)}
-              className="absolute -top-12 right-0 text-white bg-black hover:bg-gray-800 p-2 transition-colors duration-200 z-10"
-            >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            {/* Top bar with close button and dropdown */}
+            <div className="flex items-center justify-between mb-4">
+              {/* Custom Submission Type Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="h-12 px-4 bg-green-400 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-xl flex items-center justify-between hover:bg-green-500 transition-colors min-w-[120px]"
+                >
+                  <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
+                  <svg
+                    width="12"
+                    height="8"
+                    viewBox="0 0 12 8"
+                    fill="none"
+                    className={`ml-2 transition-transform ${showDropdown ? "rotate-180" : ""}`}
+                  >
+                    <path
+                      d="M1 1L6 6L11 1"
+                      stroke="#000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+
+                {showDropdown && (
+                  <div className="absolute top-full left-0 w-full bg-green-400 border-2 border-black border-t-0 z-20">
+                    {submissionOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSubmissionType(option.value as "photo" | "link" | "memory")
+                          setShowDropdown(false)
+                        }}
+                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-xl hover:bg-green-500 transition-colors border-b border-black last:border-b-0 ${
+                          submissionType === option.value ? "bg-green-500" : ""
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={() => setShowForm(false)}
+                className="text-white bg-black hover:bg-gray-800 p-2 transition-colors duration-200 z-10"
+              >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <div className="bg-white w-full relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
               <div className="p-0">
-                {/* Custom Submission Type Dropdown */}
-                <div className="border-b-2 border-black relative w-1/4">
-                  <button
-                    onClick={() => setShowDropdown(!showDropdown)}
-                    className="w-full h-16 px-4 bg-green-400 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl text-left flex items-center justify-between hover:bg-green-500 transition-colors"
-                  >
-                    <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
-                    <svg
-                      width="12"
-                      height="8"
-                      viewBox="0 0 12 8"
-                      fill="none"
-                      className={`transition-transform ${showDropdown ? "rotate-180" : ""}`}
-                    >
-                      <path
-                        d="M1 1L6 6L11 1"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-
-                  {showDropdown && (
-                    <div className="absolute top-full left-0 w-full bg-green-400 border-2 border-black border-t-0 z-20">
-                      {submissionOptions.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() => {
-                            setSubmissionType(option.value as "photo" | "link" | "memory")
-                            setShowDropdown(false)
-                          }}
-                          className={`w-full h-16 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors border-b border-black last:border-b-0 ${
-                            submissionType === option.value ? "bg-green-500" : ""
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
                 {/* Hidden file input */}
                 <input
                   id="file-input"
@@ -1096,7 +1100,7 @@ export default function BraidGlossaryPage() {
                                     const fileInput = document.getElementById("file-input") as HTMLInputElement
                                     if (fileInput) fileInput.value = ""
                                   }}
-                                  className="absolute -top-2 -right-2 w-12 h-12 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
+                                  className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 text-sm font-bold"
                                   title="Remove image"
                                 >
                                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1141,7 +1145,7 @@ export default function BraidGlossaryPage() {
                                         if (fileInput) fileInput.value = ""
                                       }
                                     }}
-                                    className="absolute -top-2 -right-2 w-12 h-12 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
+                                    className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 text-sm font-bold"
                                     title="Remove image"
                                   >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1398,43 +1402,42 @@ export default function BraidGlossaryPage() {
                           {/* Audio Recording for Memory */}
                           {audioSupported && (
                             <div className="bg-white p-4 border border-gray-300">
-                              <h4 className="stick-no-bills text-black font-medium mb-3">Record Your Memory</h4>
-                              <div className="flex items-center gap-3">
+                              <div className="flex flex-col items-center justify-center min-h-[120px]">
                                 {!isRecording && !audioBlob && (
                                   <button
                                     type="button"
                                     onClick={startRecording}
-                                    className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium stick-no-bills border-2 border-black"
+                                    className="px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium stick-no-bills border-2 border-black text-3xl"
                                   >
                                     Start Recording
                                   </button>
                                 )}
 
                                 {isRecording && (
-                                  <div className="flex items-center gap-3">
+                                  <div className="flex flex-col items-center gap-3">
                                     <button
                                       type="button"
                                       onClick={stopRecording}
-                                      className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 text-sm font-medium stick-no-bills border-2 border-black"
+                                      className="px-6 py-3 bg-red-600 text-white hover:bg-red-700 font-medium stick-no-bills border-2 border-black text-3xl"
                                     >
                                       Stop Recording
                                     </button>
-                                    <span className="text-red-600 text-sm font-mono stick-no-bills">
+                                    <span className="text-red-600 font-mono stick-no-bills text-3xl">
                                       🔴 {formatTime(recordingTime)}
                                     </span>
                                   </div>
                                 )}
 
                                 {audioBlob && (
-                                  <div className="flex items-center gap-3">
+                                  <div className="flex flex-col items-center gap-3">
                                     <button
                                       type="button"
                                       onClick={clearRecording}
-                                      className="px-3 py-1 bg-gray-400 text-white hover:bg-gray-500 text-sm stick-no-bills border-2 border-black"
+                                      className="px-4 py-2 bg-gray-400 text-white hover:bg-gray-500 stick-no-bills border-2 border-black text-3xl"
                                     >
                                       Clear
                                     </button>
-                                    <span className="text-green-600 text-sm stick-no-bills">
+                                    <span className="text-green-600 stick-no-bills text-3xl">
                                       ✓ Recorded ({formatTime(recordingTime)})
                                     </span>
                                   </div>
