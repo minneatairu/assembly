@@ -988,11 +988,11 @@ export default function BraidGlossaryPage() {
                       // Don't close the filter dropdown when a filter is selected
                     }}
                     className={`w-full p-3 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl transition-colors ${
-                      filterType === option.value ? "bg-green-400 hover:bg-green-500" : "bg-gray-50 hover:bg-gray-100"
+                      filterType === option.value ? "bg-gray-200 hover:bg-gray-300" : "bg-gray-50 hover:bg-gray-100"
                     } ${index > 0 ? "border-t border-black" : ""} ${index === 0 ? "border-b border-black" : ""} ${index === filterOptions.length - 1 ? "" : "border-b border-black"}`}
                   >
                     {option.label}
-                    {option.superscript && <sup>[{option.superscript}]</sup>}
+                    <sup className="text-xs">[{option.superscript}]</sup>
                     {option.value !== "all" && (
                       <span className="text-sm text-gray-600 block">
                         {braids.filter((b) => b.submission_type === option.value).length} submissions
@@ -1023,7 +1023,9 @@ export default function BraidGlossaryPage() {
                 >
                   <span>
                     {submissionOptions.find((opt) => opt.value === submissionType)?.label}
-                    <sup>[{submissionOptions.find((opt) => opt.value === submissionType)?.superscript}]</sup>
+                    <sup className="text-xs">
+                      [{submissionOptions.find((opt) => opt.value === submissionType)?.superscript}]
+                    </sup>
                   </span>
                   <svg
                     width="12"
@@ -1051,12 +1053,12 @@ export default function BraidGlossaryPage() {
                           setSubmissionType(option.value as "photo" | "link" | "memory")
                           setShowDropdown(false)
                         }}
-                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase hover:bg-yellow-500 transition-colors border-b border-black last:border-b-0 ${
+                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase hover:bg-yellow-500 transition-colors border-b-2 border-black last:border-b-0 ${
                           submissionType === option.value ? "bg-yellow-500" : ""
                         }`}
                       >
                         {option.label}
-                        <sup>[{option.superscript}]</sup>
+                        <sup className="text-xs">[{option.superscript}]</sup>
                       </button>
                     ))}
                   </div>
