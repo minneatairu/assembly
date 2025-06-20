@@ -1597,8 +1597,8 @@ export default function BraidGlossaryPage() {
 
       {/* Detail Modal */}
       {showDetailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 overflow-y-auto">
-          <div className="relative bg-white max-w-4xl mx-auto rounded-md shadow-lg animate-in slide-in-from-bottom-4 duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white overflow-y-auto">
+          <div className="relative bg-white max-w-4xl mx-auto shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowDetailModal(null)}
               className="absolute top-4 right-4 text-black hover:text-gray-600 z-10 transition-colors duration-200"
@@ -1606,20 +1606,10 @@ export default function BraidGlossaryPage() {
               <img src="/closing.svg" alt="Close" className="w-6 h-6" />
             </button>
 
-            <div className="p-8">
-              {/* Braid Name */}
-              <h2 className="text-4xl font-bold mb-4 stick-no-bills text-black uppercase">
-                {showDetailModal.braid_name}
-              </h2>
-
-              {/* Submission Type Indicator */}
-              <div className="mb-4 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills uppercase inline-block">
-                {showDetailModal.submission_type}
-              </div>
-
-              {/* Image or Title Area */}
+            <div className="p-0">
+              {/* Image or Title Area - No padding */}
               <div
-                className="relative mb-4"
+                className="relative w-full"
                 style={{
                   aspectRatio:
                     showDetailModal.submission_type === "link" || showDetailModal.submission_type === "memory"
@@ -1639,7 +1629,7 @@ export default function BraidGlossaryPage() {
                     }}
                   />
                 ) : (
-                  // Title display for link and memory submissions - 16:9 aspect ratio
+                  // Title display for link and memory submissions
                   <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
                     <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
                       {showDetailModal.submission_type === "memory"
@@ -1652,84 +1642,119 @@ export default function BraidGlossaryPage() {
                 )}
               </div>
 
-              {/* Alternate Names */}
-              {showDetailModal.alt_names && (
-                <div className="mb-4">
-                  <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Alternate Names</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {showDetailModal.alt_names.split(",").map((name, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-green-400 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
-                      >
-                        {name.trim()}
+              {/* Content below image */}
+              <div className="p-8">
+                {/* Title under image */}
+                <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">
+                  {showDetailModal.braid_name}
+                </h2>
+
+                {/* Inline submission fields */}
+                <div className="space-y-4">
+                  {/* Alternate Names - inline */}
+                  {showDetailModal.alt_names && (
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                        ALTERNATE NAMES
                       </span>
-                    ))}
+                      <div className="flex flex-wrap gap-2">
+                        {showDetailModal.alt_names.split(",").map((name, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-green-400 text-black text-sm stick-no-bills font-medium uppercase rounded-full"
+                          >
+                            {name.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Region - inline */}
+                  {showDetailModal.region && (
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                        REGION
+                      </span>
+                      <span className="stick-no-bills text-black uppercase text-xl">{showDetailModal.region}</span>
+                    </div>
+                  )}
+
+                  {/* Contributor - inline */}
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                      CONTRIBUTOR
+                    </span>
+                    <span className="stick-no-bills text-black uppercase text-xl">
+                      {showDetailModal.contributor_name}
+                    </span>
                   </div>
-                </div>
-              )}
 
-              {/* Region */}
-              {showDetailModal.region && (
-                <div className="mb-4">
-                  <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Region</h4>
-                  <p className="stick-no-bills text-black uppercase">{showDetailModal.region}</p>
-                </div>
-              )}
+                  {/* Audio - simplified */}
+                  {showDetailModal.audio_url && (
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                        PRONUNCIATION
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
+                          className="w-8 h-8 flex items-center justify-center text-black hover:text-gray-600 transition-colors"
+                          title={playingAudio[showDetailModal.id.toString()] ? "Stop audio" : "Play audio"}
+                        >
+                          {playingAudio[showDetailModal.id.toString()] ? "🔊" : "🔇"}
+                        </button>
+                        <span className="stick-no-bills text-black text-sm">Audio recording available</span>
+                      </div>
+                    </div>
+                  )}
 
-              {/* Contributor */}
-              <div className="mb-4">
-                <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Contributor</h4>
-                <p className="stick-no-bills text-black uppercase">{showDetailModal.contributor_name}</p>
+                  {/* Link Details - inline */}
+                  {showDetailModal.submission_type === "link" && (
+                    <>
+                      {showDetailModal.public_url && (
+                        <div className="flex items-start gap-4">
+                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                            URL
+                          </span>
+                          <a
+                            href={showDetailModal.public_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline stick-no-bills break-all"
+                          >
+                            {showDetailModal.public_url}
+                          </a>
+                        </div>
+                      )}
+                      {(showDetailModal as any).link_description && (
+                        <div className="flex items-start gap-4">
+                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                            DESCRIPTION
+                          </span>
+                          <p className="stick-no-bills text-black">{(showDetailModal as any).link_description}</p>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {/* Memory Details - inline */}
+                  {showDetailModal.submission_type === "memory" && (
+                    <>
+                      {(showDetailModal as any).memory_description && (
+                        <div className="flex items-start gap-4">
+                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                            MEMORY
+                          </span>
+                          <p className="stick-no-bills text-black leading-relaxed">
+                            {(showDetailModal as any).memory_description}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
-
-              {/* Link Details */}
-              {showDetailModal.submission_type === "link" && (
-                <>
-                  {showDetailModal.public_url && (
-                    <div className="mb-4">
-                      <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">URL</h4>
-                      <a
-                        href={showDetailModal.public_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline stick-no-bills text-black"
-                      >
-                        {showDetailModal.public_url}
-                      </a>
-                    </div>
-                  )}
-                  {showDetailModal.link_description && (
-                    <div className="mb-4">
-                      <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Description</h4>
-                      <p className="stick-no-bills text-black">{showDetailModal.link_description}</p>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Memory Details */}
-              {showDetailModal.submission_type === "memory" && (
-                <>
-                  {showDetailModal.memory_description && (
-                    <div className="mb-4">
-                      <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Memory</h4>
-                      <p className="stick-no-bills text-black">{showDetailModal.memory_description}</p>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Audio Playback */}
-              {showDetailModal.audio_url && (
-                <div className="mb-4">
-                  <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Pronunciation</h4>
-                  <audio controls>
-                    <source src={showDetailModal.audio_url} type="audio/webm" />
-                    Your browser does not support audio playback.
-                  </audio>
-                </div>
-              )}
             </div>
           </div>
         </div>
