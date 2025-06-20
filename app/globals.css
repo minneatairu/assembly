@@ -12,7 +12,7 @@
     transform: scale(1);
   }
 }
-
+.text-white {color:rgb(254 228 107/var(--tw-bg-opacity,1))}
 @keyframes blink {
   0%,
   50% {

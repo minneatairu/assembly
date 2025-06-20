@@ -736,22 +736,8 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-0 left-0 right-0 z-20">
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
-            <div className="flex gap-4 border-2 border-black rounded-full p-4 bg-[rgb(254,228,107)]">
-              <div className="relative">
-                <button
-                  onClick={() => (window.location.href = "/")}
-                  className="hover:opacity-70 transition-opacity"
-                  onMouseEnter={() => setHoveredIcon("home")}
-                  onMouseLeave={() => setHoveredIcon(null)}
-                >
-                  <img src="/globe.svg" alt="Globe" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-                </button>
-                {hoveredIcon === "home" && (
-                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    HOME
-                  </div>
-                )}
-              </div>
+            <div className="flex gap-4 p-4 ">
+        
 
               <div className="relative">
                 <button
@@ -760,7 +746,7 @@ export default function BraidGlossaryPage() {
                   onMouseEnter={() => setHoveredIcon("info")}
                   onMouseLeave={() => setHoveredIcon(null)}
                 >
-                  <img src="/infor.svg" alt="Info" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                  <img src="/globe.svg" alt="Info" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
                 </button>
                 {hoveredIcon === "info" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
