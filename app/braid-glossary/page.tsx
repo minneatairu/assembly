@@ -682,6 +682,75 @@ export default function BraidGlossaryPage() {
     { value: "memory", label: "Memory", superscript: "MP4" },
   ]
 
+  const memoryForm = (
+    <div className="bg-white p-8">
+      <div className="max-w-2xl mx-auto space-y-0">
+        {/* Memory Title */}
+        <div className="relative">
+          <input
+            type="text"
+            name="memoryTitle"
+            value={formData.memoryTitle ?? ""}
+            onChange={handleInputChange}
+            placeholder="Title"
+            className="w-full p-4 bg-white border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
+            required
+          />
+        </div>
+
+        {/* Audio Recording */}
+        {audioSupported && (
+          <div className="h-20 flex items-center">
+            {!isRecording && !audioBlob && (
+              <button
+                type="button"
+                onClick={startRecording}
+                className="w-full h-full px-4 bg-gray-50 hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills text-3xl sm:text-2xl md:text-3xl"
+              >
+                Record memory
+              </button>
+            )}
+            {isRecording && (
+              <div className="w-full h-full px-4 bg-red-50 flex items-center justify-between">
+                <span className="text-red-600 stick-no-bills text-2xl">Recording...</span>
+                <button
+                  type="button"
+                  onClick={stopRecording}
+                  className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 stick-no-bills"
+                >
+                  Stop
+                </button>
+              </div>
+            )}
+            {audioBlob && (
+              <div className="w-full h-full px-4 bg-green-50 flex items-center justify-between">
+                <span className="text-green-600 stick-no-bills text-2xl">Recorded!</span>
+                <button
+                  type="button"
+                  onClick={clearRecording}
+                  className="px-4 py-2 bg-gray-400 text-white hover:bg-gray-500 stick-no-bills"
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Basic Info for Memory */}
+        <input
+          type="text"
+          name="contributorName"
+          value={formData.contributorName ?? ""}
+          onChange={handleInputChange}
+          placeholder="Contributor name"
+          className="w-full p-4 bg-white border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
+          required
+        />
+      </div>
+    </div>
+  )
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Sticky Menu Bar */}
@@ -1436,4 +1505,32 @@ export default function BraidGlossaryPage() {
                           <input
                             type="text"
                             name="contributorName"
-                            value={formData.contributor
+                            value={formData.contributorName ?? ""}
+                            onChange={handleInputChange}
+                            placeholder="Contributor name"
+                            className="w-full p-4 bg-white border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
+                            required
+                          />
+
+                        </div>
+                      </div>
+                    ) : (
+                      /* Memory Form - Full Width (already complete above) */
+                      memoryForm
+                    )}
+                  </div>
+                )}
+
+                {/* Status Messages (already rendered earlier) */}
+              </div>
+            </div>
+          </div>
+        )}
+
+        /* ======================================
+           EXISTING IMAGE, INFO & DETAIL MODALS
+           (unchanged – close automatically)
+           ====================================== */
+    </div>
+  )\
+}
