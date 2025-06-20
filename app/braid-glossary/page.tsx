@@ -418,20 +418,49 @@ export default function BraidGlossaryPage() {
     }
 
     // Validate based on submission type
-    if (submissionType === "link" && !formData.linkUrl.trim()) {
-      setError("Please provide a URL for link submissions.")
-      return
+    if (submissionType === "link") {
+      if (!formData.linkUrl.trim()) {
+        setError("Please provide a URL for link submissions.")
+        return
+      }
+      if (!formData.linkTitle.trim()) {
+        setError("Please provide a title for link submissions.")
+        return
+      }
+      // Validate URL format
+      try {
+        new URL(formData.linkUrl.trim())
+      } catch {
+        setError("Please provide a valid URL format.")
+        return
+      }
     }
 
-    if (submissionType === "photo" && formData.imageFiles.length === 0 && !formData.imageUrl.trim()) {
-      setError("Please provide at least one image for photo submissions.")
-      return
+    if (submissionType === "photo") {
+      if (formData.imageFiles.length === 0 && !formData.imageUrl.trim()) {
+        setError("Please provide at least one image for photo submissions.")
+        return
+      }
+      if (!formData.braidName.trim()) {
+        setError("Please provide a braid name for photo submissions.")
+        return
+      }
+      // Validate image URL if provided
+      if (formData.imageUrl.trim()) {
+        try {
+          new URL(formData.imageUrl.trim())
+        } catch {
+          setError("Please provide a valid image URL format.")
+          return
+        }
+      }
     }
 
-    // Add validation for memory submissions
-    if (submissionType === "memory" && (!formData.memoryTitle.trim() || !formData.memoryDescription.trim())) {
-      setError("Please provide both a title and description for memory submissions.")
-      return
+    if (submissionType === "memory") {
+      if (!formData.memoryTitle.trim() || !formData.memoryDescription.trim()) {
+        setError("Please provide both a title and description for memory submissions.")
+        return
+      }
     }
 
     setSubmitting(true)
@@ -468,7 +497,7 @@ export default function BraidGlossaryPage() {
         link_description: submissionType === "link" ? formData.linkDescription : undefined,
         memory_title: submissionType === "memory" ? formData.memoryTitle : undefined,
         memory_description: formData.memoryDescription || undefined,
-        contributor_name: formData.contributorName,
+        contributor_name: formData.contributorName.trim() || "anonymous",
         audio_url: audioUrl || undefined,
         audio_notes: "Pronunciation guide", // Fixed description for pronunciation
         submission_type: submissionType,
@@ -848,7 +877,7 @@ export default function BraidGlossaryPage() {
                       <div className="flex items-center justify-between">
                         <div className="stick-no-bills text-xs text-gray-600">
                           <span className="font-medium text-black uppercase">CONTRIBUTOR: </span>
-                          <span className="text-black uppercase">{braid.contributor_name}</span>
+                          <span className="text-black uppercase">{braid.contributor_name || "anonymous"}</span>
                         </div>
 
                         {/* Plus icon */}
@@ -1213,7 +1242,15 @@ export default function BraidGlossaryPage() {
                         onChange={handleInputChange}
                         placeholder="Contributor name"
                         className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
-                        required
+                      />
+
+                      <input
+                        type="url"
+                        name="imageUrl"
+                        value={formData.imageUrl ?? ""}
+                        onChange={handleInputChange}
+                        placeholder="Image URL (optional)"
+                        className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
                       />
 
                       {/* Audio Recording */}
@@ -1273,10 +1310,8 @@ export default function BraidGlossaryPage() {
                             onChange={handleInputChange}
                             placeholder="Title"
                             className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            required
                           />
-                          <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 stick-no-bills text-sm">
-                            Optional
-                          </span>
                         </div>
 
                         {/* Link URL */}
@@ -1697,7 +1732,7 @@ export default function BraidGlossaryPage() {
                           CONTRIBUTOR
                         </span>
                         <span className="stick-no-bills text-black uppercase text-xl">
-                          ( {showDetailModal.contributor_name} )
+                          ( {showDetailModal.contributor_name || "anonymous"} )
                         </span>
                       </div>
 
