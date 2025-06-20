@@ -765,7 +765,7 @@ export default function BraidGlossaryPage() {
                               (braid as any).image_urls?.[currentImageIndex] || braid.image_url || "/placeholder.svg"
                             }
                             alt={braid.braid_name}
-                            className="w-full h-full object-cover transition-opacity duration-300 ease-in-out"
+                            className="w-full h-full object-cover transition-opacity duration-300 ease-in-out transition-all duration-500 ease-in-out"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
                               target.src =
@@ -776,7 +776,7 @@ export default function BraidGlossaryPage() {
                           {/* Multiple images navigation */}
                           {hasMultipleImages && (
                             <div className="absolute top-0 left-0">
-                              <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1">
+                              <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1 inline-block">
                                 {currentImageIndex + 1} / {totalImages}
                               </div>
                               <div className="flex flex-col gap-1">
@@ -1059,7 +1059,7 @@ export default function BraidGlossaryPage() {
                                 <img
                                   src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
                                   alt={`Preview ${currentImageIndex + 1}`}
-                                  className="w-full h-full object-cover transition-opacity duration-300 ease-in-out"
+                                  className="w-full h-full object-cover transition-opacity duration-300 ease-in-out transition-all duration-500 ease-in-out"
                                 />
                                 <button
                                   onClick={(e) => {
@@ -1099,7 +1099,7 @@ export default function BraidGlossaryPage() {
 
                                 {/* Image counter and navigation arrows - matching card slideshow style */}
                                 <div className="absolute top-0 left-0">
-                                  <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1">
+                                  <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1 inline-block">
                                     {currentImageIndex + 1} / {formData.imageFiles.length}
                                   </div>
                                   <div className="flex flex-col gap-1">
@@ -1606,10 +1606,10 @@ export default function BraidGlossaryPage() {
       {showDetailModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="min-h-screen flex items-start justify-center p-4">
-            <div className="relative w-full max-w-md shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
+            <div className="relative">
               <button
                 onClick={() => setShowDetailModal(null)}
-                className="absolute top-4 right-4 text-black hover:text-gray-600 z-10 transition-colors duration-200"
+                className="absolute -top-12 right-0 text-black hover:text-gray-600 z-10 transition-colors duration-200"
               >
                 <svg
                   className="w-12 h-12 sm:w-12 sm:h-12 lg:w-12 lg:h-12"
@@ -1620,175 +1620,177 @@ export default function BraidGlossaryPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-
-              <div className="p-0">
-                {/* Image or Title Area - No padding */}
-                <div
-                  className="relative w-full"
-                  style={{
-                    aspectRatio:
-                      showDetailModal.submission_type === "link" || showDetailModal.submission_type === "memory"
-                        ? "16/9"
-                        : "3/4",
-                  }}
-                >
-                  {showDetailModal.submission_type === "photo" && showDetailModal.image_url ? (
-                    <img
-                      src={showDetailModal.image_url || "/placeholder.svg"}
-                      alt={showDetailModal.braid_name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.src =
-                          "/placeholder.svg?height=300&width=300&text=" + encodeURIComponent(showDetailModal.braid_name)
-                      }}
-                    />
-                  ) : (
-                    // Title display for link and memory submissions
-                    <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
-                      <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
-                        {showDetailModal.submission_type === "memory"
-                          ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
-                          : showDetailModal.submission_type === "link"
-                            ? (showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"
-                            : showDetailModal.braid_name}
-                      </h3>
-                    </div>
-                  )}
-                </div>
-
-                {/* Content below image */}
-                <div className="p-8 bg-white">
-                  {/* Title under image */}
-                  <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">
-                    {showDetailModal.braid_name}
-                  </h2>
-
-                  {/* Inline submission fields */}
-                  <div className="space-y-0">
-                    {/* Alternate Names - inline */}
-                    {showDetailModal.alt_names && (
-                      <div className="flex items-center gap-4">
-                        <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                          ALTERNATE NAMES
-                        </span>
-                        <span className="stick-no-bills text-black uppercase text-xl">
-                          ({" "}
-                          {showDetailModal.alt_names
-                            .split(",")
-                            .map((name) => name.trim())
-                            .join(", ")}{" "}
-                          )
-                        </span>
+              <div className="w-full max-w-md shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
+                <div className="p-0">
+                  {/* Image or Title Area - No padding */}
+                  <div
+                    className="relative w-full"
+                    style={{
+                      aspectRatio:
+                        showDetailModal.submission_type === "link" || showDetailModal.submission_type === "memory"
+                          ? "16/9"
+                          : "3/4",
+                    }}
+                  >
+                    {showDetailModal.submission_type === "photo" && showDetailModal.image_url ? (
+                      <img
+                        src={showDetailModal.image_url || "/placeholder.svg"}
+                        alt={showDetailModal.braid_name}
+                        className="w-full h-full object-cover transition-all duration-500 ease-in-out"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.src =
+                            "/placeholder.svg?height=300&width=300&text=" +
+                            encodeURIComponent(showDetailModal.braid_name)
+                        }}
+                      />
+                    ) : (
+                      // Title display for link and memory submissions
+                      <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
+                        <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                          {showDetailModal.submission_type === "memory"
+                            ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
+                            : showDetailModal.submission_type === "link"
+                              ? (showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"
+                              : showDetailModal.braid_name}
+                        </h3>
                       </div>
                     )}
+                  </div>
 
-                    {/* Region - inline */}
-                    {showDetailModal.region && (
+                  {/* Content below image */}
+                  <div className="p-8 bg-white">
+                    {/* Title under image */}
+                    <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">
+                      {showDetailModal.braid_name}
+                    </h2>
+
+                    {/* Inline submission fields */}
+                    <div className="space-y-0">
+                      {/* Alternate Names - inline */}
+                      {showDetailModal.alt_names && (
+                        <div className="flex items-center gap-4">
+                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                            ALTERNATE NAMES
+                          </span>
+                          <span className="stick-no-bills text-black uppercase text-xl">
+                            ({" "}
+                            {showDetailModal.alt_names
+                              .split(",")
+                              .map((name) => name.trim())
+                              .join(", ")}{" "}
+                            )
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Region - inline */}
+                      {showDetailModal.region && (
+                        <div className="flex items-center gap-4">
+                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                            REGION
+                          </span>
+                          <span className="stick-no-bills text-black uppercase text-xl">
+                            ( {showDetailModal.region} )
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Contributor - inline */}
                       <div className="flex items-center gap-4">
                         <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                          REGION
+                          CONTRIBUTOR
                         </span>
                         <span className="stick-no-bills text-black uppercase text-xl">
-                          ( {showDetailModal.region} )
+                          ( {showDetailModal.contributor_name} )
                         </span>
                       </div>
-                    )}
 
-                    {/* Contributor - inline */}
-                    <div className="flex items-center gap-4">
-                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                        CONTRIBUTOR
-                      </span>
-                      <span className="stick-no-bills text-black uppercase text-xl">
-                        ( {showDetailModal.contributor_name} )
-                      </span>
-                    </div>
+                      {/* Audio - simplified */}
+                      {showDetailModal.audio_url && (
+                        <div className="flex items-center gap-4">
+                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                            PRONUNCIATION
+                          </span>
+                          <button
+                            onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
+                            className="text-black hover:text-gray-600 transition-colors"
+                            title={playingAudio[showDetailModal.id.toString()] ? "Pause audio" : "Play audio"}
+                          >
+                            {playingAudio[showDetailModal.id.toString()] ? (
+                              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
+                      )}
 
-                    {/* Audio - simplified */}
-                    {showDetailModal.audio_url && (
-                      <div className="flex items-center gap-4">
-                        <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                          PRONUNCIATION
-                        </span>
-                        <button
-                          onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                          className="text-black hover:text-gray-600 transition-colors"
-                          title={playingAudio[showDetailModal.id.toString()] ? "Pause audio" : "Play audio"}
-                        >
-                          {playingAudio[showDetailModal.id.toString()] ? (
-                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                            </svg>
-                          ) : (
-                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
+                      {/* Link Details - inline */}
+                      {showDetailModal.submission_type === "link" && (
+                        <>
+                          {showDetailModal.public_url && (
+                            <div className="flex items-start gap-4">
+                              <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                                URL
+                              </span>
+                              <span className="stick-no-bills text-black uppercase text-xl">
+                                ({" "}
+                                <a
+                                  href={showDetailModal.public_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 hover:underline break-all"
+                                >
+                                  {showDetailModal.public_url}
+                                </a>{" "}
+                                )
+                              </span>
+                            </div>
                           )}
-                        </button>
+                          {(showDetailModal as any).link_description && (
+                            <div className="flex items-start gap-4">
+                              <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                                DESCRIPTION
+                              </span>
+                              <span className="stick-no-bills text-black uppercase text-xl">
+                                ( {(showDetailModal as any).link_description} )
+                              </span>
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      {/* Memory Details - inline */}
+                      {showDetailModal.submission_type === "memory" && (
+                        <>
+                          {(showDetailModal as any).memory_description && (
+                            <div className="flex items-start gap-4">
+                              <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                                MEMORY
+                              </span>
+                              <span className="stick-no-bills text-black leading-relaxed uppercase text-xl">
+                                ( {(showDetailModal as any).memory_description} )
+                              </span>
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      {/* Date and timestamp - moved to last */}
+                      <div className="flex items-center gap-4">
+                        <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                          SUBMITTED
+                        </span>
+                        <span className="stick-no-bills text-black uppercase text-xl">
+                          ( {new Date(showDetailModal.created_at || Date.now()).toLocaleDateString()} at{" "}
+                          {new Date(showDetailModal.created_at || Date.now()).toLocaleTimeString()} )
+                        </span>
                       </div>
-                    )}
-
-                    {/* Link Details - inline */}
-                    {showDetailModal.submission_type === "link" && (
-                      <>
-                        {showDetailModal.public_url && (
-                          <div className="flex items-start gap-4">
-                            <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                              URL
-                            </span>
-                            <span className="stick-no-bills text-black uppercase text-xl">
-                              ({" "}
-                              <a
-                                href={showDetailModal.public_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline break-all"
-                              >
-                                {showDetailModal.public_url}
-                              </a>{" "}
-                              )
-                            </span>
-                          </div>
-                        )}
-                        {(showDetailModal as any).link_description && (
-                          <div className="flex items-start gap-4">
-                            <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                              DESCRIPTION
-                            </span>
-                            <span className="stick-no-bills text-black uppercase text-xl">
-                              ( {(showDetailModal as any).link_description} )
-                            </span>
-                          </div>
-                        )}
-                      </>
-                    )}
-
-                    {/* Memory Details - inline */}
-                    {showDetailModal.submission_type === "memory" && (
-                      <>
-                        {(showDetailModal as any).memory_description && (
-                          <div className="flex items-start gap-4">
-                            <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                              MEMORY
-                            </span>
-                            <span className="stick-no-bills text-black leading-relaxed uppercase text-xl">
-                              ( {(showDetailModal as any).memory_description} )
-                            </span>
-                          </div>
-                        )}
-                      </>
-                    )}
-
-                    {/* Date and timestamp - moved to last */}
-                    <div className="flex items-center gap-4">
-                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                        SUBMITTED
-                      </span>
-                      <span className="stick-no-bills text-black uppercase text-xl">
-                        ( {new Date(showDetailModal.created_at || Date.now()).toLocaleDateString()} at{" "}
-                        {new Date(showDetailModal.created_at || Date.now()).toLocaleTimeString()} )
-                      </span>
                     </div>
                   </div>
                 </div>
