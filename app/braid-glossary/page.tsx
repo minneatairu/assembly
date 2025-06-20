@@ -888,7 +888,7 @@ export default function BraidGlossaryPage() {
                       )}
 
                       {/* Submission type indicator */}
-                      <div className="absolute bottom-0 right-0 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills uppercase">
+                      <div className="absolute top-0 right-0 bg-black text-white px-2 py-1 text-xs stick-no-bills uppercase">
                         {braid.submission_type}
                       </div>
                     </div>
@@ -997,7 +997,7 @@ export default function BraidGlossaryPage() {
           <div className="relative w-full max-w-5xl my-8">
             <button
               onClick={() => setShowForm(false)}
-              className="absolute -top-12 right-0 text-black bg-white hover:bg-gray-100 p-2 transition-colors duration-200 z-10 border-2 border-black"
+              className="absolute -top-12 right-0 text-white bg-black hover:bg-gray-800 p-2 transition-colors duration-200 z-10"
             >
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1792,9 +1792,9 @@ export default function BraidGlossaryPage() {
                                   href={showDetailModal.public_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-blue-600 hover:underline break-all"
+                                  className="text-blue-600 hover:underline"
                                 >
-                                  {showDetailModal.public_url}
+                                  external link
                                 </a>{" "}
                                 )
                               </span>
