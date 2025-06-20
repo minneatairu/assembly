@@ -18,9 +18,9 @@ export default function BraidGlossaryPage() {
   const [showImageModal, setShowImageModal] = useState<{ url: string; caption: string } | null>(null)
   const [showDetailModal, setShowDetailModal] = useState<Braid | null>(null)
 
-  // Filter states
+  // Filter states - changed to support multiple selections
   const [showFilter, setShowFilter] = useState(false)
-  const [filterType, setFilterType] = useState<"all" | "photo" | "link" | "memory">("all")
+  const [filterTypes, setFilterTypes] = useState<("photo" | "link" | "memory")[]>([])
 
   // Audio recording states
   const [isRecording, setIsRecording] = useState(false)
@@ -86,10 +86,10 @@ export default function BraidGlossaryPage() {
     }
   }, [])
 
-  // Filter braids based on submission type
+  // Filter braids based on submission types - updated for multiple selections
   const filteredBraids = braids.filter((braid) => {
-    if (filterType === "all") return true
-    return braid.submission_type === filterType
+    if (filterTypes.length === 0) return true
+    return filterTypes.includes(braid.submission_type as "photo" | "link" | "memory")
   })
 
   // Handle image click to open modal
@@ -619,6 +619,22 @@ export default function BraidGlossaryPage() {
     setError(null)
   }
 
+  // Handle filter toggle - updated for multiple selections
+  const handleFilterToggle = (filterType: "photo" | "link" | "memory") => {
+    setFilterTypes((prev) => {
+      if (prev.includes(filterType)) {
+        return prev.filter((type) => type !== filterType)
+      } else {
+        return [...prev, filterType]
+      }
+    })
+  }
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setFilterTypes([])
+  }
+
   // Load braids on mount
   useEffect(() => {
     fetchBraids()
@@ -661,7 +677,6 @@ export default function BraidGlossaryPage() {
   ]
 
   const filterOptions = [
-    { value: "all", label: "All submissions" },
     { value: "photo", label: "Photo", superscript: "JPEG" },
     { value: "link", label: "Link", superscript: "WEB" },
     { value: "memory", label: "Memory", superscript: "MP4" },
@@ -782,15 +797,24 @@ export default function BraidGlossaryPage() {
           </div>
         )}
 
-        {/* Active Filter Button */}
-        {!loading && filterType !== "all" && (
+        {/* Active Filter Buttons */}
+        {!loading && filterTypes.length > 0 && (
           <div className="max-w-4xl mx-auto mb-6">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2 flex-wrap">
+              {filterTypes.map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setShowFilter(true)}
+                  className="bg-black text-white px-4 py-2 stick-no-bills text-sm uppercase hover:bg-gray-800 transition-colors"
+                >
+                  {type} ({braids.filter((b) => b.submission_type === type).length})
+                </button>
+              ))}
               <button
-                onClick={() => setShowFilter(true)}
-                className="bg-black text-white px-4 py-2 stick-no-bills text-sm uppercase hover:bg-gray-800 transition-colors"
+                onClick={clearAllFilters}
+                className="bg-red-600 text-white px-4 py-2 stick-no-bills text-sm uppercase hover:bg-red-700 transition-colors"
               >
-                {filterType} ({braids.filter((b) => b.submission_type === filterType).length})
+                CLEAR ALL
               </button>
             </div>
           </div>
@@ -953,12 +977,12 @@ export default function BraidGlossaryPage() {
         {!loading && filteredBraids.length === 0 && !error && (
           <div className="text-center py-12">
             <div className="stick-no-bills text-black text-xl mb-4">
-              {filterType === "all" ? "No braids found" : `No ${filterType} submissions found`}
+              {filterTypes.length === 0 ? "No braids found" : `No ${filterTypes.join(", ")} submissions found`}
             </div>
             <p className="stick-no-bills text-gray-600 mb-6">
-              {filterType === "all"
+              {filterTypes.length === 0
                 ? "Be the first to contribute to the glossary!"
-                : `Be the first to add a ${filterType} submission!`}
+                : `Be the first to add a ${filterTypes.join(" or ")} submission!`}
             </p>
             <button
               onClick={() => setShowForm(true)}
@@ -984,25 +1008,41 @@ export default function BraidGlossaryPage() {
                   <button
                     key={option.value}
                     onClick={() => {
-                      setFilterType(option.value as "all" | "photo" | "link" | "memory")
-                      // Don't close the filter dropdown when a filter is selected
+                      handleFilterToggle(option.value as "photo" | "link" | "memory")
                     }}
                     className={`w-full p-3 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl transition-colors ${
-                      filterType === option.value ? "bg-gray-200 hover:bg-gray-300" : "bg-gray-50 hover:bg-gray-100"
-                    } ${index > 0 ? "border-t border-black" : ""} ${index === 0 ? "border-b border-black" : ""} ${index === filterOptions.length - 1 ? "" : "border-b border-black"}`}
+                      filterTypes.includes(option.value as "photo" | "link" | "memory")
+                        ? "bg-gray-200 hover:bg-gray-300"
+                        : "bg-gray-50 hover:bg-gray-100"
+                    } ${index > 0 ? "border-t-2 border-black" : ""} ${index === filterOptions.length - 1 ? "" : "border-b-2 border-black"}`}
                   >
-                    {option.label}
-                    <sup className="text-xs">[{option.superscript}]</sup>
-                    {option.value !== "all" && (
-                      <span className="text-sm text-gray-600 block">
-                        {braids.filter((b) => b.submission_type === option.value).length} submissions
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={filterTypes.includes(option.value as "photo" | "link" | "memory")}
+                        onChange={() => {}}
+                        className="w-4 h-4"
+                      />
+                      <span>
+                        {option.label}
+                        <sup className="text-xs align-top">[{option.superscript}]</sup>
                       </span>
-                    )}
-                    {option.value === "all" && (
-                      <span className="text-sm text-gray-600 block">{braids.length} total submissions</span>
-                    )}
+                    </div>
+                    <span className="text-sm text-gray-600 block ml-6">
+                      {braids.filter((b) => b.submission_type === option.value).length} submissions
+                    </span>
                   </button>
                 ))}
+                
+                {/* Clear All Button */}
+                {filterTypes.length > 0 && (
+                  <button
+                    onClick={clearAllFilters}
+                    className="w-full p-3 text-left stick-no-bills text-white bg-red-600 hover:bg-red-700 text-3xl sm:text-2xl md:text-3xl transition-colors border-t-2 border-black"
+                  >
+                    CLEAR ALL FILTERS
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -1023,7 +1063,7 @@ export default function BraidGlossaryPage() {
                 >
                   <span>
                     {submissionOptions.find((opt) => opt.value === submissionType)?.label}
-                    <sup className="text-xs">
+                    <sup className="text-xs align-top">
                       [{submissionOptions.find((opt) => opt.value === submissionType)?.superscript}]
                     </sup>
                   </span>
@@ -1058,7 +1098,7 @@ export default function BraidGlossaryPage() {
                         }`}
                       >
                         {option.label}
-                        <sup className="text-xs">[{option.superscript}]</sup>
+                        <sup className="text-xs align-top">[{option.superscript}]</sup>
                       </button>
                     ))}
                   </div>
@@ -1396,508 +1436,4 @@ export default function BraidGlossaryPage() {
                           <input
                             type="text"
                             name="contributorName"
-                            value={formData.contributorName ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Contributor name"
-                            className="w-full p-4 bg-white border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                            required
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      // Memory Form - Full Width
-                      <div className="bg-white p-8">
-                        <div className="max-w-2xl mx-auto space-y-0">
-                          {/* Memory Title */}
-                          <input
-                            type="text"
-                            name="memoryTitle"
-                            value={formData.memoryTitle ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Memory title (sound)"
-                            className="w-full p-4 bg-white border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                            required={submissionType === "memory"}
-                          />
-
-                          {/* Audio Recording for Memory */}
-                          {audioSupported && (
-                            <div className="bg-white p-4 border-2 border-black">
-                              <div className="flex flex-col items-center justify-center min-h-[120px]">
-                                {!isRecording && !audioBlob && (
-                                  <button
-                                    type="button"
-                                    onClick={startRecording}
-                                    className="px-6 py-3 bg-lime-400 text-black hover:bg-lime-500 font-medium stick-no-bills border-2 border-black text-3xl uppercase"
-                                  >
-                                    START RECORDING
-                                  </button>
-                                )}
-
-                                {isRecording && (
-                                  <div className="flex flex-col items-center gap-3">
-                                    <button
-                                      type="button"
-                                      onClick={stopRecording}
-                                      className="px-6 py-3 bg-red-600 text-white hover:bg-red-700 font-medium stick-no-bills border-2 border-black text-3xl"
-                                    >
-                                      Stop Recording
-                                    </button>
-                                    <span className="text-red-600 font-mono stick-no-bills text-3xl">
-                                      🔴 {formatTime(recordingTime)}
-                                    </span>
-                                  </div>
-                                )}
-
-                                {audioBlob && (
-                                  <div className="flex flex-col items-center gap-3">
-                                    <button
-                                      type="button"
-                                      onClick={clearRecording}
-                                      className="px-4 py-2 bg-gray-400 text-white hover:bg-gray-500 stick-no-bills border-2 border-black text-3xl"
-                                    >
-                                      Clear
-                                    </button>
-                                    <span className="text-green-600 stick-no-bills text-3xl">
-                                      ✓ Recorded ({formatTime(recordingTime)})
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-
-                              {audioUrl && (
-                                <audio controls className="w-full mt-4">
-                                  <source src={audioUrl} type="audio/webm" />
-                                  Your browser does not support audio playback.
-                                </audio>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Basic Info for Memory */}
-                          <input
-                            type="text"
-                            name="contributorName"
-                            value={formData.contributorName ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Contributor name"
-                            className="w-full p-4 bg-white border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                            required
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Status Messages for Single Column */}
-                    {error && (
-                      <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mx-8 stick-no-bills">
-                        {error}
-                      </div>
-                    )}
-
-                    {uploadStatus && (
-                      <div
-                        className={`p-4 text-sm mx-8 border-2 border-black stick-no-bills ${
-                          uploadStatus.includes("failed") || uploadStatus.includes("error")
-                            ? "bg-orange-50 text-orange-700"
-                            : uploadStatus.includes("successfully")
-                              ? "bg-green-50 text-green-700"
-                              : "bg-blue-50 text-blue-700"
-                        }`}
-                      >
-                        {uploadStatus}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Agreement Checkbox - Full Width */}
-                <div className="flex items-start gap-3 p-4">
-                  <input
-                    type="checkbox"
-                    id="agreeToShare"
-                    name="agreeToShare"
-                    checked={formData.agreeToShare}
-                    onChange={handleInputChange}
-                    className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
-                    required
-                  />
-                  <label htmlFor="agreeToShare" className="stick-no-bills text-black leading-relaxed">
-                    I agree to submit and share my braid information in the public glossary for educational and cultural
-                    preservation purposes.
-                  </label>
-                </div>
-
-                {/* Account Creation Toggle */}
-                <div className="p-4">
-                  <label className="flex items-center gap-2 stick-no-bills text-black">
-                    <input
-                      type="checkbox"
-                      checked={showAccountCreation}
-                      onChange={() => setShowAccountCreation(!showAccountCreation)}
-                      className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
-                    />
-                    Create an account to manage your submissions
-                  </label>
-                </div>
-
-                {/* Account Creation Form */}
-                {showAccountCreation && (
-                  <div className="p-4 space-y-4">
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      value={accountData.email}
-                      onChange={(e) => setAccountData({ ...accountData, email: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                      required
-                    />
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      value={accountData.password}
-                      onChange={(e) => setAccountData({ ...accountData, password: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                      required
-                    />
-                    <input
-                      type="password"
-                      placeholder="Confirm Password"
-                      value={accountData.confirmPassword}
-                      onChange={(e) => setAccountData({ ...accountData, confirmPassword: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                      required
-                    />
-                    <input
-                      type="text"
-                      placeholder="First Name"
-                      value={accountData.firstName}
-                      onChange={(e) => setAccountData({ ...accountData, firstName: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                      required
-                    />
-                    <input
-                      type="text"
-                      placeholder="Last Name"
-                      value={accountData.lastName}
-                      onChange={(e) => setAccountData({ ...accountData, lastName: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
-                      required
-                    />
-                  </div>
-                )}
-
-                {/* Submit Button - Full Width */}
-                <div className="p-4">
-                  <button
-                    type="submit"
-                    onClick={handleSubmit}
-                    disabled={submitting}
-                    className="w-full py-4 bg-yellow-400 text-black text-3xl sm:text-2xl md:text-3xl hover:bg-yellow-500 transition-colors stick-no-bills border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed uppercase"
-                  >
-                    {submitting ? "Submitting..." : "SUBMIT BRAID"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Image Modal */}
-      {showImageModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80">
-          <div className="relative">
-            <button onClick={closeImageModal} className="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
-              <svg
-                className="w-12 h-12 sm:w-12 sm:h-12 lg:w-12 lg:h-12"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <img
-              src={showImageModal.url || "/placeholder.svg"}
-              alt={showImageModal.caption}
-              className="max-w-full max-h-screen object-contain"
-            />
-            <p className="mt-4 text-white text-center stick-no-bills">{showImageModal.caption}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Info Modal */}
-      {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80">
-          <div className="relative bg-white max-w-3xl mx-auto p-8 rounded-md">
-            <button onClick={closeInfoModal} className="absolute top-4 right-4 text-black hover:text-gray-600 z-10">
-              <svg
-                className="w-12 h-12 sm:w-12 sm:h-12 lg:w-12 lg:h-12"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <h2 className="text-3xl font-semibold mb-6 stick-no-bills text-black">About the Braid Glossary</h2>
-            <p className="mb-4 stick-no-bills text-black">
-              The Braid Glossary is a community-driven project dedicated to documenting and preserving the diverse world
-              of braids. Our mission is to create a comprehensive resource that celebrates the cultural significance,
-              history, and artistry of braids from around the globe.
-            </p>
-            <h3 className="text-2xl font-semibold mb-4 stick-no-bills text-black">How to Contribute</h3>
-            <p className="mb-4 stick-no-bills text-black">
-              We invite you to share your knowledge and experiences by submitting information about different types of
-              braids. Whether it's a traditional style passed down through generations or a contemporary creation, your
-              contributions help enrich our understanding of this intricate art form.
-            </p>
-            <ul className="list-disc pl-6 mb-4 stick-no-bills text-black">
-              <li>
-                <b>Photos:</b> Share clear images of braids, highlighting their unique patterns and textures.
-              </li>
-              <li>
-                <b>Links:</b> Provide links to relevant articles, tutorials, or resources that offer further insights
-                into specific braid styles.
-              </li>
-              <li>
-                <b>Memories:</b> Share personal stories and anecdotes related to braids, adding a personal touch to the
-                glossary.
-              </li>
-            </ul>
-            <h3 className="text-2xl font-semibold mb-4 stick-no-bills text-black">Contact Us</h3>
-            <p className="stick-no-bills text-black">
-              If you have any questions, suggestions, or feedback, please don't hesitate to reach out to us at{" "}
-              <a href="mailto:contact@dataassembly.com" className="text-blue-600 hover:underline">
-                contact@dataassembly.com
-              </a>
-              .
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Detail Modal */}
-      {showDetailModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="relative w-full max-w-md">
-              <button
-                onClick={() => setShowDetailModal(null)}
-                className="absolute -top-12 right-0 text-white bg-black hover:bg-gray-800 p-2 transition-colors duration-200 z-10"
-              >
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              <div className="shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
-                <div className="p-0">
-                  {/* Image or Title Area - No padding */}
-                  <div
-                    className="relative w-full"
-                    style={{
-                      aspectRatio:
-                        showDetailModal.submission_type === "link" || showDetailModal.submission_type === "memory"
-                          ? "16/9"
-                          : "3/4",
-                    }}
-                  >
-                    {showDetailModal.submission_type === "photo" && showDetailModal.image_url ? (
-                      <img
-                        src={showDetailModal.image_url || "/placeholder.svg"}
-                        alt={showDetailModal.braid_name}
-                        className="w-full h-full object-cover transition-all duration-500 ease-in-out"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          target.src =
-                            "/placeholder.svg?height=300&width=300&text=" +
-                            encodeURIComponent(showDetailModal.braid_name)
-                        }}
-                      />
-                    ) : showDetailModal.submission_type === "memory" ? (
-                      // Memory submissions show play button on yellow background
-                      <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
-                        <button
-                          onClick={() => {
-                            if (showDetailModal.audio_url) {
-                              toggleAudio(showDetailModal.id, showDetailModal.audio_url)
-                            }
-                          }}
-                          className="text-black hover:text-gray-600 transition-colors"
-                          title={playingAudio[showDetailModal.id.toString()] ? "Pause memory" : "Play memory"}
-                        >
-                          {playingAudio[showDetailModal.id.toString()] ? (
-                            <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                            </svg>
-                          ) : (
-                            <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          )}
-                        </button>
-                      </div>
-                    ) : (
-                      // Link submissions show title on yellow background
-                      <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
-                        <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
-                          {(showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"}
-                        </h3>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content below image */}
-                  <div className="p-8 bg-white">
-                    {/* Title under image */}
-                    <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">
-                      {showDetailModal.submission_type === "memory"
-                        ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
-                        : showDetailModal.braid_name}
-                    </h2>
-
-                    {/* Inline submission fields */}
-                    <div className="space-y-0">
-                      {/* Alternate Names - inline */}
-                      {showDetailModal.alt_names && (
-                        <div className="flex items-center gap-4">
-                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                            ALTERNATE NAMES
-                          </span>
-                          <span className="stick-no-bills text-black uppercase text-xl">
-                            ({" "}
-                            {showDetailModal.alt_names
-                              .split(",")
-                              .map((name) => name.trim())
-                              .join(", ")}{" "}
-                            )
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Region - inline */}
-                      {showDetailModal.region && (
-                        <div className="flex items-center gap-4">
-                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                            REGION
-                          </span>
-                          <span className="stick-no-bills text-black uppercase text-xl">
-                            ( {showDetailModal.region} )
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Contributor - inline */}
-                      <div className="flex items-center gap-4">
-                        <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                          CONTRIBUTOR
-                        </span>
-                        <span className="stick-no-bills text-black uppercase text-xl">
-                          ( {showDetailModal.contributor_name || "anonymous"} )
-                        </span>
-                      </div>
-
-                      {/* Audio - simplified */}
-                      {showDetailModal.audio_url && (
-                        <div className="flex items-center gap-4">
-                          <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                            {showDetailModal.submission_type === "memory" ? "LISTENING TO MEMORY" : "PRONUNCIATION"}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                              className="text-black hover:text-gray-600 transition-colors"
-                              title={playingAudio[showDetailModal.id.toString()] ? "Pause audio" : "Play audio"}
-                            >
-                              {playingAudio[showDetailModal.id.toString()] ? (
-                                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                                </svg>
-                              ) : (
-                                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              )}
-                            </button>
-                            {audioDurations[showDetailModal.id.toString()] && (
-                              <span className="stick-no-bills text-black uppercase text-xl">
-                                ( {audioDurations[showDetailModal.id.toString()]} )
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Link Details - inline */}
-                      {showDetailModal.submission_type === "link" && (
-                        <>
-                          {showDetailModal.public_url && (
-                            <div className="flex items-start gap-4">
-                              <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                                URL
-                              </span>
-                              <span className="stick-no-bills text-black uppercase text-xl">
-                                ({" "}
-                                <a
-                                  href={showDetailModal.public_url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-600 hover:underline"
-                                >
-                                  external link
-                                </a>{" "}
-                                )
-                              </span>
-                            </div>
-                          )}
-                          {(showDetailModal as any).link_description && (
-                            <div className="flex items-start gap-4">
-                              <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                                DESCRIPTION
-                              </span>
-                              <span className="stick-no-bills text-black uppercase text-xl">
-                                ( {(showDetailModal as any).link_description} )
-                              </span>
-                            </div>
-                          )}
-                        </>
-                      )}
-
-                      {/* Memory Details - inline */}
-                      {showDetailModal.submission_type === "memory" && (
-                        <>
-                          {(showDetailModal as any).memory_description && (
-                            <div className="flex items-start gap-4">
-                              <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                                MEMORY
-                              </span>
-                              <span className="stick-no-bills text-black leading-relaxed uppercase text-xl">
-                                ( {(showDetailModal as any).memory_description} )
-                              </span>
-                            </div>
-                          )}
-                        </>
-                      )}
-
-                      {/* Date and timestamp - moved to last */}
-                      <div className="flex items-center gap-4">
-                        <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                          SUBMITTED
-                        </span>
-                        <span className="stick-no-bills text-black uppercase text-xl">
-                          ( {new Date(showDetailModal.created_at || Date.now()).toLocaleDateString()} at{" "}
-                          {new Date(showDetailModal.created_at || Date.now()).toLocaleTimeString()} )
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+                            value={formData.contributor
