@@ -1597,5 +1597,5 @@ export default function BraidGlossaryPage() {
         </div>
       )}
     </div> {/* end of largest wrapper div */}
-  ) /* end of return */\
+  ); /* end of return */\
 }       /* end of BraidGlossaryPage */
