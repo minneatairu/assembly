@@ -1073,7 +1073,7 @@ export default function BraidGlossaryPage() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-white animate-in fade-in duration-300 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 animate-in fade-in duration-300 overflow-y-auto bg-black">
           <div className="relative w-full max-w-[40rem] my-8">
             {/* Top bar with close button and dropdown */}
             <div className="flex items-center justify-between mb-0">
@@ -1081,7 +1081,7 @@ export default function BraidGlossaryPage() {
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="h-12 px-4 bg-[rgb(254,228,107)] border-2 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px]"
+                  className="h-12 px-4 bg-[rgb(254,228,107)] border-2 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] border-dashed"
                 >
                   <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
                   <svg
@@ -1110,7 +1110,7 @@ export default function BraidGlossaryPage() {
                           setSubmissionType(option.value as "photo" | "link" | "memory")
                           setShowDropdown(false)
                         }}
-                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-b border-black last:border-b-0 ${
+                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-black last:border-b-0 border-dashed border-b-2 ${
                           submissionType === option.value ? "bg-[rgb(244,218,97)]" : ""
                         }`}
                       >
@@ -1399,15 +1399,6 @@ export default function BraidGlossaryPage() {
                               )}
                             </div>
                           </div>
-
-                          <input
-                            type="text"
-                            name="contributorName"
-                            value={formData.contributorName ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Contributor name"
-                            className="h-16 px-4 bg-white border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-2xl w-full"
-                          />
                         </div>
                       </div>
 
@@ -1417,14 +1408,14 @@ export default function BraidGlossaryPage() {
                           <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                         </div>
 
-                        <div className="p-4 space-y-4 px-0 py-0">
+                        <div className="p-0">
                           <input
                             type="text"
                             name="stylist"
                             value={formData.stylist ?? ""}
                             onChange={handleInputChange}
                             placeholder="Stylist"
-                            className="w-full h-16 px-4 bg-white border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-gray-500 text-2xl"
+                            className="w-full h-16 px-4 bg-white border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-2xl"
                           />
 
                           <input
@@ -1433,7 +1424,7 @@ export default function BraidGlossaryPage() {
                             value={formData.photographer ?? ""}
                             onChange={handleInputChange}
                             placeholder="Photographer"
-                            className="w-full h-16 px-4 bg-white border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-gray-500 text-2xl"
+                            className="w-full h-16 px-4 bg-white border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-2xl"
                           />
 
                           <input
@@ -1442,7 +1433,7 @@ export default function BraidGlossaryPage() {
                             value={formData.community ?? ""}
                             onChange={handleInputChange}
                             placeholder="Community"
-                            className="w-full h-16 px-4 bg-white border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-gray-500 text-2xl"
+                            className="w-full h-16 px-4 bg-white border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-2xl"
                           />
 
                           <input
@@ -1451,7 +1442,15 @@ export default function BraidGlossaryPage() {
                             value={formData.source ?? ""}
                             onChange={handleInputChange}
                             placeholder="Source"
-                            className="w-full h-16 px-4 bg-white border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-gray-500 text-2xl"
+                            className="w-full h-16 px-4 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-2xl"
+                          />
+                          <input
+                            type="text"
+                            name="contributorName"
+                            value={formData.contributorName ?? ""}
+                            onChange={handleInputChange}
+                            placeholder="Contributor name"
+                            className="w-full h-16 px-4 bg-white border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-2xl"
                           />
                         </div>
                       </div>
@@ -1483,10 +1482,10 @@ export default function BraidGlossaryPage() {
                   <div className="w-full">
                     {submissionType === "link" ? (
                       // Link Form - Full Width
-                      <div className="bg-white p-8">
+                      <div className="bg-white p-8 px-4 py-4">
                         <div className="min-w-[400px] mx-auto space-y-6">
                           {/* Link Information - Bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-4">
+                          <div className="border-2 border-black bg-gray-50 mb-4 border-dashed">
                             <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
                                 Link Information
@@ -1529,25 +1528,15 @@ export default function BraidGlossaryPage() {
                           </div>
 
                           {/* Basic Information - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-4 mt-6">
+                          <div className="border-2 border-black bg-gray-50 mb-4 mt-6 border-dashed">
                             <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
                                 Basic Information
                               </h3>
                             </div>
 
-                            <div className="p-4 space-y-4">
+                            <div className="p-4 space-y-4 px-0 py-0">
                               {/* Basic Info for Link */}
-                              <input
-                                type="text"
-                                name="contributorName"
-                                value={formData.contributorName ?? ""}
-                                onChange={handleInputChange}
-                                placeholder="Contributor name"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:border-transparent"
-                                required
-                              />
-
                               <input
                                 type="text"
                                 name="era"
@@ -1618,19 +1607,19 @@ export default function BraidGlossaryPage() {
                             </div>
                           </div>
                           {/* Credit Section for Link - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-6 mt-6">
-                            <div className="bg-gray-100 px-4 py-2 border-b-2 border-black">
+                          <div className="border-2 border-black bg-gray-50 mb-6 mt-6 border-dashed">
+                            <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                             </div>
 
-                            <div className="p-4 space-y-4">
+                            <div className="p-0">
                               <input
                                 type="text"
                                 name="stylist"
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Stylist"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1639,7 +1628,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Photographer"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1648,7 +1637,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Community"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1657,7 +1646,15 @@ export default function BraidGlossaryPage() {
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Source"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              />
+                              <input
+                                type="text"
+                                name="contributorName"
+                                value={formData.contributorName ?? ""}
+                                onChange={handleInputChange}
+                                placeholder="Contributor name"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -1665,7 +1662,7 @@ export default function BraidGlossaryPage() {
                       </div>
                     ) : (
                       // Memory Form - Full Width
-                      <div className="bg-white p-8">
+                      <div className="bg-white p-8 px-4 py-4">
                         <div className="min-w-[400px] mx-auto space-y-6">
                           {/* Memory Title */}
                           <input
@@ -1744,16 +1741,6 @@ export default function BraidGlossaryPage() {
                               {/* Basic Info for Memory */}
                               <input
                                 type="text"
-                                name="contributorName"
-                                value={formData.contributorName ?? ""}
-                                onChange={handleInputChange}
-                                placeholder="Contributor name"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:border-transparent"
-                                required
-                              />
-
-                              <input
-                                type="text"
                                 name="era"
                                 value={formData.era ?? ""}
                                 onChange={handleInputChange}
@@ -1828,14 +1815,14 @@ export default function BraidGlossaryPage() {
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                             </div>
 
-                            <div className="p-4 space-y-4 px-0 py-0 bg-white">
+                            <div className="p-0 bg-white">
                               <input
                                 type="text"
                                 name="stylist"
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Stylist"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1844,7 +1831,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Photographer"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1853,7 +1840,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Community"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1862,7 +1849,15 @@ export default function BraidGlossaryPage() {
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Source"
-                                className="w-full p-4 bg-white border-2 border-gray-300 text-gray-700 placeholder-gray-500 stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full p-4 bg-white text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              />
+                              <input
+                                type="text"
+                                name="contributorName"
+                                value={formData.contributorName ?? ""}
+                                onChange={handleInputChange}
+                                placeholder="Contributor name"
+                                className="w-full p-4 bg-white border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -1894,7 +1889,7 @@ export default function BraidGlossaryPage() {
                 )}
 
                 {/* Agreement Checkbox - Full Width */}
-                <div className="flex items-start gap-3 p-4 px-8">
+                <div className="flex items-start gap-3 p-4 px-4">
                   <input
                     type="checkbox"
                     id="agreeToShare"
@@ -1911,7 +1906,7 @@ export default function BraidGlossaryPage() {
                 </div>
 
                 {/* License Checkbox - Full Width */}
-                <div className="flex items-start gap-3 p-4 px-8">
+                <div className="flex items-start gap-3 p-4 px-4">
                   <input
                     type="checkbox"
                     id="licenseCheck"
@@ -1928,7 +1923,7 @@ export default function BraidGlossaryPage() {
                 </div>
 
                 {/* Account Creation Toggle */}
-                <div className="p-4 px-8">
+                <div className="p-4 px-4">
                   <label className="flex items-center gap-2 stick-no-bills text-black">
                     <input
                       type="checkbox"
