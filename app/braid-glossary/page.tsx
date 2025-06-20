@@ -961,11 +961,11 @@ export default function BraidGlossaryPage() {
                     <div className="p-4">
                       {/* Show braid name for photo submissions, or subtitle for others */}
                       {braid.submission_type === "photo" ? (
-                        <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase mb-2">
+                        <h3 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase mb-2">
                           {braid.braid_name}
                         </h3>
                       ) : (
-                        <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase mb-2">
+                        <h3 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase mb-2">
                           {braid.submission_type === "memory"
                             ? (braid as any).memory_title || braid.braid_name || "Untitled Memory"
                             : braid.submission_type === "link"
