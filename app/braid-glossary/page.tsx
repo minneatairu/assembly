@@ -707,7 +707,7 @@ export default function BraidGlossaryPage() {
   ]
 
   const braidFamilyOptions = [
-    { value: "", label: "Select braid family" },
+    { value: "", label: "Braid Family" },
     { value: "cornrows", label: "Cornrows" },
     { value: "two-strand-twist", label: "Two Strand Twist" },
     { value: "tree", label: "Tree" },
@@ -1062,12 +1062,12 @@ export default function BraidGlossaryPage() {
     
    
             {/* Top bar with close button and dropdown */}
-            <div className="flex items-center justify-between mb-0 px-0 py-4">
+            <div className="flex items-center justify-between mb-0 px-0 py-0">
               {/* Custom Submission Type Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="h-12 px-4 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] py-8 border-0 bg-yellow-200"
+                  className="h-12 px-4 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] py-8 bg-yellow-200 border-2"
                 >
                   <span className="text-5xl">
                     {submissionOptions.find((opt) => opt.value === submissionType)?.label}
@@ -1098,7 +1098,7 @@ export default function BraidGlossaryPage() {
                           setSubmissionType(option.value as "photo" | "link" | "memory")
                           setShowDropdown(false)
                         }}
-                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-black last:border-b-0 border-b-2 md:text-5xl ${
+                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-black last:border-b-0 border-b-2 md:text-5xl bg-pink-100 py-0 ${
                           submissionType === option.value ? "bg-[rgb(244,218,97)]" : ""
                         }`}
                       >
@@ -1118,8 +1118,8 @@ export default function BraidGlossaryPage() {
                 </svg>
               </button>
             </div>
-            <div className="bg-white w-full relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
-              <div className="p-0">
+            <div className="w-full relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-black">
+              <div className="p-0 bg-black">
                 {/* Hidden file input */}
                 <input
                   id="file-input"
@@ -1137,7 +1137,7 @@ export default function BraidGlossaryPage() {
                     <div className=" min-w-[400px] mx-auto space-y-0 bg-black">
                       {/* Photo Upload Area - Above form fields */}
                       <div
-                        className={`relative border-black transition-colors border-0 bg-amber-200 ${
+                        className={`relative border-black transition-colors border-0 bg-yellow-200 mt-8 ${
                           isDragOver ? "bg-[rgb(244,218,97)]" : ""
                         } flex flex-col items-center justify-center cursor-pointer overflow-visible min-h-[400px] mb-4`}
                         onDragOver={handleDragOver}
@@ -1296,7 +1296,7 @@ export default function BraidGlossaryPage() {
 
                       {/* Main Form Fields - Separate bordered section */}
                       <div className="border-black mb-3 mt-0 bg-yellow-300 border-0">
-                        <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
+                        <div className="px-4 py-2 border-b-2 border-black bg-yellow-200 mt-8">
                           <h3 className="stick-no-bills text-black font-semibold uppercase ">
                             Braid Information
                           </h3>
@@ -1318,7 +1318,7 @@ export default function BraidGlossaryPage() {
                             name="altNames"
                             value={formData.altNames ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Aternate Names"
+                            placeholder="Alternate Names"
                             className="h-16 px-4 bg-yellow-200 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                           />
 
@@ -1348,7 +1348,7 @@ export default function BraidGlossaryPage() {
                           <div className="min-h-16 px-4 bg-yellow-200 border-b-2 border-black">
                             <div className="py-2">
                               <div className="flex items-center justify-between">
-                                <label className="stick-no-bills text-black text-5xl">Braid Patterns</label>
+                                <label className="stick-no-bills text-black text-5xl">Braid Pattern</label>
                                 <button
                                   type="button"
                                   onClick={() => setShowBraidPatterns(!showBraidPatterns)}
@@ -1392,7 +1392,7 @@ export default function BraidGlossaryPage() {
 
                       {/* Credit Section - Separate bordered section */}
                       <div className="border-2 border-black bg-gray-50 mb-6 border-none" style={{ marginTop: "20px" }}>
-                        <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
+                        <div className="px-4 py-2 border-b-2 border-black bg-yellow-200 mt-8">
                           <h3 className="stick-no-bills text-black  font-semibold uppercase">Credits</h3>
                         </div>
 
@@ -1473,7 +1473,7 @@ export default function BraidGlossaryPage() {
                       <div className="p-8 px-0 py-0 bg-black">
                         <div className="min-w-[400px] mx-auto space-y-6">
                           {/* Link Information - Bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-4">
+                          <div className="border-black bg-gray-50 border-0 mb-4 mt-8">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black font-semibold uppercase">
                                 Link Information
@@ -1552,7 +1552,7 @@ export default function BraidGlossaryPage() {
                               </select>
 
                               {/* Braid Patterns for Link - Collapsible */}
-                              <div className="px-4 bg-yellow-200">
+                              <div className="px-4 bg-yellow-200 py-0.5">
                                 <div className="flex items-center justify-between mb-2">
                                   <label className="stick-no-bills text-black text-5xl">Braid Patterns</label>
                                   <button
@@ -1877,7 +1877,7 @@ export default function BraidGlossaryPage() {
                 )}
 
                 {/* Agreement Checkbox - Full Width */}
-                <div className="flex items-start gap-3 p-4 py-4 px-4 bg-yellow-200">
+                <div className="flex items-start gap-3 p-4 py-4 px-4 bg-yellow-200 pt-12 mt-8 ml-0 pl-0">
                   <input
                     type="checkbox"
                     id="agreeToShare"
@@ -1888,7 +1888,7 @@ export default function BraidGlossaryPage() {
                     required
                   />
 <label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-black uppercase">
-                    I certify that I have the rights to submit this braid for inclusion in The Braid Intelligence
+               I have the rights to submit this braid for inclusion in The Braid Intelligence
                     Dataset (B.I.D.).
                   </label>
                 </div>
@@ -1905,14 +1905,13 @@ export default function BraidGlossaryPage() {
                     required
                   />
                   <label htmlFor="licenseCheck" className="stick-no-bills leading-relaxed text-black leading-6 uppercase">
-                    This braid is either my original work, in the public domain, or covered by a license such as
-                    Creative Commons.
+                    This braid is either my original work, in the public domain, or covered by an open license.
                   </label>
                 </div>
 
                 {/* Account Creation Toggle */}
                 <div className="p-4 px-0 py-0 bg-black">
-                  <label className="flex items-center gap-2 stick-no-bills text-yellow-200 mx-0 bg-black my-0 px-4 py-0 border-solid border-yellow-200 uppercase">
+                  <label className="flex items-center gap-2 stick-no-bills mx-0 my-0 px-4 border-solid border-yellow-200 uppercase py-4 text-black bg-yellow-200 pt-4 pb-12">
                     <input
                       type="checkbox"
                       checked={showAccountCreation}
@@ -1970,12 +1969,12 @@ export default function BraidGlossaryPage() {
                 )}
 
                 {/* Submit Button - Full Width */}
-                <div className="p-4 px-0 py-0">
+                <div className="p-4 px-0 py-0 bg-black">
                   <button
                     type="submit"
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="w-full py-4 bg-[rgb(254,228,107)] text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed uppercase text-5xl"
+                    className="w-full py-4 text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed uppercase text-5xl border-none my-8 bg-yellow-200"
                   >
                     {submitting ? "Submitting..." : "SUBMIT BRAID"}
                   </button>
@@ -2175,7 +2174,7 @@ export default function BraidGlossaryPage() {
                       {showDetailModal.braid_family && (
                         <div className="flex items-center gap-4">
                           <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                            BRAID FAMILY
+                  Braid Family
                           </span>
                           <span className="stick-no-bills text-black uppercase text-xl">
                             ( {showDetailModal.braid_family.replace("-", " ")} )
