@@ -1056,9 +1056,11 @@ export default function BraidGlossaryPage() {
       )}
 
       {/* Form Modal */}
-      {showForm && (
-        <div className="h-12 px-4 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] py-8 bg-yellow-200 border-2 ">
-          <div className="relative w-full max-w-[50rem] my-8">
+{showForm && (
+  <div className="fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black">
+    <div className="relative w-full max-w-4xl bg-black border-2 border-black p-6 overflow-y-auto max-h-[90vh]">
+    
+   
             {/* Top bar with close button and dropdown */}
             <div className="flex items-center justify-between mb-0 px-0 py-4">
               {/* Custom Submission Type Dropdown */}
