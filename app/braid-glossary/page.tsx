@@ -627,7 +627,7 @@ export default function BraidGlossaryPage() {
   ]
 
   const filterOptions = [
-    { value: "all", label: "All" },
+    { value: "all", label: "All submissions" },
     { value: "photo", label: "Photo" },
     { value: "link", label: "Link" },
     { value: "memory", label: "Memory" },
@@ -951,11 +951,11 @@ export default function BraidGlossaryPage() {
                     key={option.value}
                     onClick={() => {
                       setFilterType(option.value as "all" | "photo" | "link" | "memory")
-                      setShowFilter(false)
+                      // Don't close the filter dropdown when a filter is selected
                     }}
-                    className={`w-full p-3 text-left stick-no-bills text-black text-lg border-2 border-black transition-colors ${
+                    className={`w-full p-3 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl transition-colors ${
                       filterType === option.value ? "bg-green-400 hover:bg-green-500" : "bg-gray-50 hover:bg-gray-100"
-                    } ${index > 0 ? "border-t-0" : ""}`}
+                    } ${index > 0 ? "border-t border-black" : ""} ${index === 0 ? "border-b border-black" : ""} ${index === filterOptions.length - 1 ? "" : "border-b border-black"}`}
                   >
                     {option.label}
                     {option.value !== "all" && (
