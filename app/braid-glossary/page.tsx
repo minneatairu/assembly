@@ -1081,7 +1081,7 @@ export default function BraidGlossaryPage() {
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="h-12 px-4 bg-[rgb(254,228,107)] border-2 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] py-8"
+                  className="h-12 px-4 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] py-8 border-0 bg-yellow-200"
                 >
                   <span className="text-5xl">
                     {submissionOptions.find((opt) => opt.value === submissionType)?.label}
@@ -1151,7 +1151,7 @@ export default function BraidGlossaryPage() {
                     <div className=" min-w-[400px] mx-auto space-y-0 bg-black">
                       {/* Photo Upload Area - Above form fields */}
                       <div
-                        className={`relative bg-[rgb(254,228,107)] border-2 border-black transition-colors ${
+                        className={`relative bg-[rgb(254,228,107)] border-black transition-colors border-0 ${
                           isDragOver ? "bg-[rgb(244,218,97)]" : ""
                         } flex flex-col items-center justify-center cursor-pointer overflow-visible min-h-[400px] mb-4`}
                         onDragOver={handleDragOver}
@@ -1309,7 +1309,7 @@ export default function BraidGlossaryPage() {
                       </div>
 
                       {/* Main Form Fields - Separate bordered section */}
-                      <div className="border-2 border-black mb-3 mt-0 bg-yellow-300">
+                      <div className="border-black mb-3 mt-0 bg-yellow-300 border-0">
                         <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
                           <h3 className="stick-no-bills text-black font-semibold uppercase text-xl">
                             Braid Information
@@ -1322,7 +1322,7 @@ export default function BraidGlossaryPage() {
                             name="braidName"
                             value={formData.braidName ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Braid name"
+                            placeholder="BRAID NAME"
                             className="h-16 px-4 bg-yellow-200 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                             required
                           />
@@ -1332,7 +1332,7 @@ export default function BraidGlossaryPage() {
                             name="altNames"
                             value={formData.altNames ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Alternative names"
+                            placeholder="ALTERNATIVE NAMES"
                             className="h-16 px-4 bg-yellow-200 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                           />
 
@@ -1341,7 +1341,7 @@ export default function BraidGlossaryPage() {
                             name="era"
                             value={formData.era ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Era"
+                            placeholder="ERA"
                             className="h-16 px-4 bg-yellow-200 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                           />
 
@@ -1405,7 +1405,7 @@ export default function BraidGlossaryPage() {
                       </div>
 
                       {/* Credit Section - Separate bordered section */}
-                      <div className="border-2 border-black bg-gray-50 mb-4 mt-4 px-0 border-dashed">
+                      <div className="border-2 border-black bg-gray-50 mb-4 mt-4 px-0 border-none">
                         <div className="py-2 border-b-2 border-black bg-amber-200 px-4">
                           <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                         </div>
@@ -1416,8 +1416,8 @@ export default function BraidGlossaryPage() {
                             name="stylist"
                             value={formData.stylist ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Stylist"
-                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            placeholder="STYLIST"
+                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
                           <input
@@ -1425,8 +1425,8 @@ export default function BraidGlossaryPage() {
                             name="photographer"
                             value={formData.photographer ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Photographer"
-                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            placeholder="PHOTOGRAPHER"
+                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
                           <input
@@ -1434,8 +1434,8 @@ export default function BraidGlossaryPage() {
                             name="community"
                             value={formData.community ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Community"
-                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            placeholder="COMMUNITY"
+                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
                           <input
@@ -1443,7 +1443,7 @@ export default function BraidGlossaryPage() {
                             name="source"
                             value={formData.source ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Source"
+                            placeholder="SOURCE"
                             className="w-full h-16 px-4 bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
                           <input
@@ -1451,8 +1451,8 @@ export default function BraidGlossaryPage() {
                             name="contributorName"
                             value={formData.contributorName ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Contributor name"
-                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            placeholder="CONTRIBUTOR NAME"
+                            className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
                         </div>
                       </div>
@@ -1488,21 +1488,21 @@ export default function BraidGlossaryPage() {
                         <div className="min-w-[400px] mx-auto space-y-6">
                           {/* Link Information - Bordered section */}
                           <div className="border-2 border-black bg-gray-50 mb-4">
-                            <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
+                            <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
                                 Link Information
                               </h3>
                             </div>
 
-                            <div className="p-0">
+                            <div className="p-0 bg-amber-200">
                               {/* Link Title */}
                               <input
                                 type="text"
                                 name="linkTitle"
                                 value={formData.linkTitle ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Title"
-                                className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                                placeholder="TITLE"
+                                className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                                 required
                               />
 
@@ -1513,7 +1513,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.linkUrl ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="URL"
-                                className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                                className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                                 required={submissionType === "link"}
                               />
 
@@ -1522,16 +1522,16 @@ export default function BraidGlossaryPage() {
                                 name="linkDescription"
                                 value={formData.linkDescription ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Description"
+                                placeholder="DESCRIPTION"
                                 rows={4}
-                                className="w-full p-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black resize-none"
+                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black resize-none"
                               />
                             </div>
                           </div>
 
                           {/* Basic Information - Separate bordered section */}
                           <div className="border-2 border-black bg-gray-50 mb-4 mt-6">
-                            <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
+                            <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
                                 Basic Information
                               </h3>
@@ -1544,15 +1544,15 @@ export default function BraidGlossaryPage() {
                                 name="era"
                                 value={formData.era ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Era"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-gray-500 stick-no-bills text-5xl focus:outline-none focus:border-transparent"
+                                placeholder="ERA"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent"
                               />
 
                               <select
                                 name="braidFamily"
                                 value={formData.braidFamily ?? ""}
                                 onChange={handleInputChange}
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 stick-no-bills text-5xl focus:outline-none focus:border-transparent"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-black stick-no-bills text-5xl focus:outline-none focus:border-transparent"
                               >
                                 {braidFamilyOptions.map((option) => (
                                   <option
@@ -1566,9 +1566,9 @@ export default function BraidGlossaryPage() {
                               </select>
 
                               {/* Braid Patterns for Link - Collapsible */}
-                              <div className="p-4 bg-yellow-200">
+                              <div className="px-4 bg-yellow-200">
                                 <div className="flex items-center justify-between mb-2">
-                                  <label className="stick-no-bills text-gray-700 text-2xl">Braid Patterns</label>
+                                  <label className="stick-no-bills text-black text-5xl">Braid Patterns</label>
                                   <button
                                     type="button"
                                     onClick={() => setShowBraidPatterns(!showBraidPatterns)}
@@ -1600,7 +1600,7 @@ export default function BraidGlossaryPage() {
                                           onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
                                           className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
                                         />
-                                        <span className="stick-no-bills text-gray-700 text-sm">{option.label}</span>
+                                        <span className="stick-no-bills text-black text-5xl">{option.label}</span>
                                       </label>
                                     ))}
                                   </div>
@@ -1609,7 +1609,7 @@ export default function BraidGlossaryPage() {
                             </div>
                           </div>
                           {/* Credit Section for Link - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-6 mt-6">
+                          <div className="border-black bg-gray-50 mb-6 mt-6 border-0">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                             </div>
@@ -1620,8 +1620,8 @@ export default function BraidGlossaryPage() {
                                 name="stylist"
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Stylist"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="STYLIST"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1629,8 +1629,8 @@ export default function BraidGlossaryPage() {
                                 name="photographer"
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Photographer"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="PHOTOGRAPHER"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1638,8 +1638,8 @@ export default function BraidGlossaryPage() {
                                 name="community"
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Community"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="COMMUNITY"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1647,16 +1647,16 @@ export default function BraidGlossaryPage() {
                                 name="source"
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Source"
-                                className="w-full p-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="SOURCE"
+                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                               <input
                                 type="text"
                                 name="contributorName"
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Contributor name"
-                                className="w-full p-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="CONTRIBUTOR NAME"
+                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -1672,20 +1672,20 @@ export default function BraidGlossaryPage() {
                             name="memoryTitle"
                             value={formData.memoryTitle ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Memory title (sound)"
-                            className="w-full p-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black mb-6"
+                            placeholder="MEMORY TITLE "
+                            className="w-full px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black mb-6"
                             required={submissionType === "memory"}
                           />
 
                           {/* Audio Recording for Memory */}
                           {audioSupported && (
-                            <div className="p-4 border-2 border-black mb-6 bg-yellow-300 border-dashed">
+                            <div className="p-4 border-2 border-black mb-6 border-none bg-yellow-200">
                               <div className="flex flex-col items-center justify-center min-h-[120px]">
                                 {!isRecording && !audioBlob && (
                                   <button
                                     type="button"
                                     onClick={startRecording}
-                                    className="px-6 py-3 text-black hover:bg-lime-500 font-medium stick-no-bills border-2 border-black text-2xl uppercase border-dashed bg-rose-200"
+                                    className="px-6 py-3 text-black hover:bg-lime-500 font-medium stick-no-bills border-2 border-black uppercase bg-rose-200 text-5xl border-solid"
                                   >
                                     START RECORDING
                                   </button>
@@ -1732,8 +1732,8 @@ export default function BraidGlossaryPage() {
                           )}
 
                           {/* Basic Information - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-6 border-dashed">
-                            <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
+                          <div className="border-2 border-black bg-gray-50 mb-6 border-none">
+                            <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
                                 Basic Information
                               </h3>
@@ -1746,15 +1746,15 @@ export default function BraidGlossaryPage() {
                                 name="era"
                                 value={formData.era ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Era"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-gray-500 stick-no-bills text-5xl focus:outline-none focus:border-transparent"
+                                placeholder="ERA"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent"
                               />
 
                               <select
                                 name="braidFamily"
                                 value={formData.braidFamily ?? ""}
                                 onChange={handleInputChange}
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 stick-no-bills text-5xl focus:outline-none focus:border-transparent"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-black stick-no-bills text-5xl focus:outline-none focus:border-transparent"
                               >
                                 {braidFamilyOptions.map((option) => (
                                   <option
@@ -1768,9 +1768,9 @@ export default function BraidGlossaryPage() {
                               </select>
 
                               {/* Braid Patterns for Memory - Collapsible */}
-                              <div className="p-4 bg-yellow-200">
+                              <div className="px-4 bg-yellow-200">
                                 <div className="flex items-center justify-between mb-2">
-                                  <label className="stick-no-bills text-gray-700 text-2xl">Braid Patterns</label>
+                                  <label className="stick-no-bills text-black text-5xl">Braid Patterns</label>
                                   <button
                                     type="button"
                                     onClick={() => setShowBraidPatterns(!showBraidPatterns)}
@@ -1802,7 +1802,7 @@ export default function BraidGlossaryPage() {
                                           onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
                                           className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
                                         />
-                                        <span className="stick-no-bills text-gray-700 text-sm">{option.label}</span>
+                                        <span className="stick-no-bills text-black text-5xl">{option.label}</span>
                                       </label>
                                     ))}
                                   </div>
@@ -1812,8 +1812,8 @@ export default function BraidGlossaryPage() {
                           </div>
 
                           {/* Credit Section for Memory - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-6 border-dashed">
-                            <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
+                          <div className="border-2 border-black bg-gray-50 mb-6 border-none">
+                            <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                             </div>
 
@@ -1823,8 +1823,8 @@ export default function BraidGlossaryPage() {
                                 name="stylist"
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Stylist"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="STYLIST"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1832,8 +1832,8 @@ export default function BraidGlossaryPage() {
                                 name="photographer"
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Photographer"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="PHOTOGRAPHER"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1841,8 +1841,8 @@ export default function BraidGlossaryPage() {
                                 name="community"
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Community"
-                                className="w-full p-4 bg-yellow-200 border-b-2 border-black border-dashed text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="COMMUNITY"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
                               <input
@@ -1850,16 +1850,16 @@ export default function BraidGlossaryPage() {
                                 name="source"
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Source"
-                                className="w-full p-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="SOURCE"
+                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                               <input
                                 type="text"
                                 name="contributorName"
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="Contributor name"
-                                className="w-full p-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="CONTRIBUTOR NAME"
+                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -1891,7 +1891,7 @@ export default function BraidGlossaryPage() {
                 )}
 
                 {/* Agreement Checkbox - Full Width */}
-                <div className="flex items-start gap-3 p-4 bg-black text-amber-300 py-4 px-0">
+                <div className="flex items-start gap-3 p-4 py-4 px-4 bg-amber-200">
                   <input
                     type="checkbox"
                     id="agreeToShare"
@@ -1901,14 +1901,14 @@ export default function BraidGlossaryPage() {
                     className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                     required
                   />
-                  <label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-yellow-200">
+                  <label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-black">
                     I certify that I have the rights to submit this braid for inclusion in The Braid Intelligence
                     Dataset (B.I.D.).
                   </label>
                 </div>
 
                 {/* License Checkbox - Full Width */}
-                <div className="flex items-start gap-3 p-4 bg-black px-0 py-0">
+                <div className="flex items-start gap-3 p-4 px-4 py-4 bg-yellow-200">
                   <input
                     type="checkbox"
                     id="licenseCheck"
@@ -1918,7 +1918,7 @@ export default function BraidGlossaryPage() {
                     className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                     required
                   />
-                  <label htmlFor="licenseCheck" className="stick-no-bills leading-relaxed text-yellow-200">
+                  <label htmlFor="licenseCheck" className="stick-no-bills leading-relaxed text-black leading-6">
                     This braid is either my original work, in the public domain, or covered by a license such as
                     Creative Commons.
                   </label>
@@ -1942,42 +1942,42 @@ export default function BraidGlossaryPage() {
                   <div className="p-4 space-y-4">
                     <input
                       type="email"
-                      placeholder="Email"
+                      placeholder="EMAIL"
                       value={accountData.email}
                       onChange={(e) => setAccountData({ ...accountData, email: e.target.value })}
-                      className="w-full p-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                      className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                       required
                     />
                     <input
                       type="password"
-                      placeholder="Password"
+                      placeholder="PASSWORD"
                       value={accountData.password}
                       onChange={(e) => setAccountData({ ...accountData, password: e.target.value })}
-                      className="w-full p-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                      className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                       required
                     />
                     <input
                       type="password"
-                      placeholder="Confirm Password"
+                      placeholder="CONFIRM PASSWORD"
                       value={accountData.confirmPassword}
                       onChange={(e) => setAccountData({ ...accountData, confirmPassword: e.target.value })}
-                      className="w-full p-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                      className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                       required
                     />
                     <input
                       type="text"
-                      placeholder="First Name"
+                      placeholder="FIRST NAME"
                       value={accountData.firstName}
                       onChange={(e) => setAccountData({ ...accountData, firstName: e.target.value })}
-                      className="w-full p-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                      className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                       required
                     />
                     <input
                       type="text"
-                      placeholder="Last Name"
+                      placeholder="LAST NAME"
                       value={accountData.lastName}
                       onChange={(e) => setAccountData({ ...accountData, lastName: e.target.value })}
-                      className="w-full p-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                      className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                       required
                     />
                   </div>
