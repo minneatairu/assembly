@@ -18,6 +18,10 @@ export default function BraidGlossaryPage() {
   const [showImageModal, setShowImageModal] = useState<{ url: string; caption: string } | null>(null)
   const [showDetailModal, setShowDetailModal] = useState<Braid | null>(null)
 
+  // Filter states
+  const [showFilter, setShowFilter] = useState(false)
+  const [filterType, setFilterType] = useState<"all" | "photo" | "link" | "memory">("all")
+
   // Audio recording states
   const [isRecording, setIsRecording] = useState(false)
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
@@ -77,6 +81,12 @@ export default function BraidGlossaryPage() {
     }
   }, [])
 
+  // Filter braids based on submission type
+  const filteredBraids = braids.filter((braid) => {
+    if (filterType === "all") return true
+    return braid.submission_type === filterType
+  })
+
   // Handle image click to open modal
   const handleImageClick = (imageUrl: string, braidName: string) => {
     setShowImageModal({ url: imageUrl, caption: braidName })
@@ -104,13 +114,15 @@ export default function BraidGlossaryPage() {
           setShowDetailModal(null)
         } else if (showForm) {
           setShowForm(false)
+        } else if (showFilter) {
+          setShowFilter(false)
         }
       }
     }
 
     document.addEventListener("keydown", handleEscape)
     return () => document.removeEventListener("keydown", handleEscape)
-  }, [showImageModal, showInfoModal, showDetailModal, showForm])
+  }, [showImageModal, showInfoModal, showDetailModal, showForm, showFilter])
 
   // Drag and drop handlers
   const handleDragOver = (e: React.DragEvent) => {
@@ -580,6 +592,13 @@ export default function BraidGlossaryPage() {
     { value: "memory", label: "Memory" },
   ]
 
+  const filterOptions = [
+    { value: "all", label: "All" },
+    { value: "photo", label: "Photo" },
+    { value: "link", label: "Link" },
+    { value: "memory", label: "Memory" },
+  ]
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Sticky Menu Bar */}
@@ -607,6 +626,13 @@ export default function BraidGlossaryPage() {
                 title="Login to your account"
               >
                 <img src="/accounting.svg" alt="Account" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+              </button>
+              <button
+                onClick={() => setShowFilter(true)}
+                className="hover:opacity-70 transition-opacity"
+                title="Filter submissions"
+              >
+                <img src="/search.svg" alt="Search" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
               </button>
               <button
                 onClick={() => setShowForm(true)}
@@ -646,10 +672,10 @@ export default function BraidGlossaryPage() {
         )}
 
         {/* Gallery Grid - Masonry Layout */}
-        {!loading && braids.length > 0 && (
+        {!loading && filteredBraids.length > 0 && (
           <div className="max-w-4xl mx-auto">
             <div className="columns-2 gap-6 space-y-6">
-              {braids.map((braid) => {
+              {filteredBraids.map((braid) => {
                 // Determine if this braid has multiple images
                 const hasMultipleImages = (braid as any).image_urls && (braid as any).image_urls.length > 1
                 const totalImages = hasMultipleImages ? (braid as any).image_urls.length : braid.image_url ? 1 : 0
@@ -806,10 +832,16 @@ export default function BraidGlossaryPage() {
         )}
 
         {/* Empty State */}
-        {!loading && braids.length === 0 && !error && (
+        {!loading && filteredBraids.length === 0 && !error && (
           <div className="text-center py-12">
-            <div className="stick-no-bills text-black text-xl mb-4">No braids found</div>
-            <p className="stick-no-bills text-gray-600 mb-6">Be the first to contribute to the glossary!</p>
+            <div className="stick-no-bills text-black text-xl mb-4">
+              {filterType === "all" ? "No braids found" : `No ${filterType} submissions found`}
+            </div>
+            <p className="stick-no-bills text-gray-600 mb-6">
+              {filterType === "all" 
+                ? "Be the first to contribute to the glossary!" 
+                : `Be the first to add a ${filterType} submission!`}
+            </p>
             <button
               onClick={() => setShowForm(true)}
               className="bg-green-400 text-black py-3 px-6 hover:bg-green-500 transition-colors stick-no-bills border-2 border-black rounded-full text-lg font-bold"
@@ -819,6 +851,53 @@ export default function BraidGlossaryPage() {
           </div>
         )}
       </div>
+
+      {/* Filter Modal */}
+      {showFilter && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
+          <div className="bg-white w-full max-w-md relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
+            <button
+              onClick={() => setShowFilter(false)}
+              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
+            >
+              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
+            </button>
+
+            <div className="p-8">
+              <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">Filter Submissions</h2>
+              
+              <div className="space-y-4">
+                {filterOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => {
+                      setFilterType(option.value as "all" | "photo" | "link" | "memory")
+                      setShowFilter(false)
+                    }}
+                    className={`w-full p-4 text-left stick-no-bills text-black text-xl border-2 border-black transition-colors ${
+                      filterType === option.value 
+                        ? "bg-green-400 hover:bg-green-500" 
+                        : "bg-gray-50 hover:bg-gray-100"
+                    }`}
+                  >
+                    {option.label}
+                    {option.value !== "all" && (
+                      <span className="text-sm text-gray-600 block">
+                        {braids.filter(b => b.submission_type === option.value).length} submissions
+                      </span>
+                    )}
+                    {option.value === "all" && (
+                      <span className="text-sm text-gray-600 block">
+                        {braids.length} total submissions
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Form Modal */}
       {showForm && (
@@ -1186,7 +1265,7 @@ export default function BraidGlossaryPage() {
                           name="contributorName"
                           value={formData.contributorName ?? ""}
                           onChange={handleInputChange}
-                          placeholder="Your name"
+                          placeholder="Contributor name"
                           className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required
                         />
@@ -1212,7 +1291,7 @@ export default function BraidGlossaryPage() {
                           name="memoryDescription"
                           value={formData.memoryDescription ?? ""}
                           onChange={handleInputChange}
-                          placeholder="Share your memory, story, or tradition..."
+                          placeholder="Describe your memory"
                           rows={8}
                           className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
                           required={submissionType === "memory"}
@@ -1221,7 +1300,7 @@ export default function BraidGlossaryPage() {
                         {/* Audio Recording for Memory */}
                         {audioSupported && (
                           <div className="bg-white p-4 border border-gray-300">
-                            <h4 className="stick-no-bills text-black font-medium mb-3">Record Your Story (Optional)</h4>
+                            <h4 className="stick-no-bills text-black font-medium mb-3">Record Your Memory (Optional)</h4>
                             <div className="flex items-center gap-3">
                               {!isRecording && !audioBlob && (
                                 <button
@@ -1279,7 +1358,7 @@ export default function BraidGlossaryPage() {
                           name="contributorName"
                           value={formData.contributorName ?? ""}
                           onChange={handleInputChange}
-                          placeholder="Your name"
+                          placeholder="Contributor name"
                           className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                           required
                         />
@@ -1371,243 +1450,4 @@ export default function BraidGlossaryPage() {
                       type="email"
                       name="email"
                       value={accountData.email}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}
-                      placeholder="Email address"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      required={showAccountCreation}
-                    />
-
-                    {/* Password */}
-                    <input
-                      type="password"
-                      name="password"
-                      value={accountData.password}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, password: e.target.value }))}
-                      placeholder="Password (min 6 characters)"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      minLength={6}
-                      required={showAccountCreation}
-                    />
-
-                    {/* Confirm Password */}
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={accountData.confirmPassword}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                      placeholder="Confirm password"
-                      className="w-full h-16 px-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      required={showAccountCreation}
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Submit Button - Full Width */}
-              <form onSubmit={handleSubmit}>
-                <button
-                  type="submit"
-                  disabled={submitting || !formData.agreeToShare}
-                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-t-2 border-black text-5xl"
-                >
-                  {submitting ? "SHARING..." : "SHARE"}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Info Modal */}
-      {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-2xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
-            <button
-              onClick={closeInfoModal}
-              className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
-            >
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-
-            <div className="p-6 sm:p-8 lg:p-12">
-              <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">ABOUT THE BRAID GLOSSARY</h2>
-
-              <div className="space-y-12 stick-no-bills text-black">
-                <div>
-                  <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                    The Braid Glossary is a crowdsourced initiative dedicated to documenting and preserving the diverse
-                    world of braids. Our mission is to create a comprehensive, accessible, and educational resource that
-                    celebrates the cultural significance, artistic expression, and historical context of braids from
-                    around the globe.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Why a Braid Glossary?</h3>
-                  <p className="text-lg sm:text-xl leading-relaxed">
-                    Braids are more than just hairstyles; they are powerful symbols of identity, tradition, and
-                    community. They carry stories of heritage, resilience, and innovation. By creating a glossary, we
-                    aim to:
-                  </p>
-                  <ul className="list-disc pl-6 mt-4 space-y-2">
-                    <li className="text-lg sm:text-xl leading-relaxed">
-                      Preserve cultural heritage by documenting braid names, techniques, and their cultural origins.
-                    </li>
-                    <li className="text-lg sm:text-xl leading-relaxed">
-                      Promote cross-cultural understanding by showcasing the diversity and similarities of braids across
-                      different cultures.
-                    </li>
-                    <li className="text-lg sm:text-xl leading-relaxed">
-                      Educate and inspire future generations about the rich history and artistry of braids.
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">How to Contribute</h3>
-                  <p className="text-lg sm:text-xl leading-relaxed">
-                    We invite you to contribute to the Braid Glossary by sharing your knowledge and experiences. You can
-                    submit:
-                  </p>
-                  <ul className="list-disc pl-6 mt-4 space-y-2">
-                    <li className="text-lg sm:text-xl leading-relaxed">
-                      Photos of braids with detailed descriptions of their names, origins, and techniques.
-                    </li>
-                    <li className="text-lg sm:text-xl leading-relaxed">
-                      Links to relevant articles, videos, and resources about specific braids.
-                    </li>
-                    <li className="text-lg sm:text-xl leading-relaxed">
-                      Personal memories, stories, and traditions associated with braids.
-                    </li>
-                  </ul>
-                  <p className="text-lg sm:text-xl leading-relaxed mt-4">
-                    Your contributions will help us build a more comprehensive and representative glossary for everyone.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Demo Mode</h3>
-                  <p className="text-lg sm:text-xl leading-relaxed">
-                    This glossary is currently running in demo mode. Some features, such as image uploads and account
-                    creation, may be limited. We appreciate your understanding as we continue to develop and improve the
-                    platform.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Contact Us</h3>
-                  <p className="text-lg sm:text-xl leading-relaxed">
-                    If you have any questions, suggestions, or feedback, please don't hesitate to contact us at{" "}
-                    <a href="mailto:info@dataassembly.org" className="text-blue-600 hover:underline">
-                      info@dataassembly.org
-                    </a>
-                    .
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Detail Modal */}
-      {showDetailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-4xl relative shadow-xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
-            <button
-              onClick={() => setShowDetailModal(null)}
-              className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
-            >
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-
-            <div className="p-6 sm:p-8 lg:p-12">
-              <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">{showDetailModal.braid_name}</h2>
-
-              <div className="space-y-6 stick-no-bills text-black">
-                {showDetailModal.image_url && (
-                  <div className="relative">
-                    <img
-                      src={showDetailModal.image_url || "/placeholder.svg"}
-                      alt={showDetailModal.braid_name}
-                      className="w-full h-auto object-cover rounded-md"
-                    />
-                  </div>
-                )}
-
-                {showDetailModal.alt_names && (
-                  <div>
-                    <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Alternative Names</h3>
-                    <p className="text-lg sm:text-xl leading-relaxed">{showDetailModal.alt_names}</p>
-                  </div>
-                )}
-
-                {showDetailModal.region && (
-                  <div>
-                    <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Cultural Origin</h3>
-                    <p className="text-lg sm:text-xl leading-relaxed">{showDetailModal.region}</p>
-                  </div>
-                )}
-
-                {showDetailModal.public_url && (
-                  <div>
-                    <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Learn More</h3>
-                    <a
-                      href={showDetailModal.public_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline text-lg sm:text-xl leading-relaxed"
-                    >
-                      {showDetailModal.link_title || showDetailModal.public_url}
-                    </a>
-                    {showDetailModal.link_description && (
-                      <p className="mt-2 text-lg sm:text-xl leading-relaxed">{showDetailModal.link_description}</p>
-                    )}
-                  </div>
-                )}
-
-                {showDetailModal.memory_title && (
-                  <div>
-                    <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Memory</h3>
-                    <h4 className="text-lg sm:text-xl leading-relaxed font-medium">{showDetailModal.memory_title}</h4>
-                    {showDetailModal.memory_description && (
-                      <p className="mt-2 text-lg sm:text-xl leading-relaxed">{showDetailModal.memory_description}</p>
-                    )}
-                  </div>
-                )}
-
-                <div>
-                  <h3 className="text-xl mb-3 stick-no-bills font-medium uppercase">Contributed By</h3>
-                  <p className="text-lg sm:text-xl leading-relaxed">{showDetailModal.contributor_name}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Image Modal */}
-      {showImageModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-4xl relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
-            <button
-              onClick={closeImageModal}
-              className="sticky top-4 right-4 ml-auto hover:opacity-70 transition-opacity z-50"
-            >
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-
-            <div className="p-6 sm:p-8 lg:p-12">
-              <img
-                src={showImageModal.url || "/placeholder.svg"}
-                alt={showImageModal.caption}
-                className="w-full h-auto object-contain rounded-md"
-              />
-              <p className="mt-4 text-center text-lg sm:text-xl stick-no-bills text-black">{showImageModal.caption}</p>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+                      onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}\
