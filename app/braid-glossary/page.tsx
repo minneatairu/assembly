@@ -1151,7 +1151,7 @@ export default function BraidGlossaryPage() {
                     <div className=" min-w-[400px] mx-auto space-y-0 bg-black">
                       {/* Photo Upload Area - Above form fields */}
                       <div
-                        className={`relative bg-[rgb(254,228,107)] border-black transition-colors border-0 ${
+                        className={`relative border-black transition-colors border-0 bg-amber-200 ${
                           isDragOver ? "bg-[rgb(244,218,97)]" : ""
                         } flex flex-col items-center justify-center cursor-pointer overflow-visible min-h-[400px] mb-4`}
                         onDragOver={handleDragOver}
@@ -1362,7 +1362,7 @@ export default function BraidGlossaryPage() {
                           <div className="min-h-16 px-4 bg-yellow-200 border-b-2 border-black">
                             <div className="py-2">
                               <div className="flex items-center justify-between">
-                                <label className="stick-no-bills text-black text-2xl">Braid Patterns</label>
+                                <label className="stick-no-bills text-black text-5xl">Braid Patterns</label>
                                 <button
                                   type="button"
                                   onClick={() => setShowBraidPatterns(!showBraidPatterns)}
@@ -1385,7 +1385,7 @@ export default function BraidGlossaryPage() {
                                 </button>
                               </div>
                               {showBraidPatterns && (
-                                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto mt-2">
+                                <div className="grid grid-cols-2 gap-2  overflow-y-auto mt-2">
                                   {braidPatternOptions.map((option) => (
                                     <label key={option.value} className="flex items-center gap-2 cursor-pointer">
                                       <input
@@ -1394,7 +1394,7 @@ export default function BraidGlossaryPage() {
                                         onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
                                         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
                                       />
-                                      <span className="stick-no-bills text-black text-sm">{option.label}</span>
+                                      <span className="stick-no-bills text-black text-5xl">{option.label}</span>
                                     </label>
                                   ))}
                                 </div>
@@ -1926,7 +1926,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Account Creation Toggle */}
                 <div className="p-4 px-0 py-0 bg-black">
-                  <label className="flex items-center gap-2 stick-no-bills text-yellow-200 mx-0 bg-black my-0">
+                  <label className="flex items-center gap-2 stick-no-bills text-yellow-200 mx-0 bg-black my-0 px-4 py-4">
                     <input
                       type="checkbox"
                       checked={showAccountCreation}
