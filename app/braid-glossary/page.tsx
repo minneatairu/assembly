@@ -1024,14 +1024,14 @@ export default function BraidGlossaryPage() {
                     >
                       {/* Show uploaded files or upload prompt */}
                       {formData.imageFiles.length > 0 ? (
-                        <div className="w-full h-full p-4 overflow-y-auto">
+                        <div className="w-full h-full overflow-y-auto">
                           {formData.imageFiles.length === 1 ? (
                             // Single image - full display with 3:4 aspect ratio
                             <div className="relative w-full mb-4" style={{ aspectRatio: "3/4" }}>
                               <img
                                 src={imagePreviews[0] || "/placeholder.svg"}
                                 alt="Preview"
-                                className="w-full h-full object-cover border-2 border-black"
+                                className="w-full h-full object-cover"
                               />
                               <button
                                 onClick={(e) => {
@@ -1051,14 +1051,13 @@ export default function BraidGlossaryPage() {
                               </button>
                             </div>
                           ) : (
-                            // Multiple images - slideshow with thumbnails
+                            // Multiple images - remove borders and gaps
                             <div className="space-y-4">
-                              {/* Main image display with 3:4 aspect ratio */}
                               <div className="relative w-full" style={{ aspectRatio: "3/4" }}>
                                 <img
                                   src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
                                   alt={`Preview ${currentImageIndex + 1}`}
-                                  className="w-full h-full object-cover border-2 border-black transition-opacity duration-300 ease-in-out"
+                                  className="w-full h-full object-cover transition-opacity duration-300 ease-in-out"
                                 />
                                 <button
                                   onClick={(e) => {
@@ -1118,8 +1117,8 @@ export default function BraidGlossaryPage() {
                                   </div>
                                 </div>
 
-                                {/* Thumbnail strip */}
-                                <div className="flex gap-2 overflow-x-auto pb-2">
+                                {/* Thumbnail strip - remove gaps */}
+                                <div className="flex gap-0 overflow-x-auto pb-2">
                                   {imagePreviews.map((preview, index) => (
                                     <button
                                       key={index}
@@ -1141,24 +1140,18 @@ export default function BraidGlossaryPage() {
                                   ))}
                                 </div>
                               </div>
-
-                              <div className="text-center">
-                                <p className="text-black text-sm stick-no-bills mb-2">
-                                  {formData.imageFiles.length} file{formData.imageFiles.length > 1 ? "s" : ""} selected
-                                </p>
-                                <p className="text-black text-xs stick-no-bills">
-                                  Click to add more files (max 5 total)
-                                </p>
-                              </div>
                             </div>
                           )}
 
-                          <div className="text-center">
-                            <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
-                              CLICK TO UPLOAD
-                            </p>
-                            <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
-                          </div>
+                          {/* Remove this upload text section when images are uploaded - delete this entire block */}
+                          {formData.imageFiles.length === 0 && (
+                            <div className="text-center">
+                              <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
+                                CLICK TO UPLOAD
+                              </p>
+                              <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <div className="text-center">
@@ -1531,7 +1524,7 @@ export default function BraidGlossaryPage() {
 
       {/* Detail Modal */}
       {showDetailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-300 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300 overflow-y-auto">
           <div className="bg-white w-full max-w-4xl relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
             <button
               onClick={() => setShowDetailModal(null)}
@@ -1540,76 +1533,142 @@ export default function BraidGlossaryPage() {
               <img src="/closing.svg" alt="Close" className="w-10 h-10 sm:w-12 sm:h-12" />
             </button>
 
-            <div className="p-8">
-              <h2 className="text-3xl font-bold stick-no-bills text-black uppercase mb-4">
-                {showDetailModal.braid_name}
-              </h2>
-
-              {/* Image Display */}
-              {showDetailModal.image_url && (
-                <div className="mb-4">
+            <div className="p-0">
+              {/* For photo submissions, show image first then title */}
+              {showDetailModal.submission_type === "photo" && showDetailModal.image_url ? (
+                <div>
                   <img
                     src={showDetailModal.image_url || "/placeholder.svg"}
                     alt={showDetailModal.braid_name}
-                    className="w-full h-auto object-cover border-2 border-black"
+                    className="w-full h-auto object-cover"
                   />
-                </div>
-              )}
+                  <div className="p-8">
+                    <h2 className="text-3xl font-bold stick-no-bills text-black uppercase mb-4">
+                      {showDetailModal.braid_name}
+                    </h2>
+                    {/* Rest of the content */}
+                    {/* Link Display */}
+                    {showDetailModal.public_url && (
+                      <div className="mb-4">
+                        <a
+                          href={showDetailModal.public_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline stick-no-bills"
+                        >
+                          {showDetailModal.link_title || showDetailModal.public_url}
+                        </a>
+                        {showDetailModal.link_description && (
+                          <p className="text-gray-700 stick-no-bills">{showDetailModal.link_description}</p>
+                        )}
+                      </div>
+                    )}
 
-              {/* Link Display */}
-              {showDetailModal.public_url && (
-                <div className="mb-4">
-                  <a
-                    href={showDetailModal.public_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline stick-no-bills"
-                  >
-                    {showDetailModal.link_title || showDetailModal.public_url}
-                  </a>
-                  {showDetailModal.link_description && (
-                    <p className="text-gray-700 stick-no-bills">{showDetailModal.link_description}</p>
+                    {/* Memory Display */}
+                    {showDetailModal.memory_title && (
+                      <div className="mb-4">
+                        <h3 className="text-xl font-semibold stick-no-bills text-black">
+                          {showDetailModal.memory_title}
+                        </h3>
+                        <p className="text-gray-700 stick-no-bills">{showDetailModal.memory_description}</p>
+                      </div>
+                    )}
+
+                    {/* Audio Playback */}
+                    {showDetailModal.audio_url && (
+                      <div className="mb-4">
+                        <audio controls>
+                          <source src={showDetailModal.audio_url} type="audio/webm" />
+                          Your browser does not support audio playback.
+                        </audio>
+                      </div>
+                    )}
+
+                    {/* Additional Information */}
+                    <div className="space-y-2">
+                      {showDetailModal.alt_names && (
+                        <div>
+                          <span className="font-medium stick-no-bills text-black uppercase">Alternative Names:</span>
+                          <span className="stick-no-bills text-black uppercase">{showDetailModal.alt_names}</span>
+                        </div>
+                      )}
+                      {showDetailModal.region && (
+                        <div>
+                          <span className="font-medium stick-no-bills text-black uppercase">Region:</span>
+                          <span className="stick-no-bills text-black uppercase">{showDetailModal.region}</span>
+                        </div>
+                      )}
+                      <div>
+                        <span className="font-medium stick-no-bills text-black uppercase">Contributor:</span>
+                        <span className="stick-no-bills text-black uppercase">{showDetailModal.contributor_name}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-8">
+                  <h2 className="text-3xl font-bold stick-no-bills text-black uppercase mb-4">
+                    {showDetailModal.braid_name}
+                  </h2>
+                  {/* Rest of content */}
+                  {/* Link Display */}
+                  {showDetailModal.public_url && (
+                    <div className="mb-4">
+                      <a
+                        href={showDetailModal.public_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline stick-no-bills"
+                      >
+                        {showDetailModal.link_title || showDetailModal.public_url}
+                      </a>
+                      {showDetailModal.link_description && (
+                        <p className="text-gray-700 stick-no-bills">{showDetailModal.link_description}</p>
+                      )}
+                    </div>
                   )}
-                </div>
-              )}
 
-              {/* Memory Display */}
-              {showDetailModal.memory_title && (
-                <div className="mb-4">
-                  <h3 className="text-xl font-semibold stick-no-bills text-black">{showDetailModal.memory_title}</h3>
-                  <p className="text-gray-700 stick-no-bills">{showDetailModal.memory_description}</p>
-                </div>
-              )}
+                  {/* Memory Display */}
+                  {showDetailModal.memory_title && (
+                    <div className="mb-4">
+                      <h3 className="text-xl font-semibold stick-no-bills text-black">
+                        {showDetailModal.memory_title}
+                      </h3>
+                      <p className="text-gray-700 stick-no-bills">{showDetailModal.memory_description}</p>
+                    </div>
+                  )}
 
-              {/* Audio Playback */}
-              {showDetailModal.audio_url && (
-                <div className="mb-4">
-                  <audio controls>
-                    <source src={showDetailModal.audio_url} type="audio/webm" />
-                    Your browser does not support audio playback.
-                  </audio>
-                </div>
-              )}
+                  {/* Audio Playback */}
+                  {showDetailModal.audio_url && (
+                    <div className="mb-4">
+                      <audio controls>
+                        <source src={showDetailModal.audio_url} type="audio/webm" />
+                        Your browser does not support audio playback.
+                      </audio>
+                    </div>
+                  )}
 
-              {/* Additional Information */}
-              <div className="space-y-2">
-                {showDetailModal.alt_names && (
-                  <div>
-                    <span className="font-medium stick-no-bills text-black uppercase">Alternative Names:</span>
-                    <span className="stick-no-bills text-black uppercase">{showDetailModal.alt_names}</span>
+                  {/* Additional Information */}
+                  <div className="space-y-2">
+                    {showDetailModal.alt_names && (
+                      <div>
+                        <span className="font-medium stick-no-bills text-black uppercase">Alternative Names:</span>
+                        <span className="stick-no-bills text-black uppercase">{showDetailModal.alt_names}</span>
+                      </div>
+                    )}
+                    {showDetailModal.region && (
+                      <div>
+                        <span className="font-medium stick-no-bills text-black uppercase">Region:</span>
+                        <span className="stick-no-bills text-black uppercase">{showDetailModal.region}</span>
+                      </div>
+                    )}
+                    <div>
+                      <span className="font-medium stick-no-bills text-black uppercase">Contributor:</span>
+                      <span className="stick-no-bills text-black uppercase">{showDetailModal.contributor_name}</span>
+                    </div>
                   </div>
-                )}
-                {showDetailModal.region && (
-                  <div>
-                    <span className="font-medium stick-no-bills text-black uppercase">Region:</span>
-                    <span className="stick-no-bills text-black uppercase">{showDetailModal.region}</span>
-                  </div>
-                )}
-                <div>
-                  <span className="font-medium stick-no-bills text-black uppercase">Contributor:</span>
-                  <span className="stick-no-bills text-black uppercase">{showDetailModal.contributor_name}</span>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
