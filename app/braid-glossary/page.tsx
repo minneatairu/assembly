@@ -655,9 +655,9 @@ export default function BraidGlossaryPage() {
   }, [audioUrl, imagePreviews])
 
   const submissionOptions = [
-    { value: "photo", label: "Photo" },
-    { value: "link", label: "Link" },
-    { value: "memory", label: "Memory" },
+    { value: "photo", label: "Photo [JPEG]" },
+    { value: "link", label: "Link [WEB]" },
+    { value: "memory", label: "Memory [MP4]" },
   ]
 
   const filterOptions = [
@@ -673,7 +673,7 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-0 left-0 right-0 z-20">
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
-            <div className="flex gap-4 border-2 border-black rounded-full p-4 bg-yellow-400">
+            <div className="flex gap-4 border-2 border-black rounded-none p-4 bg-yellow-400">
               <div className="relative">
                 <button
                   onClick={() => (window.location.href = "/")}
