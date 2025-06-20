@@ -58,7 +58,6 @@ export default function BraidGlossaryPage() {
     linkTitle: "",
     linkDescription: "",
     memoryTitle: "",
-    memoryDescription: "",
     agreeToShare: false,
   })
 
@@ -457,8 +456,12 @@ export default function BraidGlossaryPage() {
     }
 
     if (submissionType === "memory") {
-      if (!formData.memoryTitle.trim() || !formData.memoryDescription.trim()) {
-        setError("Please provide both a title and description for memory submissions.")
+      if (!formData.memoryTitle.trim()) {
+        setError("Please provide a title for memory submissions.")
+        return
+      }
+      if (!audioBlob) {
+        setError("Please record audio for memory submissions.")
         return
       }
     }
@@ -496,7 +499,7 @@ export default function BraidGlossaryPage() {
         link_title: submissionType === "link" ? formData.linkTitle : undefined,
         link_description: submissionType === "link" ? formData.linkDescription : undefined,
         memory_title: submissionType === "memory" ? formData.memoryTitle : undefined,
-        memory_description: formData.memoryDescription || undefined,
+        memory_description: undefined,
         contributor_name: formData.contributorName.trim() || "anonymous",
         audio_url: audioUrl || undefined,
         audio_notes: "Pronunciation guide", // Fixed description for pronunciation
@@ -518,7 +521,6 @@ export default function BraidGlossaryPage() {
         linkTitle: "",
         linkDescription: "",
         memoryTitle: "",
-        memoryDescription: "",
         agreeToShare: false,
       })
 
@@ -637,7 +639,7 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-0 left-0 right-0 z-20">
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
-            <div className="flex gap-4 border-2 border-black rounded-full p-4 bg-lime-400">
+            <div className="flex gap-4 border-2 border-black rounded-full p-4 bg-yellow-400">
               <div className="relative">
                 <button
                   onClick={() => (window.location.href = "/")}
@@ -887,6 +889,30 @@ export default function BraidGlossaryPage() {
                           </svg>
                         </div>
                       </div>
+
+                      {braid.submission_type === "memory" && braid.audio_url && (
+                        <div className="mt-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleAudio(braid.id, braid.audio_url!)
+                            }}
+                            className="flex items-center gap-2 text-black hover:text-gray-600 transition-colors"
+                            title={playingAudio[braid.id.toString()] ? "Pause memory" : "Play memory"}
+                          >
+                            {playingAudio[braid.id.toString()] ? (
+                              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            )}
+                            <span className="text-sm stick-no-bills uppercase">Play Memory</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )
@@ -961,157 +987,107 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-white animate-in fade-in duration-300 overflow-y-auto">
-          <div className="bg-white w-full max-w-5xl relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black my-8">
+          <div className="relative w-full max-w-5xl my-8">
             <button
               onClick={() => setShowForm(false)}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
+              className="absolute -top-12 right-0 text-black bg-white hover:bg-gray-100 p-2 transition-colors duration-200 z-10 border-2 border-black"
             >
-              <svg
-                className="w-12 h-12 sm:w-12 sm:h-12 lg:w-12 lg:h-12"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-
-            <div className="p-0">
-              {/* Custom Submission Type Dropdown */}
-              <div className="border-b-2 border-black relative w-1/4">
-                <button
-                  onClick={() => setShowDropdown(!showDropdown)}
-                  className="w-full h-16 px-4 bg-green-400 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl text-left flex items-center justify-between hover:bg-green-500 transition-colors"
-                >
-                  <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
-                  <svg
-                    width="12"
-                    height="8"
-                    viewBox="0 0 12 8"
-                    fill="none"
-                    className={`transition-transform ${showDropdown ? "rotate-180" : ""}`}
+            <div className="bg-white w-full relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
+              <div className="p-0">
+                {/* Custom Submission Type Dropdown */}
+                <div className="border-b-2 border-black relative w-1/4">
+                  <button
+                    onClick={() => setShowDropdown(!showDropdown)}
+                    className="w-full h-16 px-4 bg-green-400 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl text-left flex items-center justify-between hover:bg-green-500 transition-colors"
                   >
-                    <path
-                      d="M1 1L6 6L11 1"
-                      stroke="#000"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-
-                {showDropdown && (
-                  <div className="absolute top-full left-0 w-full bg-green-400 border-2 border-black border-t-0 z-20">
-                    {submissionOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => {
-                          setSubmissionType(option.value as "photo" | "link" | "memory")
-                          setShowDropdown(false)
-                        }}
-                        className={`w-full h-16 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors border-b border-black last:border-b-0 ${
-                          submissionType === option.value ? "bg-green-500" : ""
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Hidden file input */}
-              <input
-                id="file-input"
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-
-              {/* Conditional Layout Based on Submission Type */}
-              {submissionType === "photo" ? (
-                // Two-column layout for photo submissions
-                <div className="flex h-full">
-                  {/* Left Side - Photo Upload Area */}
-                  <div className="w-1/2">
-                    <div
-                      className={`relative bg-green-400 border-r-2 border-black transition-colors ${
-                        isDragOver ? "bg-green-500" : ""
-                      } flex flex-col items-center justify-center cursor-pointer overflow-visible h-full min-h-[500px]`}
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                      onDrop={handleDrop}
-                      onClick={() => document.getElementById("file-input")?.click()}
+                    <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
+                    <svg
+                      width="12"
+                      height="8"
+                      viewBox="0 0 12 8"
+                      fill="none"
+                      className={`transition-transform ${showDropdown ? "rotate-180" : ""}`}
                     >
-                      {/* Show uploaded files or upload prompt */}
-                      {formData.imageFiles.length > 0 ? (
-                        <div className="w-full h-full overflow-y-auto">
-                          {formData.imageFiles.length === 1 ? (
-                            // Single image - full display with 3:4 aspect ratio
-                            <div className="relative w-full mb-4" style={{ aspectRatio: "3/4" }}>
-                              <img
-                                src={imagePreviews[0] || "/placeholder.svg"}
-                                alt="Preview"
-                                className="w-full h-full object-cover"
-                              />
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  // Clean up the preview URL
-                                  URL.revokeObjectURL(imagePreviews[0])
-                                  setFormData((prev) => ({ ...prev, imageFiles: [] }))
-                                  setImagePreviews([])
-                                  // Reset file input
-                                  const fileInput = document.getElementById("file-input") as HTMLInputElement
-                                  if (fileInput) fileInput.value = ""
-                                }}
-                                className="absolute -top-2 -right-2 w-12 h-12 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
-                                title="Remove image"
-                              >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          ) : (
-                            // Multiple images - remove borders and gaps
-                            <div className="space-y-4">
-                              <div className="relative w-full" style={{ aspectRatio: "3/4" }}>
+                      <path
+                        d="M1 1L6 6L11 1"
+                        stroke="#000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {showDropdown && (
+                    <div className="absolute top-full left-0 w-full bg-green-400 border-2 border-black border-t-0 z-20">
+                      {submissionOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => {
+                            setSubmissionType(option.value as "photo" | "link" | "memory")
+                            setShowDropdown(false)
+                          }}
+                          className={`w-full h-16 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors border-b border-black last:border-b-0 ${
+                            submissionType === option.value ? "bg-green-500" : ""
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Hidden file input */}
+                <input
+                  id="file-input"
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+
+                {/* Conditional Layout Based on Submission Type */}
+                {submissionType === "photo" ? (
+                  // Two-column layout for photo submissions
+                  <div className="flex h-full">
+                    {/* Left Side - Photo Upload Area */}
+                    <div className="w-1/2">
+                      <div
+                        className={`relative bg-green-400 border-r-2 border-black transition-colors ${
+                          isDragOver ? "bg-green-500" : ""
+                        } flex flex-col items-center justify-center cursor-pointer overflow-visible h-full min-h-[500px]`}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        onClick={() => document.getElementById("file-input")?.click()}
+                      >
+                        {/* Show uploaded files or upload prompt */}
+                        {formData.imageFiles.length > 0 ? (
+                          <div className="w-full h-full overflow-y-auto">
+                            {formData.imageFiles.length === 1 ? (
+                              // Single image - full display with 3:4 aspect ratio
+                              <div className="relative w-full mb-4" style={{ aspectRatio: "3/4" }}>
                                 <img
-                                  src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
-                                  alt={`Preview ${currentImageIndex + 1}`}
-                                  className="w-full h-full object-cover transition-opacity duration-300 ease-in-out transition-all duration-500 ease-in-out"
+                                  src={imagePreviews[0] || "/placeholder.svg"}
+                                  alt="Preview"
+                                  className="w-full h-full object-cover"
                                 />
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    // Remove the current image
-                                    const newFiles = formData.imageFiles.filter((_, i) => i !== currentImageIndex)
-                                    const newPreviews = imagePreviews.filter((_, i) => i !== currentImageIndex)
-
-                                    // Clean up the removed preview URL
-                                    URL.revokeObjectURL(imagePreviews[currentImageIndex])
-
-                                    setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
-                                    setImagePreviews(newPreviews)
-
-                                    // Adjust current index if needed
-                                    if (currentImageIndex >= newFiles.length && newFiles.length > 0) {
-                                      setCurrentImageIndex(newFiles.length - 1)
-                                    } else if (newFiles.length === 0) {
-                                      setCurrentImageIndex(0)
-                                      // Reset file input if no files left
-                                      const fileInput = document.getElementById("file-input") as HTMLInputElement
-                                      if (fileInput) fileInput.value = ""
-                                    }
+                                    // Clean up the preview URL
+                                    URL.revokeObjectURL(imagePreviews[0])
+                                    setFormData((prev) => ({ ...prev, imageFiles: [] }))
+                                    setImagePreviews([])
+                                    // Reset file input
+                                    const fileInput = document.getElementById("file-input") as HTMLInputElement
+                                    if (fileInput) fileInput.value = ""
                                   }}
                                   className="absolute -top-2 -right-2 w-12 h-12 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
                                   title="Remove image"
@@ -1125,437 +1101,472 @@ export default function BraidGlossaryPage() {
                                     />
                                   </svg>
                                 </button>
+                              </div>
+                            ) : (
+                              // Multiple images - remove borders and gaps
+                              <div className="space-y-4">
+                                <div className="relative w-full" style={{ aspectRatio: "3/4" }}>
+                                  <img
+                                    src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
+                                    alt={`Preview ${currentImageIndex + 1}`}
+                                    className="w-full h-full object-cover transition-opacity duration-300 ease-in-out transition-all duration-500 ease-in-out"
+                                  />
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      // Remove the current image
+                                      const newFiles = formData.imageFiles.filter((_, i) => i !== currentImageIndex)
+                                      const newPreviews = imagePreviews.filter((_, i) => i !== currentImageIndex)
 
-                                {/* Image counter and navigation arrows - matching card slideshow style */}
-                                <div className="absolute top-0 left-0">
-                                  <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1 inline-block">
-                                    {currentImageIndex + 1} / {formData.imageFiles.length}
-                                  </div>
-                                  <div className="flex flex-col gap-1">
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        setCurrentImageIndex((prev) => prev - 1)
-                                      }}
-                                      className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
-                                      title="Previous image"
-                                    >
-                                      ←
-                                    </button>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        setCurrentImageIndex((prev) => prev + 1)
-                                      }}
-                                      className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
-                                      title="Next image"
-                                    >
-                                      →
-                                    </button>
-                                  </div>
-                                </div>
+                                      // Clean up the removed preview URL
+                                      URL.revokeObjectURL(imagePreviews[currentImageIndex])
 
-                                {/* Thumbnail strip - remove gaps */}
-                                <div className="flex gap-0 overflow-x-auto pb-2">
-                                  {imagePreviews.map((preview, index) => (
-                                    <button
-                                      key={index}
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        setCurrentImageIndex(index)
-                                      }}
-                                      className={`relative flex-shrink-0 w-16 h-16 transition-all ${
-                                        index === currentImageIndex ? "opacity-100" : "opacity-70 hover:opacity-90"
-                                      }`}
-                                      title={`View image ${index + 1}`}
-                                    >
-                                      <img
-                                        src={preview || "/placeholder.svg"}
-                                        alt={`Thumbnail ${index + 1}`}
-                                        className="w-full h-full object-cover"
+                                      setFormData((prev) => ({ ...prev, imageFiles: newFiles }))
+                                      setImagePreviews(newPreviews)
+
+                                      // Adjust current index if needed
+                                      if (currentImageIndex >= newFiles.length && newFiles.length > 0) {
+                                        setCurrentImageIndex(newFiles.length - 1)
+                                      } else if (newFiles.length === 0) {
+                                        setCurrentImageIndex(0)
+                                        // Reset file input if no files left
+                                        const fileInput = document.getElementById("file-input") as HTMLInputElement
+                                        if (fileInput) fileInput.value = ""
+                                      }
+                                    }}
+                                    className="absolute -top-2 -right-2 w-12 h-12 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
+                                    title="Remove image"
+                                  >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
                                       />
-                                    </button>
-                                  ))}
+                                    </svg>
+                                  </button>
+
+                                  {/* Image counter and navigation arrows - matching card slideshow style */}
+                                  <div className="absolute top-0 left-0">
+                                    <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1 inline-block">
+                                      {currentImageIndex + 1} / {formData.imageFiles.length}
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          setCurrentImageIndex((prev) => prev - 1)
+                                        }}
+                                        className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                        title="Previous image"
+                                      >
+                                        ←
+                                      </button>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          setCurrentImageIndex((prev) => prev + 1)
+                                        }}
+                                        className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                        title="Next image"
+                                      >
+                                        →
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                  {/* Thumbnail strip - remove gaps */}
+                                  <div className="flex gap-0 overflow-x-auto pb-2">
+                                    {imagePreviews.map((preview, index) => (
+                                      <button
+                                        key={index}
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          setCurrentImageIndex(index)
+                                        }}
+                                        className={`relative flex-shrink-0 w-16 h-16 transition-all ${
+                                          index === currentImageIndex ? "opacity-100" : "opacity-70 hover:opacity-90"
+                                        }`}
+                                        title={`View image ${index + 1}`}
+                                      >
+                                        <img
+                                          src={preview || "/placeholder.svg"}
+                                          alt={`Thumbnail ${index + 1}`}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </button>
+                                    ))}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
+                            )}
 
-                          {/* Remove this upload text section when images are uploaded - delete this entire block */}
-                          {formData.imageFiles.length === 0 && (
-                            <div className="text-center">
-                              <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
-                                CLICK TO UPLOAD
-                              </p>
-                              <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="text-center">
-                          <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
-                            CLICK TO UPLOAD
-                          </p>
-                          <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
-                        </div>
-                      )}
+                            {/* Remove this upload text section when images are uploaded - delete this entire block */}
+                            {formData.imageFiles.length === 0 && (
+                              <div className="text-center">
+                                <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
+                                  CLICK TO UPLOAD
+                                </p>
+                                <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-center">
+                            <p className="text-black text-center font-medium stick-no-bills mb-2 text-3xl sm:text-2xl md:text-3xl">
+                              CLICK TO UPLOAD
+                            </p>
+                            <p className="text-black text-sm stick-no-bills">(JPG, PNG, GIF, WebP - Max 5 files)</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Right Side - Form Fields for Photo */}
-                  <div className="w-1/2 flex flex-col">
-                    <div className="flex-1 flex flex-col min-h-[500px]">
-                      {/* Make input fields fill the height with fixed heights */}
-                      <input
-                        type="text"
-                        name="braidName"
-                        value={formData.braidName ?? ""}
-                        onChange={handleInputChange}
-                        placeholder="Braid name"
-                        className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
-                        required
-                      />
+                    {/* Right Side - Form Fields for Photo */}
+                    <div className="w-1/2 flex flex-col">
+                      <div className="flex-1 flex flex-col min-h-[500px]">
+                        {/* Make input fields fill the height with fixed heights */}
+                        <input
+                          type="text"
+                          name="braidName"
+                          value={formData.braidName ?? ""}
+                          onChange={handleInputChange}
+                          placeholder="Braid name"
+                          className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
+                          required
+                        />
 
-                      <input
-                        type="text"
-                        name="altNames"
-                        value={formData.altNames ?? ""}
-                        onChange={handleInputChange}
-                        placeholder="Alternative names"
-                        className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
-                      />
+                        <input
+                          type="text"
+                          name="altNames"
+                          value={formData.altNames ?? ""}
+                          onChange={handleInputChange}
+                          placeholder="Alternative names"
+                          className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
+                        />
 
-                      <input
-                        type="text"
-                        name="region"
-                        value={formData.region ?? ""}
-                        onChange={handleInputChange}
-                        placeholder="Cultural origin"
-                        className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
-                        required
-                      />
+                        <input
+                          type="text"
+                          name="region"
+                          value={formData.region ?? ""}
+                          onChange={handleInputChange}
+                          placeholder="Cultural origin"
+                          className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
+                          required
+                        />
 
-                      <input
-                        type="text"
-                        name="contributorName"
-                        value={formData.contributorName ?? ""}
-                        onChange={handleInputChange}
-                        placeholder="Contributor name"
-                        className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
-                      />
+                        <input
+                          type="text"
+                          name="contributorName"
+                          value={formData.contributorName ?? ""}
+                          onChange={handleInputChange}
+                          placeholder="Contributor name"
+                          className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
+                        />
 
-                      <input
-                        type="url"
-                        name="imageUrl"
-                        value={formData.imageUrl ?? ""}
-                        onChange={handleInputChange}
-                        placeholder="Image URL (optional)"
-                        className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
-                      />
+                        <input
+                          type="url"
+                          name="imageUrl"
+                          value={formData.imageUrl ?? ""}
+                          onChange={handleInputChange}
+                          placeholder="Image URL (optional)"
+                          className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
+                        />
 
-                      {/* Audio Recording */}
-                      {audioSupported && (
-                        <div className="h-20 flex items-center">
-                          {!isRecording && !audioBlob && (
-                            <button
-                              type="button"
-                              onClick={startRecording}
-                              className="w-full h-full px-4 bg-gray-50 hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills text-3xl sm:text-2xl md:text-3xl"
-                            >
-                              Record pronunciation
-                            </button>
-                          )}
-                          {isRecording && (
-                            <div className="w-full h-full px-4 bg-red-50 flex items-center justify-between">
-                              <span className="text-red-600 stick-no-bills text-2xl">Recording...</span>
+                        {/* Audio Recording */}
+                        {audioSupported && (
+                          <div className="h-20 flex items-center">
+                            {!isRecording && !audioBlob && (
                               <button
                                 type="button"
-                                onClick={stopRecording}
-                                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 stick-no-bills"
+                                onClick={startRecording}
+                                className="w-full h-full px-4 bg-gray-50 hover:bg-gray-100 text-black text-left font-normal transition-colors stick-no-bills text-3xl sm:text-2xl md:text-3xl"
                               >
-                                Stop
+                                Record pronunciation
                               </button>
-                            </div>
-                          )}
-                          {audioBlob && (
-                            <div className="w-full h-full px-4 bg-green-50 flex items-center justify-between">
-                              <span className="text-green-600 stick-no-bills text-2xl">Recorded!</span>
-                              <button
-                                type="button"
-                                onClick={clearRecording}
-                                className="px-4 py-2 bg-gray-400 text-white hover:bg-gray-500 stick-no-bills"
-                              >
-                                Clear
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                            )}
+                            {isRecording && (
+                              <div className="w-full h-full px-4 bg-red-50 flex items-center justify-between">
+                                <span className="text-red-600 stick-no-bills text-2xl">Recording...</span>
+                                <button
+                                  type="button"
+                                  onClick={stopRecording}
+                                  className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 stick-no-bills"
+                                >
+                                  Stop
+                                </button>
+                              </div>
+                            )}
+                            {audioBlob && (
+                              <div className="w-full h-full px-4 bg-green-50 flex items-center justify-between">
+                                <span className="text-green-600 stick-no-bills text-2xl">Recorded!</span>
+                                <button
+                                  type="button"
+                                  onClick={clearRecording}
+                                  className="px-4 py-2 bg-gray-400 text-white hover:bg-gray-500 stick-no-bills"
+                                >
+                                  Clear
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                // Single-column layout for link and memory submissions
-                <div className="w-full">
-                  {submissionType === "link" ? (
-                    // Link Form - Full Width
-                    <div className="bg-white p-8">
-                      <div className="max-w-2xl mx-auto space-y-0">
-                        {/* Link Title */}
-                        <div className="relative">
+                ) : (
+                  // Single-column layout for link and memory submissions
+                  <div className="w-full">
+                    {submissionType === "link" ? (
+                      // Link Form - Full Width
+                      <div className="bg-white p-8">
+                        <div className="max-w-2xl mx-auto space-y-0">
+                          {/* Link Title */}
+                          <div className="relative">
+                            <input
+                              type="text"
+                              name="linkTitle"
+                              value={formData.linkTitle ?? ""}
+                              onChange={handleInputChange}
+                              placeholder="Title"
+                              className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                              required
+                            />
+                          </div>
+
+                          {/* Link URL */}
+                          <input
+                            type="url"
+                            name="linkUrl"
+                            value={formData.linkUrl ?? ""}
+                            onChange={handleInputChange}
+                            placeholder="URL"
+                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            required={submissionType === "link"}
+                          />
+
+                          {/* Link Description */}
+                          <div className="relative">
+                            <textarea
+                              name="linkDescription"
+                              value={formData.linkDescription ?? ""}
+                              onChange={handleInputChange}
+                              placeholder="Description"
+                              rows={4}
+                              className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
+                            />
+                            <span className="absolute right-4 top-4 text-gray-400 stick-no-bills text-sm">
+                              Optional
+                            </span>
+                          </div>
+
+                          {/* Basic Info for Link */}
                           <input
                             type="text"
-                            name="linkTitle"
-                            value={formData.linkTitle ?? ""}
+                            name="contributorName"
+                            value={formData.contributorName ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Title"
+                            placeholder="Contributor name"
                             className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
                             required
                           />
                         </div>
-
-                        {/* Link URL */}
-                        <input
-                          type="url"
-                          name="linkUrl"
-                          value={formData.linkUrl ?? ""}
-                          onChange={handleInputChange}
-                          placeholder="URL"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                          required={submissionType === "link"}
-                        />
-
-                        {/* Link Description */}
-                        <div className="relative">
-                          <textarea
-                            name="linkDescription"
-                            value={formData.linkDescription ?? ""}
-                            onChange={handleInputChange}
-                            placeholder="Description"
-                            rows={4}
-                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
-                          />
-                          <span className="absolute right-4 top-4 text-gray-400 stick-no-bills text-sm">Optional</span>
-                        </div>
-
-                        {/* Basic Info for Link */}
-                        <input
-                          type="text"
-                          name="contributorName"
-                          value={formData.contributorName ?? ""}
-                          onChange={handleInputChange}
-                          placeholder="Contributor name"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                          required
-                        />
                       </div>
-                    </div>
-                  ) : (
-                    // Memory Form - Full Width
-                    <div className="bg-white p-8">
-                      <div className="max-w-2xl mx-auto space-y-0">
-                        {/* Memory Title */}
-                        <input
-                          type="text"
-                          name="memoryTitle"
-                          value={formData.memoryTitle ?? ""}
-                          onChange={handleInputChange}
-                          placeholder="Memory title"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                          required={submissionType === "memory"}
-                        />
+                    ) : (
+                      // Memory Form - Full Width
+                      <div className="bg-white p-8">
+                        <div className="max-w-2xl mx-auto space-y-0">
+                          {/* Memory Title */}
+                          <input
+                            type="text"
+                            name="memoryTitle"
+                            value={formData.memoryTitle ?? ""}
+                            onChange={handleInputChange}
+                            placeholder="Memory title"
+                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            required={submissionType === "memory"}
+                          />
 
-                        {/* Memory Description */}
-                        <textarea
-                          name="memoryDescription"
-                          value={formData.memoryDescription ?? ""}
-                          onChange={handleInputChange}
-                          placeholder="Describe your memory"
-                          rows={8}
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
-                          required={submissionType === "memory"}
-                        />
-
-                        {/* Audio Recording for Memory */}
-                        {audioSupported && (
-                          <div className="bg-white p-4 border border-gray-300">
-                            <h4 className="stick-no-bills text-black font-medium mb-3">
-                              Record Your Memory (Optional)
-                            </h4>
-                            <div className="flex items-center gap-3">
-                              {!isRecording && !audioBlob && (
-                                <button
-                                  type="button"
-                                  onClick={startRecording}
-                                  className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium stick-no-bills border-2 border-black"
-                                >
-                                  Start Recording
-                                </button>
-                              )}
-
-                              {isRecording && (
-                                <div className="flex items-center gap-3">
+                          {/* Audio Recording for Memory */}
+                          {audioSupported && (
+                            <div className="bg-white p-4 border border-gray-300">
+                              <h4 className="stick-no-bills text-black font-medium mb-3">Record Your Memory</h4>
+                              <div className="flex items-center gap-3">
+                                {!isRecording && !audioBlob && (
                                   <button
                                     type="button"
-                                    onClick={stopRecording}
-                                    className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 text-sm font-medium stick-no-bills border-2 border-black"
+                                    onClick={startRecording}
+                                    className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium stick-no-bills border-2 border-black"
                                   >
-                                    Stop Recording
+                                    Start Recording
                                   </button>
-                                  <span className="text-red-600 text-sm font-mono stick-no-bills">
-                                    🔴 {formatTime(recordingTime)}
-                                  </span>
-                                </div>
-                              )}
+                                )}
 
-                              {audioBlob && (
-                                <div className="flex items-center gap-3">
-                                  <button
-                                    type="button"
-                                    onClick={clearRecording}
-                                    className="px-3 py-1 bg-gray-400 text-white hover:bg-gray-500 text-sm stick-no-bills border-2 border-black"
-                                  >
-                                    Clear
-                                  </button>
-                                  <span className="text-green-600 text-sm stick-no-bills">
-                                    ✓ Recorded ({formatTime(recordingTime)})
-                                  </span>
-                                </div>
+                                {isRecording && (
+                                  <div className="flex items-center gap-3">
+                                    <button
+                                      type="button"
+                                      onClick={stopRecording}
+                                      className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 text-sm font-medium stick-no-bills border-2 border-black"
+                                    >
+                                      Stop Recording
+                                    </button>
+                                    <span className="text-red-600 text-sm font-mono stick-no-bills">
+                                      🔴 {formatTime(recordingTime)}
+                                    </span>
+                                  </div>
+                                )}
+
+                                {audioBlob && (
+                                  <div className="flex items-center gap-3">
+                                    <button
+                                      type="button"
+                                      onClick={clearRecording}
+                                      className="px-3 py-1 bg-gray-400 text-white hover:bg-gray-500 text-sm stick-no-bills border-2 border-black"
+                                    >
+                                      Clear
+                                    </button>
+                                    <span className="text-green-600 text-sm stick-no-bills">
+                                      ✓ Recorded ({formatTime(recordingTime)})
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {audioUrl && (
+                                <audio controls className="w-full mt-4">
+                                  <source src={audioUrl} type="audio/webm" />
+                                  Your browser does not support audio playback.
+                                </audio>
                               )}
                             </div>
+                          )}
 
-                            {audioUrl && (
-                              <audio controls className="w-full mt-4">
-                                <source src={audioUrl} type="audio/webm" />
-                                Your browser does not support audio playback.
-                              </audio>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Basic Info for Memory */}
-                        <input
-                          type="text"
-                          name="contributorName"
-                          value={formData.contributorName ?? ""}
-                          onChange={handleInputChange}
-                          placeholder="Contributor name"
-                          className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                          required
-                        />
+                          {/* Basic Info for Memory */}
+                          <input
+                            type="text"
+                            name="contributorName"
+                            value={formData.contributorName ?? ""}
+                            onChange={handleInputChange}
+                            placeholder="Contributor name"
+                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Status Messages for Single Column */}
-                  {error && (
-                    <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mx-8 stick-no-bills">
-                      {error}
-                    </div>
-                  )}
+                    {/* Status Messages for Single Column */}
+                    {error && (
+                      <div className="p-4 bg-red-50 border-2 border-black text-red-700 text-sm mx-8 stick-no-bills">
+                        {error}
+                      </div>
+                    )}
 
-                  {uploadStatus && (
-                    <div
-                      className={`p-4 text-sm mx-8 border-2 border-black stick-no-bills ${
-                        uploadStatus.includes("failed") || uploadStatus.includes("error")
-                          ? "bg-orange-50 text-orange-700"
-                          : uploadStatus.includes("successfully")
-                            ? "bg-green-50 text-green-700"
-                            : "bg-blue-50 text-blue-700"
-                      }`}
-                    >
-                      {uploadStatus}
-                    </div>
-                  )}
-                </div>
-              )}
+                    {uploadStatus && (
+                      <div
+                        className={`p-4 text-sm mx-8 border-2 border-black stick-no-bills ${
+                          uploadStatus.includes("failed") || uploadStatus.includes("error")
+                            ? "bg-orange-50 text-orange-700"
+                            : uploadStatus.includes("successfully")
+                              ? "bg-green-50 text-green-700"
+                              : "bg-blue-50 text-blue-700"
+                        }`}
+                      >
+                        {uploadStatus}
+                      </div>
+                    )}
+                  </div>
+                )}
 
-              {/* Agreement Checkbox - Full Width */}
-              <div className="flex items-start gap-3 p-4">
-                <input
-                  type="checkbox"
-                  id="agreeToShare"
-                  name="agreeToShare"
-                  checked={formData.agreeToShare}
-                  onChange={handleInputChange}
-                  className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
-                  required
-                />
-                <label htmlFor="agreeToShare" className="stick-no-bills text-black leading-relaxed">
-                  I agree to submit and share my braid information in the public glossary for educational and cultural
-                  preservation purposes.
-                </label>
-              </div>
-
-              {/* Account Creation Toggle */}
-              <div className="p-4">
-                <label className="flex items-center gap-2 stick-no-bills text-black">
+                {/* Agreement Checkbox - Full Width */}
+                <div className="flex items-start gap-3 p-4">
                   <input
                     type="checkbox"
-                    checked={showAccountCreation}
-                    onChange={() => setShowAccountCreation(!showAccountCreation)}
-                    className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
-                  />
-                  Create an account to manage your submissions
-                </label>
-              </div>
-
-              {/* Account Creation Form */}
-              {showAccountCreation && (
-                <div className="p-4 space-y-4">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={accountData.email}
-                    onChange={(e) => setAccountData({ ...accountData, email: e.target.value })}
-                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                    id="agreeToShare"
+                    name="agreeToShare"
+                    checked={formData.agreeToShare}
+                    onChange={handleInputChange}
+                    className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                     required
                   />
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={accountData.password}
-                    onChange={(e) => setAccountData({ ...accountData, password: e.target.value })}
-                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                    required
-                  />
-                  <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={accountData.confirmPassword}
-                    onChange={(e) => setAccountData({ ...accountData, confirmPassword: e.target.value })}
-                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="First Name"
-                    value={accountData.firstName}
-                    onChange={(e) => setAccountData({ ...accountData, firstName: e.target.value })}
-                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Last Name"
-                    value={accountData.lastName}
-                    onChange={(e) => setAccountData({ ...accountData, lastName: e.target.value })}
-                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
-                    required
-                  />
+                  <label htmlFor="agreeToShare" className="stick-no-bills text-black leading-relaxed">
+                    I agree to submit and share my braid information in the public glossary for educational and cultural
+                    preservation purposes.
+                  </label>
                 </div>
-              )}
 
-              {/* Submit Button - Full Width */}
-              <div className="p-4">
-                <button
-                  type="submit"
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  className="w-full py-4 bg-green-400 text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors stick-no-bills border-2 border-black rounded-full font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {submitting ? "Submitting..." : "Submit Braid"}
-                </button>
+                {/* Account Creation Toggle */}
+                <div className="p-4">
+                  <label className="flex items-center gap-2 stick-no-bills text-black">
+                    <input
+                      type="checkbox"
+                      checked={showAccountCreation}
+                      onChange={() => setShowAccountCreation(!showAccountCreation)}
+                      className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
+                    />
+                    Create an account to manage your submissions
+                  </label>
+                </div>
+
+                {/* Account Creation Form */}
+                {showAccountCreation && (
+                  <div className="p-4 space-y-4">
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={accountData.email}
+                      onChange={(e) => setAccountData({ ...accountData, email: e.target.value })}
+                      className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                      required
+                    />
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      value={accountData.password}
+                      onChange={(e) => setAccountData({ ...accountData, password: e.target.value })}
+                      className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                      required
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirm Password"
+                      value={accountData.confirmPassword}
+                      onChange={(e) => setAccountData({ ...accountData, confirmPassword: e.target.value })}
+                      className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="First Name"
+                      value={accountData.firstName}
+                      onChange={(e) => setAccountData({ ...accountData, firstName: e.target.value })}
+                      className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Last Name"
+                      value={accountData.lastName}
+                      onChange={(e) => setAccountData({ ...accountData, lastName: e.target.value })}
+                      className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                      required
+                    />
+                  </div>
+                )}
+
+                {/* Submit Button - Full Width */}
+                <div className="p-4">
+                  <button
+                    type="submit"
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                    className="w-full py-4 bg-green-400 text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors stick-no-bills border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? "Submitting..." : "Submit Braid"}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
