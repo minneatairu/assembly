@@ -655,16 +655,16 @@ export default function BraidGlossaryPage() {
   }, [audioUrl, imagePreviews])
 
   const submissionOptions = [
-    { value: "photo", label: "Photo [JPEG]" },
-    { value: "link", label: "Link [WEB]" },
-    { value: "memory", label: "Memory [MP4]" },
+    { value: "photo", label: "Photo", superscript: "JPEG" },
+    { value: "link", label: "Link", superscript: "WEB" },
+    { value: "memory", label: "Memory", superscript: "MP4" },
   ]
 
   const filterOptions = [
     { value: "all", label: "All submissions" },
-    { value: "photo", label: "Photo" },
-    { value: "link", label: "Link" },
-    { value: "memory", label: "Memory" },
+    { value: "photo", label: "Photo", superscript: "JPEG" },
+    { value: "link", label: "Link", superscript: "WEB" },
+    { value: "memory", label: "Memory", superscript: "MP4" },
   ]
 
   return (
@@ -992,6 +992,7 @@ export default function BraidGlossaryPage() {
                     } ${index > 0 ? "border-t border-black" : ""} ${index === 0 ? "border-b border-black" : ""} ${index === filterOptions.length - 1 ? "" : "border-b border-black"}`}
                   >
                     {option.label}
+                    {option.superscript && <sup>[{option.superscript}]</sup>}
                     {option.value !== "all" && (
                       <span className="text-sm text-gray-600 block">
                         {braids.filter((b) => b.submission_type === option.value).length} submissions
@@ -1020,7 +1021,10 @@ export default function BraidGlossaryPage() {
                   onClick={() => setShowDropdown(!showDropdown)}
                   className="h-12 px-4 bg-yellow-400 border-2 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-yellow-500 transition-colors min-w-[200px]"
                 >
-                  <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
+                  <span>
+                    {submissionOptions.find((opt) => opt.value === submissionType)?.label}
+                    <sup>[{submissionOptions.find((opt) => opt.value === submissionType)?.superscript}]</sup>
+                  </span>
                   <svg
                     width="12"
                     height="8"
@@ -1052,6 +1056,7 @@ export default function BraidGlossaryPage() {
                         }`}
                       >
                         {option.label}
+                        <sup>[{option.superscript}]</sup>
                       </button>
                     ))}
                   </div>
