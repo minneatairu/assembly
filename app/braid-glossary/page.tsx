@@ -1606,7 +1606,7 @@ export default function BraidGlossaryPage() {
       {showDetailModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="min-h-screen flex items-start justify-center p-4">
-            <div className="relative w-full max-w-4xl shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
+            <div className="relative w-full max-w-md shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
               <button
                 onClick={() => setShowDetailModal(null)}
                 className="absolute top-4 right-4 text-black hover:text-gray-600 z-10 transition-colors duration-200"
@@ -1665,34 +1665,21 @@ export default function BraidGlossaryPage() {
                   </h2>
 
                   {/* Inline submission fields */}
-                  <div className="space-y-4">
-                    {/* Date and timestamp */}
-                    <div className="flex items-center gap-4">
-                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                        SUBMITTED
-                      </span>
-                      <span className="stick-no-bills text-black uppercase text-xl">
-                        {new Date(showDetailModal.created_at || Date.now()).toLocaleDateString()} at{" "}
-                        {new Date(showDetailModal.created_at || Date.now()).toLocaleTimeString()}
-                      </span>
-                    </div>
-
+                  <div className="space-y-0">
                     {/* Alternate Names - inline */}
                     {showDetailModal.alt_names && (
                       <div className="flex items-center gap-4">
                         <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
                           ALTERNATE NAMES
                         </span>
-                        <div className="flex flex-wrap gap-2">
-                          {showDetailModal.alt_names.split(",").map((name, index) => (
-                            <span
-                              key={index}
-                              className="px-3 py-1 bg-green-400 text-black text-sm stick-no-bills font-medium uppercase rounded-full"
-                            >
-                              {name.trim()}
-                            </span>
-                          ))}
-                        </div>
+                        <span className="stick-no-bills text-black uppercase text-xl">
+                          ({" "}
+                          {showDetailModal.alt_names
+                            .split(",")
+                            .map((name) => name.trim())
+                            .join(", ")}{" "}
+                          )
+                        </span>
                       </div>
                     )}
 
@@ -1702,7 +1689,9 @@ export default function BraidGlossaryPage() {
                         <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
                           REGION
                         </span>
-                        <span className="stick-no-bills text-black uppercase text-xl">{showDetailModal.region}</span>
+                        <span className="stick-no-bills text-black uppercase text-xl">
+                          ( {showDetailModal.region} )
+                        </span>
                       </div>
                     )}
 
@@ -1712,7 +1701,7 @@ export default function BraidGlossaryPage() {
                         CONTRIBUTOR
                       </span>
                       <span className="stick-no-bills text-black uppercase text-xl">
-                        {showDetailModal.contributor_name}
+                        ( {showDetailModal.contributor_name} )
                       </span>
                     </div>
 
@@ -1722,24 +1711,21 @@ export default function BraidGlossaryPage() {
                         <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
                           PRONUNCIATION
                         </span>
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                            className="text-black hover:text-gray-600 transition-colors"
-                            title={playingAudio[showDetailModal.id.toString()] ? "Pause audio" : "Play audio"}
-                          >
-                            {playingAudio[showDetailModal.id.toString()] ? (
-                              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                              </svg>
-                            ) : (
-                              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
-                            )}
-                          </button>
-                          <span className="stick-no-bills text-black text-sm">Audio recording available</span>
-                        </div>
+                        <button
+                          onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
+                          className="text-black hover:text-gray-600 transition-colors"
+                          title={playingAudio[showDetailModal.id.toString()] ? "Pause audio" : "Play audio"}
+                        >
+                          {playingAudio[showDetailModal.id.toString()] ? (
+                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          )}
+                        </button>
                       </div>
                     )}
 
@@ -1751,14 +1737,18 @@ export default function BraidGlossaryPage() {
                             <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
                               URL
                             </span>
-                            <a
-                              href={showDetailModal.public_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline stick-no-bills break-all"
-                            >
-                              {showDetailModal.public_url}
-                            </a>
+                            <span className="stick-no-bills text-black uppercase text-xl">
+                              ({" "}
+                              <a
+                                href={showDetailModal.public_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline break-all"
+                              >
+                                {showDetailModal.public_url}
+                              </a>{" "}
+                              )
+                            </span>
                           </div>
                         )}
                         {(showDetailModal as any).link_description && (
@@ -1766,7 +1756,9 @@ export default function BraidGlossaryPage() {
                             <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
                               DESCRIPTION
                             </span>
-                            <p className="stick-no-bills text-black">{(showDetailModal as any).link_description}</p>
+                            <span className="stick-no-bills text-black uppercase text-xl">
+                              ( {(showDetailModal as any).link_description} )
+                            </span>
                           </div>
                         )}
                       </>
@@ -1780,13 +1772,24 @@ export default function BraidGlossaryPage() {
                             <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
                               MEMORY
                             </span>
-                            <p className="stick-no-bills text-black leading-relaxed">
-                              {(showDetailModal as any).memory_description}
-                            </p>
+                            <span className="stick-no-bills text-black leading-relaxed uppercase text-xl">
+                              ( {(showDetailModal as any).memory_description} )
+                            </span>
                           </div>
                         )}
                       </>
                     )}
+
+                    {/* Date and timestamp - moved to last */}
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                        SUBMITTED
+                      </span>
+                      <span className="stick-no-bills text-black uppercase text-xl">
+                        ( {new Date(showDetailModal.created_at || Date.now()).toLocaleDateString()} at{" "}
+                        {new Date(showDetailModal.created_at || Date.now()).toLocaleTimeString()} )
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
