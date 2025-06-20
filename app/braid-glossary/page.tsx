@@ -765,6 +765,20 @@ export default function BraidGlossaryPage() {
           </div>
         )}
 
+        {/* Active Filter Button */}
+        {!loading && filterType !== "all" && (
+          <div className="max-w-4xl mx-auto mb-6">
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowFilter(true)}
+                className="bg-black text-white px-4 py-2 stick-no-bills text-sm uppercase hover:bg-gray-800 transition-colors"
+              >
+                {filterType} ({braids.filter((b) => b.submission_type === filterType).length})
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Gallery Grid - Masonry Layout */}
         {!loading && filteredBraids.length > 0 && (
           <div className="max-w-4xl mx-auto">
@@ -842,13 +856,34 @@ export default function BraidGlossaryPage() {
                       ) : (
                         // Title display for link and memory submissions - 16:9 aspect ratio
                         <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
-                          <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
-                            {braid.submission_type === "memory"
-                              ? (braid as any).memory_title || braid.braid_name || "Untitled Memory"
-                              : braid.submission_type === "link"
+                          {braid.submission_type === "memory" ? (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (braid.audio_url) {
+                                  toggleAudio(braid.id, braid.audio_url)
+                                }
+                              }}
+                              className="text-black hover:text-gray-600 transition-colors"
+                              title={playingAudio[braid.id.toString()] ? "Pause memory" : "Play memory"}
+                            >
+                              {playingAudio[braid.id.toString()] ? (
+                                <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                                </svg>
+                              ) : (
+                                <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              )}
+                            </button>
+                          ) : (
+                            <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                              {braid.submission_type === "link"
                                 ? (braid as any).link_title || braid.braid_name || "Untitled Link"
                                 : braid.braid_name}
-                          </h3>
+                            </h3>
+                          )}
                         </div>
                       )}
 
@@ -889,30 +924,6 @@ export default function BraidGlossaryPage() {
                           </svg>
                         </div>
                       </div>
-
-                      {braid.submission_type === "memory" && braid.audio_url && (
-                        <div className="mt-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              toggleAudio(braid.id, braid.audio_url!)
-                            }}
-                            className="flex items-center gap-2 text-black hover:text-gray-600 transition-colors"
-                            title={playingAudio[braid.id.toString()] ? "Pause memory" : "Play memory"}
-                          >
-                            {playingAudio[braid.id.toString()] ? (
-                              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                              </svg>
-                            ) : (
-                              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
-                            )}
-                            <span className="text-sm stick-no-bills uppercase">Play Memory</span>
-                          </button>
-                        </div>
-                      )}
                     </div>
                   </div>
                 )
@@ -951,33 +962,29 @@ export default function BraidGlossaryPage() {
               className="bg-white w-80 shadow-xl border-2 border-black animate-in slide-in-from-top-4 duration-300"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-6">
-                <h2 className="text-xl mb-4 stick-no-bills font-light uppercase">Filter Submissions</h2>
-
-                <div className="space-y-0">
-                  {filterOptions.map((option, index) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setFilterType(option.value as "all" | "photo" | "link" | "memory")
-                        setShowFilter(false)
-                      }}
-                      className={`w-full p-3 text-left stick-no-bills text-black text-lg border-2 border-black transition-colors ${
-                        filterType === option.value ? "bg-green-400 hover:bg-green-500" : "bg-gray-50 hover:bg-gray-100"
-                      } ${index > 0 ? "border-t-0" : ""}`}
-                    >
-                      {option.label}
-                      {option.value !== "all" && (
-                        <span className="text-sm text-gray-600 block">
-                          {braids.filter((b) => b.submission_type === option.value).length} submissions
-                        </span>
-                      )}
-                      {option.value === "all" && (
-                        <span className="text-sm text-gray-600 block">{braids.length} total submissions</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
+              <div className="space-y-0">
+                {filterOptions.map((option, index) => (
+                  <button
+                    key={option.value}
+                    onClick={() => {
+                      setFilterType(option.value as "all" | "photo" | "link" | "memory")
+                      setShowFilter(false)
+                    }}
+                    className={`w-full p-3 text-left stick-no-bills text-black text-lg border-2 border-black transition-colors ${
+                      filterType === option.value ? "bg-green-400 hover:bg-green-500" : "bg-gray-50 hover:bg-gray-100"
+                    } ${index > 0 ? "border-t-0" : ""}`}
+                  >
+                    {option.label}
+                    {option.value !== "all" && (
+                      <span className="text-sm text-gray-600 block">
+                        {braids.filter((b) => b.submission_type === option.value).length} submissions
+                      </span>
+                    )}
+                    {option.value === "all" && (
+                      <span className="text-sm text-gray-600 block">{braids.length} total submissions</span>
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
