@@ -648,11 +648,11 @@ export default function BraidGlossaryPage() {
                   onMouseEnter={() => setHoveredIcon("account")}
                   onMouseLeave={() => setHoveredIcon(null)}
                 >
-                  <img src="/userr.svg" alt="Account" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                  <img src="/cool.svg" alt="Cool" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
                 </button>
                 {hoveredIcon === "account" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    Login to your account
+                    Cool features and tools
                   </div>
                 )}
               </div>
