@@ -76,6 +76,9 @@ export default function BraidGlossaryPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentImageIndices, setCurrentImageIndices] = useState<{ [key: string]: number }>({})
 
+  // Audio duration state
+  const [audioDurations, setAudioDurations] = useState<{ [key: string]: string }>({})
+
   // Check audio support on mount
   useEffect(() => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -283,6 +286,28 @@ export default function BraidGlossaryPage() {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
+
+  // Get audio duration
+  const getAudioDuration = async (audioUrl: string, braidId: string | number) => {
+    try {
+      const audio = new Audio(audioUrl)
+      audio.preload = "metadata"
+
+      audio.onloadedmetadata = () => {
+        const duration = audio.duration
+        const minutes = Math.floor(duration / 60)
+        const seconds = Math.floor(duration % 60)
+        const formattedDuration = `${minutes}:${seconds.toString().padStart(2, "0")}`
+
+        setAudioDurations((prev) => ({
+          ...prev,
+          [braidId.toString()]: formattedDuration,
+        }))
+      }
+    } catch (error) {
+      console.error("Error loading audio duration:", error)
+    }
   }
 
   // Fetch braids
@@ -598,6 +623,15 @@ export default function BraidGlossaryPage() {
   useEffect(() => {
     fetchBraids()
   }, [])
+
+  // Load audio durations when braids change
+  useEffect(() => {
+    braids.forEach((braid) => {
+      if (braid.audio_url && !audioDurations[braid.id.toString()]) {
+        getAudioDuration(braid.audio_url, braid.id)
+      }
+    })
+  }, [braids])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -1674,15 +1708,34 @@ export default function BraidGlossaryPage() {
                             encodeURIComponent(showDetailModal.braid_name)
                         }}
                       />
+                    ) : showDetailModal.submission_type === "memory" ? (
+                      // Memory submissions show play button on yellow background
+                      <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
+                        <button
+                          onClick={() => {
+                            if (showDetailModal.audio_url) {
+                              toggleAudio(showDetailModal.id, showDetailModal.audio_url)
+                            }
+                          }}
+                          className="text-black hover:text-gray-600 transition-colors"
+                          title={playingAudio[showDetailModal.id.toString()] ? "Pause memory" : "Play memory"}
+                        >
+                          {playingAudio[showDetailModal.id.toString()] ? (
+                            <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
                     ) : (
-                      // Title display for link and memory submissions
+                      // Link submissions show title on yellow background
                       <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
                         <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
-                          {showDetailModal.submission_type === "memory"
-                            ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
-                            : showDetailModal.submission_type === "link"
-                              ? (showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"
-                              : showDetailModal.braid_name}
+                          {(showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"}
                         </h3>
                       </div>
                     )}
@@ -1692,7 +1745,9 @@ export default function BraidGlossaryPage() {
                   <div className="p-8 bg-white">
                     {/* Title under image */}
                     <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">
-                      {showDetailModal.braid_name}
+                      {showDetailModal.submission_type === "memory"
+                        ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
+                        : showDetailModal.braid_name}
                     </h2>
 
                     {/* Inline submission fields */}
@@ -1740,23 +1795,30 @@ export default function BraidGlossaryPage() {
                       {showDetailModal.audio_url && (
                         <div className="flex items-center gap-4">
                           <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                            PRONUNCIATION
+                            {showDetailModal.submission_type === "memory" ? "LISTENING TO MEMORY" : "PRONUNCIATION"}
                           </span>
-                          <button
-                            onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                            className="text-black hover:text-gray-600 transition-colors"
-                            title={playingAudio[showDetailModal.id.toString()] ? "Pause audio" : "Play audio"}
-                          >
-                            {playingAudio[showDetailModal.id.toString()] ? (
-                              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                              </svg>
-                            ) : (
-                              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
+                              className="text-black hover:text-gray-600 transition-colors"
+                              title={playingAudio[showDetailModal.id.toString()] ? "Pause audio" : "Play audio"}
+                            >
+                              {playingAudio[showDetailModal.id.toString()] ? (
+                                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                                </svg>
+                              ) : (
+                                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              )}
+                            </button>
+                            {audioDurations[showDetailModal.id.toString()] && (
+                              <span className="stick-no-bills text-black uppercase text-xl">
+                                ( {audioDurations[showDetailModal.id.toString()]} )
+                              </span>
                             )}
-                          </button>
+                          </div>
                         </div>
                       )}
 
