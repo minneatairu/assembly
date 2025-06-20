@@ -649,7 +649,7 @@ export default function BraidGlossaryPage() {
       {/* Main Content */}
       <div className="pt-32 px-8 pb-8">
         {/* Header */}
-        <div className="text-center mb-12"></div>
+        <div className="text-center mb-12">{/* Remove this entire header section */}</div>
 
         {/* Loading State */}
         {loading && (
@@ -838,8 +838,8 @@ export default function BraidGlossaryPage() {
               {filterType === "all" ? "No braids found" : `No ${filterType} submissions found`}
             </div>
             <p className="stick-no-bills text-gray-600 mb-6">
-              {filterType === "all" 
-                ? "Be the first to contribute to the glossary!" 
+              {filterType === "all"
+                ? "Be the first to contribute to the glossary!"
                 : `Be the first to add a ${filterType} submission!`}
             </p>
             <button
@@ -854,45 +854,40 @@ export default function BraidGlossaryPage() {
 
       {/* Filter Modal */}
       {showFilter && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-md relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
-            <button
-              onClick={() => setShowFilter(false)}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
-            >
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
+        <div className="fixed inset-0 z-30">
+          {/* Transparent overlay */}
+          <div className="absolute inset-0 bg-black/20" onClick={() => setShowFilter(false)} />
 
-            <div className="p-8">
-              <h2 className="text-2xl mb-6 stick-no-bills font-light uppercase">Filter Submissions</h2>
-              
-              <div className="space-y-4">
-                {filterOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => {
-                      setFilterType(option.value as "all" | "photo" | "link" | "memory")
-                      setShowFilter(false)
-                    }}
-                    className={`w-full p-4 text-left stick-no-bills text-black text-xl border-2 border-black transition-colors ${
-                      filterType === option.value 
-                        ? "bg-green-400 hover:bg-green-500" 
-                        : "bg-gray-50 hover:bg-gray-100"
-                    }`}
-                  >
-                    {option.label}
-                    {option.value !== "all" && (
-                      <span className="text-sm text-gray-600 block">
-                        {braids.filter(b => b.submission_type === option.value).length} submissions
-                      </span>
-                    )}
-                    {option.value === "all" && (
-                      <span className="text-sm text-gray-600 block">
-                        {braids.length} total submissions
-                      </span>
-                    )}
-                  </button>
-                ))}
+          {/* Filter dropdown positioned below menu */}
+          <div className="absolute top-32 left-8">
+            <div className="bg-white w-80 shadow-xl border-2 border-black animate-in slide-in-from-top-4 duration-300">
+              <div className="p-6">
+                <h2 className="text-xl mb-4 stick-no-bills font-light uppercase">Filter Submissions</h2>
+
+                <div className="space-y-2">
+                  {filterOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setFilterType(option.value as "all" | "photo" | "link" | "memory")
+                        setShowFilter(false)
+                      }}
+                      className={`w-full p-3 text-left stick-no-bills text-black text-lg border-2 border-black transition-colors ${
+                        filterType === option.value ? "bg-green-400 hover:bg-green-500" : "bg-gray-50 hover:bg-gray-100"
+                      }`}
+                    >
+                      {option.label}
+                      {option.value !== "all" && (
+                        <span className="text-sm text-gray-600 block">
+                          {braids.filter((b) => b.submission_type === option.value).length} submissions
+                        </span>
+                      )}
+                      {option.value === "all" && (
+                        <span className="text-sm text-gray-600 block">{braids.length} total submissions</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1300,7 +1295,9 @@ export default function BraidGlossaryPage() {
                         {/* Audio Recording for Memory */}
                         {audioSupported && (
                           <div className="bg-white p-4 border border-gray-300">
-                            <h4 className="stick-no-bills text-black font-medium mb-3">Record Your Memory (Optional)</h4>
+                            <h4 className="stick-no-bills text-black font-medium mb-3">
+                              Record Your Memory (Optional)
+                            </h4>
                             <div className="flex items-center gap-3">
                               {!isRecording && !audioBlob && (
                                 <button
@@ -1482,17 +1479,15 @@ export default function BraidGlossaryPage() {
               </div>
 
               {/* Submit Button - Full Width */}
-              <div className="p-4">
+              <form onSubmit={handleSubmit}>
                 <button
                   type="submit"
-                  disabled={submitting}
-                  className={`w-full h-16 bg-green-400 text-black text-3xl sm:text-2xl md:text-3xl font-bold stick-no-bills hover:bg-green-500 transition-colors border-2 border-black ${
-                    submitting ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  disabled={submitting || !formData.agreeToShare}
+                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-t-2 border-black text-5xl"
                 >
-                  {submitting ? "Submitting..." : "SUBMIT BRAID"}
+                  {submitting ? "SHARING..." : "SHARE"}
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -1500,148 +1495,112 @@ export default function BraidGlossaryPage() {
 
       {/* Image Modal */}
       {showImageModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in duration-300">
-          <div className="relative bg-white max-w-4xl max-h-screen overflow-auto">
-            <button
-              onClick={closeImageModal}
-              className="absolute top-4 right-4 text-black hover:text-gray-600 z-10 transition-colors duration-200"
-            >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 animate-in fade-in duration-300">
+          <div className="relative bg-white max-w-4xl max-h-screen overflow-auto p-8 animate-in slide-in-from-bottom-4 duration-300">
+            <button onClick={closeImageModal} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
               <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
-            <img src={showImageModal.url || "/placeholder.svg"} alt={showImageModal.caption} className="w-full h-auto" />
-            <div className="p-4 stick-no-bills text-black">{showImageModal.caption}</div>
+            <img
+              src={showImageModal.url || "/placeholder.svg"}
+              alt={showImageModal.caption}
+              className="w-full object-contain"
+            />
+            <p className="mt-4 text-center text-gray-800 stick-no-bills">{showImageModal.caption}</p>
           </div>
         </div>
       )}
 
       {/* Info Modal */}
       {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in duration-300">
-          <div className="relative bg-white w-full max-w-3xl max-h-screen overflow-auto p-8 border-2 border-black">
-            <button
-              onClick={closeInfoModal}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
-            >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 animate-in fade-in duration-300">
+          <div className="relative bg-white max-w-4xl max-h-screen overflow-auto p-8 animate-in slide-in-from-bottom-4 duration-300">
+            <button onClick={closeInfoModal} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
               <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
-
-            <h2 className="text-4xl mb-6 stick-no-bills text-black uppercase">About the Braid Glossary</h2>
-
-            <div className="space-y-6 stick-no-bills text-black text-xl">
-              <p>
-                The Braid Glossary is a community-driven project dedicated to documenting and preserving the diverse
-                world of braids.
-              </p>
-              <p>
-                Our mission is to create a comprehensive resource that celebrates the cultural significance, history, and
-                techniques of braids from around the globe.
-              </p>
-              <p>
-                We invite you to explore the glossary, discover new braids, and contribute your knowledge to help us
-                expand this valuable resource.
-              </p>
-              <p>
-                Whether you're a seasoned braider, a cultural enthusiast, or simply curious, we hope you find the Braid
-                Glossary informative and inspiring.
-              </p>
-              <p>
-                Thank you for being a part of this project!
-              </p>
-            </div>
+            <h2 className="text-3xl mb-4 stick-no-bills">About the Braid Glossary</h2>
+            <p className="mb-4 stick-no-bills">
+              This glossary is a community-driven project to document and preserve information about different types of
+              braids from around the world.
+            </p>
+            <p className="mb-4 stick-no-bills">
+              You can use this glossary to learn about different braids, their origins, and their cultural significance.
+              You can also contribute to the glossary by submitting information about braids that you know.
+            </p>
+            <h3 className="text-2xl mb-2 stick-no-bills">How to Contribute</h3>
+            <p className="mb-4 stick-no-bills">
+              To contribute to the glossary, simply click the "Add a Braid" button and fill out the form. You can submit
+              information about braids that you know, including their name, origin, and cultural significance.
+            </p>
+            <h3 className="text-2xl mb-2 stick-no-bills">Demo Mode</h3>
+            {demoStatus.isDemo ? (
+              <>
+                <p className="mb-4 stick-no-bills">You are currently in demo mode. Some features may be limited.</p>
+                {demoStatus.reason && <p className="mb-4 stick-no-bills">Reason: {demoStatus.reason}</p>}
+              </>
+            ) : (
+              <p className="mb-4 stick-no-bills">You are not in demo mode.</p>
+            )}
           </div>
         </div>
       )}
 
       {/* Detail Modal */}
       {showDetailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in duration-300">
-          <div className="relative bg-white w-full max-w-4xl max-h-screen overflow-auto border-2 border-black">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 animate-in fade-in duration-300">
+          <div className="relative bg-white max-w-4xl max-h-screen overflow-auto p-8 animate-in slide-in-from-bottom-4 duration-300">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
+              className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
             >
               <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
             </button>
 
-            <div className="p-8">
-              <h2 className="text-4xl mb-4 stick-no-bills text-black uppercase">{showDetailModal.braid_name}</h2>
+            <h2 className="text-3xl mb-4 stick-no-bills">{showDetailModal.braid_name}</h2>
 
-              {/* Image Display */}
-              {showDetailModal.image_url && (
-                <div className="mb-6">
-                  <img
-                    src={showDetailModal.image_url || "/placeholder.svg"}
-                    alt={showDetailModal.braid_name}
-                    className="w-full h-auto object-cover border-2 border-black"
-                  />
-                </div>
-              )}
+            {showDetailModal.image_url && (
+              <img
+                src={showDetailModal.image_url || "/placeholder.svg"}
+                alt={showDetailModal.braid_name}
+                className="w-full object-contain mb-4"
+              />
+            )}
 
-              {/* Alt Names */}
-              {showDetailModal.alt_names && (
-                <div className="mb-4">
-                  <h3 className="text-2xl stick-no-bills text-black uppercase">Alternative Names</h3>
-                  <p className="text-xl stick-no-bills text-black">{showDetailModal.alt_names}</p>
-                </div>
-              )}
+            <p className="mb-4 stick-no-bills">
+              <span className="font-bold stick-no-bills">Alternative Names:</span> {showDetailModal.alt_names}
+            </p>
+            <p className="mb-4 stick-no-bills">
+              <span className="font-bold stick-no-bills">Region:</span> {showDetailModal.region}
+            </p>
+            <p className="mb-4 stick-no-bills">
+              <span className="font-bold stick-no-bills">Contributor:</span> {showDetailModal.contributor_name}
+            </p>
 
-              {/* Region */}
-              {showDetailModal.region && (
-                <div className="mb-4">
-                  <h3 className="text-2xl stick-no-bills text-black uppercase">Cultural Origin</h3>
-                  <p className="text-xl stick-no-bills text-black">{showDetailModal.region}</p>
-                </div>
-              )}
+            {showDetailModal.public_url && (
+              <a
+                href={showDetailModal.public_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline stick-no-bills"
+              >
+                Visit Link
+              </a>
+            )}
 
-              {/* Contributor */}
-              <div className="mb-4">
-                <h3 className="text-2xl stick-no-bills text-black uppercase">Contributor</h3>
-                <p className="text-xl stick-no-bills text-black">{showDetailModal.contributor_name}</p>
-              
+            {showDetailModal.memory_description && (
+              <p className="mb-4 stick-no-bills">
+                <span className="font-bold stick-no-bills">Memory:</span> {showDetailModal.memory_description}
+              </p>
+            )}
 
-              {/* Link Details */}
-              {showDetailModal.public_url && showDetailModal.submission_type === "link" && (
-                <div className="mb-4">
-                  <h3 className="text-2xl stick-no-bills text-black uppercase">Link Details</h3>
-                  <a
-                    href={showDetailModal.public_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline text-xl stick-no-bills"
-                  >
-                    {showDetailModal.link_title || showDetailModal.public_url}
-                  </a>
-                  {showDetailModal.link_description && (
-                    <p className="text-xl stick-no-bills text-black">{showDetailModal.link_description}</p>
-                  )}
-                </div>
-              )}
-
-              {/* Memory Details */}
-              {showDetailModal.memory_title && showDetailModal.submission_type === "memory" && (
-                <div className="mb-4">
-                  <h3 className="text-2xl stick-no-bills text-black uppercase">Memory Details</h3>
-                  <h4 className="text-xl stick-no-bills text-black">{showDetailModal.memory_title}</h4>
-                  {showDetailModal.memory_description && (
-                    <p className="text-xl stick-no-bills text-black">{showDetailModal.memory_description}</p>
-                  )}
-                </div>
-              )}
-
-              {/* Audio Playback */}
-              {showDetailModal.audio_url && (
-                <div>
-                  <h3 className="text-2xl stick-no-bills text-black uppercase">Pronunciation</h3>
-                  <audio controls className="w-full">
-                    <source src={showDetailModal.audio_url} type="audio/webm" />
-                    Your browser does not support audio playback.
-                  </audio>
-                </div>
-              )}
-            </div>
+            {showDetailModal.audio_url && (
+              <audio controls className="w-full">
+                <source src={showDetailModal.audio_url} type="audio/webm" />
+                Your browser does not support audio playback.
+              </audio>
+            )}
           </div>
         </div>
       )}
     </div>
-  )\
+  )
 }
