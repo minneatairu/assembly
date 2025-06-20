@@ -835,41 +835,27 @@ export default function BraidGlossaryPage() {
                           {braid.braid_name}
                         </h3>
                       ) : (
-                        <p className="text-sm stick-no-bills text-gray-600 mb-2">
+                        <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase mb-2">
                           {braid.submission_type === "memory"
-                            ? (braid as any).memory_description?.substring(0, 100) + "..." || "Memory submission"
+                            ? (braid as any).memory_title || braid.braid_name || "Untitled Memory"
                             : braid.submission_type === "link"
-                              ? (braid as any).link_description?.substring(0, 100) + "..." || "Link submission"
-                              : ""}
-                        </p>
+                              ? (braid as any).link_title || braid.braid_name || "Untitled Link"
+                              : braid.braid_name}
+                        </h3>
                       )}
 
-                      {braid.alt_names && braid.submission_type === "photo" && (
-                        <div className="flex flex-wrap gap-1 mb-2">
-                          {braid.alt_names
-                            .split(",")
-                            .slice(0, 2)
-                            .map((name, index) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 bg-green-400 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
-                              >
-                                {name.trim()}
-                              </span>
-                            ))}
-                        </div>
-                      )}
-
-                      <div className="space-y-1 stick-no-bills text-xs text-gray-600">
-                        {braid.region && (
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium text-black uppercase">REGION:</span>
-                            <span className="text-black uppercase">{braid.region}</span>
-                          </div>
-                        )}
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-black uppercase">CONTRIBUTOR:</span>
+                      {/* Only show contributor name */}
+                      <div className="flex items-center justify-between">
+                        <div className="stick-no-bills text-xs text-gray-600">
+                          <span className="font-medium text-black uppercase">CONTRIBUTOR: </span>
                           <span className="text-black uppercase">{braid.contributor_name}</span>
+                        </div>
+
+                        {/* Plus icon */}
+                        <div className="w-6 h-6 bg-black text-white flex items-center justify-center">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
                         </div>
                       </div>
                     </div>
@@ -1618,9 +1604,9 @@ export default function BraidGlossaryPage() {
 
       {/* Detail Modal */}
       {showDetailModal && (
-        <div className="fixed inset-0 z-50 bg-white overflow-y-auto">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="min-h-screen flex items-start justify-center p-4">
-            <div className="relative bg-white w-full max-w-4xl shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
+            <div className="relative w-full max-w-4xl shadow-lg animate-in slide-in-from-bottom-4 duration-300 border-2 border-black bg-white">
               <button
                 onClick={() => setShowDetailModal(null)}
                 className="absolute top-4 right-4 text-black hover:text-gray-600 z-10 transition-colors duration-200"
@@ -1672,7 +1658,7 @@ export default function BraidGlossaryPage() {
                 </div>
 
                 {/* Content below image */}
-                <div className="p-8">
+                <div className="p-8 bg-white">
                   {/* Title under image */}
                   <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">
                     {showDetailModal.braid_name}
@@ -1680,6 +1666,17 @@ export default function BraidGlossaryPage() {
 
                   {/* Inline submission fields */}
                   <div className="space-y-4">
+                    {/* Date and timestamp */}
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
+                        SUBMITTED
+                      </span>
+                      <span className="stick-no-bills text-black uppercase text-xl">
+                        {new Date(showDetailModal.created_at || Date.now()).toLocaleDateString()} at{" "}
+                        {new Date(showDetailModal.created_at || Date.now()).toLocaleTimeString()}
+                      </span>
+                    </div>
+
                     {/* Alternate Names - inline */}
                     {showDetailModal.alt_names && (
                       <div className="flex items-center gap-4">
