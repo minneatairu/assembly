@@ -13,85 +13,9 @@
   }
 }
 
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
-}
-
 .animate-fade-in {
   animation: fade-in 0.6s ease-out forwards;
   opacity: 0;
 }
 
-.animate-blink {
-  animation: blink 1s infinite;
-}
-
-.stick-no-bills {
-  font-family: "Stick No Bills", sans-serif;
-  font-weight: 500;
-}
-
-.tomorrow {
-  font-family: "Tomorrow", sans-serif;
-}
-
-.museo-moderno {
-  font-family: "MuseoModerno", sans-serif;
-}
-
-.inknut-antiqua {
-  font-family: "Inknut Antiqua", serif;
-}
-
-.crimson-pro {
-  font-family: "Crimson Pro", serif;
-}
-
-.boldonse {
-  font-family: "Boldonse", sans-serif;
-}
-
-/* label {
-  background: grey;
-} */
-
-/* Custom square checkboxes */
-input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid #374151;
-  background-color: #f3f4f6;
-  cursor: pointer;
-  position: relative;
-}
-
-input[type="checkbox"]:checked {
-  background-color: #10b981;
-  border-color: #10b981;
-}
-
-input[type="checkbox"]:checked::after {
-  content: "✓";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-input[type="checkbox"]:focus {
-  outline: 2px solid #10b981;
-  outline-offset: 2px;
-}
+label{background:grey}
