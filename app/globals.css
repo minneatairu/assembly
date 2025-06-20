@@ -75,6 +75,9 @@ input[type="checkbox"] {
   position: relative;
 }
 
+.bg-green-400 {    background-color: rgb(254 228 107/var(--tw-bg-opacity,1));
+}
+
 input[type="checkbox"]:checked {
   background-color: #000000;
   border-color: PINK;

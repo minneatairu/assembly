@@ -736,7 +736,7 @@ export default function BraidGlossaryPage() {
       <div className="fixed top-0 left-0 right-0 z-20">
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
-            <div className="flex gap-4 p-4 ">
+            <div className="flex gap-4 p-4 items-center">
               <div className="relative">
                 <button
                   onClick={() => setShowInfoModal(true)}
@@ -2122,7 +2122,7 @@ export default function BraidGlossaryPage() {
                   {/* Content below image */}
                   <div className="p-8 bg-white">
                     {/* Title under image */}
-                    <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">
+                    <h2 className="text-5xl font-bold mb-6 stick-no-bills text-black uppercase">
                       {showDetailModal.submission_type === "memory"
                         ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
                         : showDetailModal.braid_name}
