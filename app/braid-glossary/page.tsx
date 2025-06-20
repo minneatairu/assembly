@@ -949,7 +949,7 @@ export default function BraidGlossaryPage() {
               onClick={() => setShowForm(false)}
               className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
             >
-              <img src="/closing.svg" alt="Close" className="w-10 h-10 sm:w-12 sm:h-12" />
+              <span className="text-2xl font-bold">×</span>
             </button>
 
             <div className="p-0">
@@ -1047,7 +1047,7 @@ export default function BraidGlossaryPage() {
                                 className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
                                 title="Remove image"
                               >
-                                ×
+                                <img src="/closing.svg" alt="Remove" className="w-4 h-4" />
                               </button>
                             </div>
                           ) : (
@@ -1085,7 +1085,7 @@ export default function BraidGlossaryPage() {
                                   className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 text-white flex items-center justify-center hover:bg-red-700 text-sm font-bold"
                                   title="Remove image"
                                 >
-                                  ×
+                                  <img src="/closing.svg" alt="Remove" className="w-4 h-4" />
                                 </button>
 
                                 {/* Image counter and navigation arrows - matching card slideshow style */}
