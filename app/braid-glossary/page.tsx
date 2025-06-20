@@ -1297,7 +1297,7 @@ export default function BraidGlossaryPage() {
                       {/* Main Form Fields - Separate bordered section */}
                       <div className="border-black mb-3 mt-0 bg-yellow-300 border-0">
                         <div className="px-4 py-2 border-b-2 border-black bg-amber-200">
-                          <h3 className="stick-no-bills text-black font-semibold uppercase text-xl">
+                          <h3 className="stick-no-bills text-black font-semibold uppercase ">
                             Braid Information
                           </h3>
                         </div>
@@ -1393,7 +1393,7 @@ export default function BraidGlossaryPage() {
                       {/* Credit Section - Separate bordered section */}
                       <div className="border-2 border-black bg-gray-50 mb-6 border-none" style={{ marginTop: "20px" }}>
                         <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                          <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
+                          <h3 className="stick-no-bills text-black  font-semibold uppercase">Credits</h3>
                         </div>
 
                         <div className="p-0">
@@ -1475,7 +1475,7 @@ export default function BraidGlossaryPage() {
                           {/* Link Information - Bordered section */}
                           <div className="border-2 border-black bg-gray-50 mb-4">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
+                              <h3 className="stick-no-bills text-black font-semibold uppercase">
                                 Link Information
                               </h3>
                             </div>
@@ -1518,7 +1518,7 @@ export default function BraidGlossaryPage() {
                           {/* Basic Information - Separate bordered section */}
                           <div className="border-2 border-black mb-4 mt-6">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
+                              <h3 className="stick-no-bills text-black  font-semibold uppercase">
                                 Basic Information
                               </h3>
                             </div>
@@ -1597,7 +1597,7 @@ export default function BraidGlossaryPage() {
                           {/* Credit Section for Link - Separate bordered section */}
                           <div className="border-black bg-gray-50 mb-6 mt-6 border-0">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
+                              <h3 className="stick-no-bills text-black font-semibold uppercase">Credits</h3>
                             </div>
 
                             <div className="p-0">
@@ -1720,7 +1720,7 @@ export default function BraidGlossaryPage() {
                           {/* Basic Information - Separate bordered section */}
                           <div className="border-2 border-black bg-gray-50 mb-6 border-none">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
+                              <h3 className="stick-no-bills text-black font-semibold uppercase">
                                 Basic Information
                               </h3>
                             </div>
@@ -1800,7 +1800,7 @@ export default function BraidGlossaryPage() {
                           {/* Credit Section for Memory - Separate bordered section */}
                           <div className="border-2 border-black bg-gray-50 mb-6 border-none" style="margin-top: 20px">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
+                              <h3 className="stick-no-bills text-black font-semibold uppercase">Credits</h3>
                             </div>
 
                             <div className="p-0 bg-white">
@@ -1887,7 +1887,7 @@ export default function BraidGlossaryPage() {
                     className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                     required
                   />
-                  <label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-black">
+<label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-black uppercase">
                     I certify that I have the rights to submit this braid for inclusion in The Braid Intelligence
                     Dataset (B.I.D.).
                   </label>
@@ -1904,7 +1904,7 @@ export default function BraidGlossaryPage() {
                     className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                     required
                   />
-                  <label htmlFor="licenseCheck" className="stick-no-bills leading-relaxed text-black leading-6">
+                  <label htmlFor="licenseCheck" className="stick-no-bills leading-relaxed text-black leading-6 uppercase">
                     This braid is either my original work, in the public domain, or covered by a license such as
                     Creative Commons.
                   </label>
@@ -1912,12 +1912,12 @@ export default function BraidGlossaryPage() {
 
                 {/* Account Creation Toggle */}
                 <div className="p-4 px-0 py-0 bg-black">
-                  <label className="flex items-center gap-2 stick-no-bills text-yellow-200 mx-0 bg-black my-0 px-4 py-0 border-solid border-yellow-200">
+                  <label className="flex items-center gap-2 stick-no-bills text-yellow-200 mx-0 bg-black my-0 px-4 py-0 border-solid border-yellow-200 uppercase">
                     <input
                       type="checkbox"
                       checked={showAccountCreation}
                       onChange={() => setShowAccountCreation(!showAccountCreation)}
-                      className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
+                      className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2 uppercase"
                     />
                     Create an account to manage your submissions
                   </label>
@@ -1925,7 +1925,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Account Creation Form */}
                 {showAccountCreation && (
-                  <div className="p-4 space-y-4">
+                  <div className="p-4 space-y-4 px-0 py-0">
                     <input
                       type="email"
                       placeholder="Email"
