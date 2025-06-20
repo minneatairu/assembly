@@ -83,7 +83,9 @@ div.flex.items-start.gap-3.p-4.px-4.py-4.bg-yellow-200 {align-items:center}
 
 
 }
-
+.mt-2 {
+    margin: 3rem 0;
+}
 input[type="checkbox"]:checked {
   background-color: #000000;
   border-color: PINK;
