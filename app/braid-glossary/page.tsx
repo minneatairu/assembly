@@ -616,7 +616,7 @@ export default function BraidGlossaryPage() {
                   onMouseEnter={() => setHoveredIcon("home")}
                   onMouseLeave={() => setHoveredIcon(null)}
                 >
-                  <img src="/main.svg" alt="Main" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                  <img src="/globe.svg" alt="Globe" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
                 </button>
                 {hoveredIcon === "home" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
@@ -653,6 +653,22 @@ export default function BraidGlossaryPage() {
                 {hoveredIcon === "account" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
                     Login to your account
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => (window.location.href = "mailto:contact@dataassembly.com")}
+                  className="hover:opacity-70 transition-opacity"
+                  onMouseEnter={() => setHoveredIcon("email")}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                >
+                  <img src="/email.svg" alt="Email" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                </button>
+                {hoveredIcon === "email" && (
+                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
+                    Contact us via email
                   </div>
                 )}
               </div>
@@ -1449,157 +1465,69 @@ export default function BraidGlossaryPage() {
                   <input
                     type="checkbox"
                     checked={showAccountCreation}
-                    onChange={(e) => setShowAccountCreation(e.target.checked)}
-                    className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
+                    onChange={() => setShowAccountCreation(!showAccountCreation)}
+                    className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                   />
-                  Create an account to track your submissions
+                  Create an account to manage your submissions
                 </label>
               </div>
 
-              {/* Account Creation Fields */}
+              {/* Account Creation Form */}
               {showAccountCreation && (
-                <div className="p-4 bg-gray-50 border-t-2 border-black">
-                  <h3 className="stick-no-bills text-black font-medium mb-4">Create Your Account</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={accountData.firstName}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, firstName: e.target.value }))}
-                      placeholder="First name"
-                      className="px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills"
-                      required={showAccountCreation}
-                    />
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={accountData.lastName}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, lastName: e.target.value }))}
-                      placeholder="Last name"
-                      className="px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills"
-                      required={showAccountCreation}
-                    />
-                  </div>
-                  <div className="mt-4">
-                    <input
-                      type="email"
-                      name="email"
-                      value={accountData.email}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}
-                      placeholder="Email address"
-                      className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills"
-                      required={showAccountCreation}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 mt-4">
-                    <input
-                      type="password"
-                      name="password"
-                      value={accountData.password}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, password: e.target.value }))}
-                      placeholder="Password"
-                      className="px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills"
-                      required={showAccountCreation}
-                    />
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={accountData.confirmPassword}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                      placeholder="Confirm password"
-                      className="px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills"
-                      required={showAccountCreation}
-                    />
-                  </div>
+                <div className="p-4 space-y-4">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={accountData.email}
+                    onChange={(e) => setAccountData({ ...accountData, email: e.target.value })}
+                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                    required
+                  />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    value={accountData.password}
+                    onChange={(e) => setAccountData({ ...accountData, password: e.target.value })}
+                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                    required
+                  />
+                  <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={accountData.confirmPassword}
+                    onChange={(e) => setAccountData({ ...accountData, confirmPassword: e.target.value })}
+                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                    required
+                  />
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    value={accountData.firstName}
+                    onChange={(e) => setAccountData({ ...accountData, firstName: e.target.value })}
+                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                    required
+                  />
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    value={accountData.lastName}
+                    onChange={(e) => setAccountData({ ...accountData, lastName: e.target.value })}
+                    className="w-full p-3 bg-gray-50 border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                    required
+                  />
                 </div>
               )}
 
-              {/* Status Messages for Photo Layout */}
-              {submissionType === "photo" && (
-                <>
-                  {error && (
-                    <div className="p-4 bg-red-50 border-t-2 border-black text-red-700 text-sm stick-no-bills">
-                      {error}
-                    </div>
-                  )}
-
-                  {uploadStatus && (
-                    <div
-                      className={`p-4 text-sm border-t-2 border-black stick-no-bills ${
-                        uploadStatus.includes("failed") || uploadStatus.includes("error")
-                          ? "bg-orange-50 text-orange-700"
-                          : uploadStatus.includes("successfully")
-                            ? "bg-green-50 text-green-700"
-                            : "bg-blue-50 text-blue-700"
-                      }`}
-                    >
-                      {uploadStatus}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Submit Button */}
-              <div className="p-4 border-t-2 border-black">
+              {/* Submit Button - Full Width */}
+              <div className="p-4">
                 <button
                   type="submit"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="w-full bg-green-400 text-black py-4 hover:bg-green-500 disabled:bg-gray-300 disabled:text-gray-500 transition-colors stick-no-bills border-2 border-black text-3xl sm:text-2xl md:text-3xl font-bold"
+                  className="w-full py-4 bg-green-400 text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors stick-no-bills border-2 border-black rounded-full font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {submitting ? "SUBMITTING..." : "SUBMIT BRAID"}
+                  {submitting ? "Submitting..." : "Submit Braid"}
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Info Modal */}
-      {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-2xl relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black">
-            <button
-              onClick={closeInfoModal}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
-            >
-              <img src="/closing.svg" alt="Close" className="w-6 h-6" />
-            </button>
-
-            <div className="p-8">
-              <h2 className="text-4xl font-bold mb-6 stick-no-bills text-black uppercase">About the Braid Glossary</h2>
-
-              <div className="space-y-4 stick-no-bills text-black leading-relaxed">
-                <p>
-                  The Braid Glossary is a collaborative project to document and preserve the rich cultural heritage of
-                  braiding traditions from around the world.
-                </p>
-
-                <p>
-                  This platform allows community members to contribute their knowledge through photos, links to
-                  resources, and personal memories about different braiding styles and techniques.
-                </p>
-
-                <h3 className="text-xl font-bold mt-6 mb-3 uppercase">How to Contribute</h3>
-                <ul className="list-disc list-inside space-y-2">
-                  <li>
-                    <strong>Photo submissions:</strong> Upload images of braids with detailed information about their
-                    cultural origin and significance
-                  </li>
-                  <li>
-                    <strong>Link submissions:</strong> Share valuable online resources, tutorials, or articles about
-                    braiding
-                  </li>
-                  <li>
-                    <strong>Memory submissions:</strong> Share personal stories, cultural memories, or traditional
-                    knowledge about braiding practices
-                  </li>
-                </ul>
-
-                <p className="text-sm text-gray-600 mt-6">
-                  All submissions are reviewed and shared publicly to help preserve and celebrate braiding traditions
-                  for future generations.
-                </p>
               </div>
             </div>
           </div>
@@ -1608,169 +1536,201 @@ export default function BraidGlossaryPage() {
 
       {/* Image Modal */}
       {showImageModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in duration-300"
-          onClick={closeImageModal}
-        >
-          <div className="relative max-w-4xl max-h-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80">
+          <div className="relative">
+            <button onClick={closeImageModal} className="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+              <img src="/closing.svg" alt="Close" className="w-6 h-6" />
+            </button>
             <img
               src={showImageModal.url || "/placeholder.svg"}
               alt={showImageModal.caption}
-              className="max-w-full max-h-full object-contain"
-              onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-screen object-contain"
             />
-            <button
-              onClick={closeImageModal}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 transition-colors duration-200"
-            >
-              <img src="/closing.svg" alt="Close" className="w-6 h-6 filter invert" />
+            <p className="mt-4 text-white text-center stick-no-bills">{showImageModal.caption}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Info Modal */}
+      {showInfoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80">
+          <div className="relative bg-white max-w-3xl mx-auto p-8 rounded-md">
+            <button onClick={closeInfoModal} className="absolute top-4 right-4 text-black hover:text-gray-600 z-10">
+              <img src="/closing.svg" alt="Close" className="w-6 h-6" />
             </button>
-            <div className="absolute bottom-4 left-4 right-4 text-white text-center">
-              <p className="stick-no-bills text-lg font-medium">{showImageModal.caption}</p>
-            </div>
+            <h2 className="text-3xl font-semibold mb-6 stick-no-bills text-black">About the Braid Glossary</h2>
+            <p className="mb-4 stick-no-bills text-black">
+              The Braid Glossary is a community-driven project dedicated to documenting and preserving the diverse world
+              of braids. Our mission is to create a comprehensive resource that celebrates the cultural significance,
+              history, and artistry of braids from around the globe.
+            </p>
+            <h3 className="text-2xl font-semibold mb-4 stick-no-bills text-black">How to Contribute</h3>
+            <p className="mb-4 stick-no-bills text-black">
+              We invite you to share your knowledge and experiences by submitting information about different types of
+              braids. Whether it's a traditional style passed down through generations or a contemporary creation, your
+              contributions help enrich our understanding of this intricate art form.
+            </p>
+            <ul className="list-disc pl-6 mb-4 stick-no-bills text-black">
+              <li>
+                <b>Photos:</b> Share clear images of braids, highlighting their unique patterns and textures.
+              </li>
+              <li>
+                <b>Links:</b> Provide links to relevant articles, tutorials, or resources that offer further insights
+                into specific braid styles.
+              </li>
+              <li>
+                <b>Memories:</b> Share personal stories and anecdotes related to braids, adding a personal touch to the
+                glossary.
+              </li>
+            </ul>
+            <h3 className="text-2xl font-semibold mb-4 stick-no-bills text-black">Contact Us</h3>
+            <p className="stick-no-bills text-black">
+              If you have any questions, suggestions, or feedback, please don't hesitate to reach out to us at{" "}
+              <a href="mailto:contact@dataassembly.com" className="text-blue-600 hover:underline">
+                contact@dataassembly.com
+              </a>
+              .
+            </p>
           </div>
         </div>
       )}
 
       {/* Detail Modal */}
       {showDetailModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-300"
-          onClick={() => setShowDetailModal(null)}
-        >
-          <div
-            className="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto relative shadow-xl animate-in slide-in-from-bottom-4 duration-300 border-2 border-black"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 overflow-y-auto">
+          <div className="relative bg-white max-w-4xl mx-auto rounded-md shadow-lg animate-in slide-in-from-bottom-4 duration-300">
             <button
               onClick={() => setShowDetailModal(null)}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 z-10 transition-colors duration-200"
+              className="absolute top-4 right-4 text-black hover:text-gray-600 z-10 transition-colors duration-200"
             >
               <img src="/closing.svg" alt="Close" className="w-6 h-6" />
             </button>
 
             <div className="p-8">
-              {/* Header */}
-              <div className="mb-6">
-                <h2 className="text-4xl font-bold stick-no-bills text-black uppercase mb-2">
-                  {showDetailModal.submission_type === "memory"
-                    ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
-                    : showDetailModal.submission_type === "link"
-                      ? (showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"
-                      : showDetailModal.braid_name}
-                </h2>
-                <div className="flex items-center gap-4 text-sm stick-no-bills text-gray-600">
-                  <span className="bg-black text-white px-2 py-1 uppercase">{showDetailModal.submission_type}</span>
-                  <span>By {showDetailModal.contributor_name}</span>
-                  {showDetailModal.region && <span>From {showDetailModal.region}</span>}
-                </div>
+              {/* Braid Name */}
+              <h2 className="text-4xl font-bold mb-4 stick-no-bills text-black uppercase">
+                {showDetailModal.braid_name}
+              </h2>
+
+              {/* Submission Type Indicator */}
+              <div className="mb-4 bg-black/70 text-white px-2 py-1 text-xs stick-no-bills uppercase inline-block">
+                {showDetailModal.submission_type}
               </div>
 
-              {/* Content based on submission type */}
-              {showDetailModal.submission_type === "photo" && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Image */}
-                  <div>
-                    <img
-                      src={showDetailModal.image_url || "/placeholder.svg"}
-                      alt={showDetailModal.braid_name}
-                      className="w-full h-auto object-cover cursor-pointer"
-                      onClick={() =>
-                        handleImageClick(showDetailModal.image_url!, showDetailModal.braid_name || "Braid")
-                      }
-                    />
+              {/* Image or Title Area */}
+              <div
+                className="relative mb-4"
+                style={{
+                  aspectRatio:
+                    showDetailModal.submission_type === "link" || showDetailModal.submission_type === "memory"
+                      ? "16/9"
+                      : "3/4",
+                }}
+              >
+                {showDetailModal.submission_type === "photo" && showDetailModal.image_url ? (
+                  <img
+                    src={showDetailModal.image_url || "/placeholder.svg"}
+                    alt={showDetailModal.braid_name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.src =
+                        "/placeholder.svg?height=300&width=300&text=" + encodeURIComponent(showDetailModal.braid_name)
+                    }}
+                  />
+                ) : (
+                  // Title display for link and memory submissions - 16:9 aspect ratio
+                  <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
+                    <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                      {showDetailModal.submission_type === "memory"
+                        ? (showDetailModal as any).memory_title || showDetailModal.braid_name || "Untitled Memory"
+                        : showDetailModal.submission_type === "link"
+                          ? (showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"
+                          : showDetailModal.braid_name}
+                    </h3>
                   </div>
+                )}
+              </div>
 
-                  {/* Details */}
-                  <div className="space-y-4">
-                    {showDetailModal.alt_names && (
-                      <div>
-                        <h3 className="font-bold stick-no-bills text-black uppercase mb-2">Alternative Names</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {showDetailModal.alt_names.split(",").map((name, index) => (
-                            <span
-                              key={index}
-                              className="px-3 py-1 bg-green-400 text-black text-sm stick-no-bills font-medium uppercase"
-                            >
-                              {name.trim()}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {showDetailModal.audio_url && (
-                      <div>
-                        <h3 className="font-bold stick-no-bills text-black uppercase mb-2">Pronunciation</h3>
-                        <button
-                          onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors stick-no-bills"
-                        >
-                          {playingAudio[showDetailModal.id.toString()] ? "⏸ Stop" : "▶ Play"}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {showDetailModal.submission_type === "link" && (
-                <div className="space-y-6">
-                  {(showDetailModal as any).link_description && (
-                    <div>
-                      <h3 className="font-bold stick-no-bills text-black uppercase mb-2">Description</h3>
-                      <p className="stick-no-bills text-gray-700 leading-relaxed">
-                        {(showDetailModal as any).link_description}
-                      </p>
-                    </div>
-                  )}
-
-                  <div>
-                    <h3 className="font-bold stick-no-bills text-black uppercase mb-2">Link</h3>
-                    <a
-                      href={showDetailModal.public_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline stick-no-bills break-all"
-                    >
-                      {showDetailModal.public_url}
-                    </a>
-                  </div>
-                </div>
-              )}
-
-              {showDetailModal.submission_type === "memory" && (
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-bold stick-no-bills text-black uppercase mb-2">Memory</h3>
-                    <p className="stick-no-bills text-gray-700 leading-relaxed text-lg">
-                      {(showDetailModal as any).memory_description}
-                    </p>
-                  </div>
-
-                  {showDetailModal.audio_url && (
-                    <div>
-                      <h3 className="font-bold stick-no-bills text-black uppercase mb-2">Audio Recording</h3>
-                      <button
-                        onClick={() => toggleAudio(showDetailModal.id, showDetailModal.audio_url!)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors stick-no-bills"
+              {/* Alternate Names */}
+              {showDetailModal.alt_names && (
+                <div className="mb-4">
+                  <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Alternate Names</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {showDetailModal.alt_names.split(",").map((name, index) => (
+                      <span
+                        key={index}
+                        className="px-2 py-1 bg-green-400 rounded-full text-xs stick-no-bills text-black font-medium uppercase"
                       >
-                        {playingAudio[showDetailModal.id.toString()] ? "⏸ Stop" : "▶ Play"}
-                      </button>
+                        {name.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Region */}
+              {showDetailModal.region && (
+                <div className="mb-4">
+                  <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Region</h4>
+                  <p className="stick-no-bills text-black uppercase">{showDetailModal.region}</p>
+                </div>
+              )}
+
+              {/* Contributor */}
+              <div className="mb-4">
+                <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Contributor</h4>
+                <p className="stick-no-bills text-black uppercase">{showDetailModal.contributor_name}</p>
+              </div>
+
+              {/* Link Details */}
+              {showDetailModal.submission_type === "link" && (
+                <>
+                  {showDetailModal.public_url && (
+                    <div className="mb-4">
+                      <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">URL</h4>
+                      <a
+                        href={showDetailModal.public_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline stick-no-bills text-black"
+                      >
+                        {showDetailModal.public_url}
+                      </a>
                     </div>
                   )}
+                  {showDetailModal.link_description && (
+                    <div className="mb-4">
+                      <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Description</h4>
+                      <p className="stick-no-bills text-black">{showDetailModal.link_description}</p>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Memory Details */}
+              {showDetailModal.submission_type === "memory" && (
+                <>
+                  {showDetailModal.memory_description && (
+                    <div className="mb-4">
+                      <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Memory</h4>
+                      <p className="stick-no-bills text-black">{showDetailModal.memory_description}</p>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Audio Playback */}
+              {showDetailModal.audio_url && (
+                <div className="mb-4">
+                  <h4 className="text-xl font-semibold mb-2 stick-no-bills text-black uppercase">Pronunciation</h4>
+                  <audio controls>
+                    <source src={showDetailModal.audio_url} type="audio/webm" />
+                    Your browser does not support audio playback.
+                  </audio>
                 </div>
               )}
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Demo Status Banner */}
-      {demoStatus.isDemo && (
-        <div className="fixed bottom-4 right-4 bg-yellow-400 text-black p-3 border-2 border-black shadow-lg max-w-sm">
-          <div className="stick-no-bills text-sm">
-            <strong>Demo Mode:</strong> {demoStatus.reason}
           </div>
         </div>
       )}
