@@ -688,21 +688,6 @@ export default function BraidGlossaryPage() {
                 )}
               </div>
 
-              <div className="relative">
-                <button
-                  onClick={() => (window.location.href = "mailto:contact@dataassembly.com")}
-                  className="hover:opacity-70 transition-opacity"
-                  onMouseEnter={() => setHoveredIcon("email")}
-                  onMouseLeave={() => setHoveredIcon(null)}
-                >
-                  <img src="/email.svg" alt="Email" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-                </button>
-                {hoveredIcon === "email" && (
-                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
-                    CONTACT
-                  </div>
-                )}
-              </div>
               {/* Remove this entire block: */}
 
               <div className="relative">
