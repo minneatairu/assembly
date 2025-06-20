@@ -1073,7 +1073,7 @@ export default function BraidGlossaryPage() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 animate-in fade-in duration-300 overflow-y-auto bg-black">
+        <div className="h-12 px-4 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] py-8 bg-yellow-200 border-2 ">
           <div className="relative w-full max-w-[50rem] my-8">
             {/* Top bar with close button and dropdown */}
             <div className="flex items-center justify-between mb-0 px-0 py-4">
@@ -1405,7 +1405,8 @@ export default function BraidGlossaryPage() {
                       </div>
 
                       {/* Credit Section - Separate bordered section */}
-                        <div className="border-2 border-black bg-gray-50 mb-6 border-none">
+                        <div className="border-2 border-black bg-gray-50 mb-6 border-none"   style={{ marginTop: "20px" }}
+>
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                           <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                         </div>
@@ -1530,7 +1531,7 @@ export default function BraidGlossaryPage() {
                           </div>
 
                           {/* Basic Information - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-4 mt-6">
+                          <div className="border-2 border-black mb-4 mt-6">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">
                                 Basic Information
@@ -1812,7 +1813,8 @@ export default function BraidGlossaryPage() {
                           </div>
 
                           {/* Credit Section for Memory - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-6 border-none">
+                          <div className="border-2 border-black bg-gray-50 mb-6 border-none"
+                          style="margin-top: 20px">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                             </div>

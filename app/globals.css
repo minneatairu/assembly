@@ -69,29 +69,28 @@ input[type="checkbox"] {
   -moz-appearance: none;
   width: 2rem;
   height: 2rem;
-  border: 2px solid #374151;
+  border: 2px dashed #000000;
   background-color: pink;
   cursor: pointer;
   position: relative;
 }
 
 input[type="checkbox"]:checked {
-  background-color: #10b981;
-  border-color: #10b981;
+  background-color: #000000;
+  border-color: PINK;
 }
 
 input[type="checkbox"]:checked::after {
-  content: "✓";
+  content: "X";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
+  color: PINK;
   font-size: 0.75rem;
   font-weight: bold;
 }
 
 input[type="checkbox"]:focus {
-  outline: 2px solid #10b981;
-  outline-offset: 2px;
+  outline:NONE;
 }
