@@ -575,9 +575,9 @@ export default function BraidGlossaryPage() {
   }, [audioUrl, imagePreviews])
 
   const submissionOptions = [
-    { value: "photo", label: "Photo Submission" },
-    { value: "link", label: "Link Submission" },
-    { value: "memory", label: "Memory Submission" },
+    { value: "photo", label: "Photo" },
+    { value: "link", label: "Link" },
+    { value: "memory", label: "Memory" },
   ]
 
   return (
@@ -666,7 +666,7 @@ export default function BraidGlossaryPage() {
                     <div
                       className="relative"
                       style={{
-                        aspectRatio: isTextSubmission ? "16/9" : "1/1",
+                        aspectRatio: isTextSubmission ? "16/9" : "3/4",
                       }}
                     >
                       {braid.submission_type === "photo" && braid.image_url ? (
@@ -720,7 +720,7 @@ export default function BraidGlossaryPage() {
                           )}
                         </>
                       ) : (
-                        // Title display for link and memory submissions - 1:1 aspect ratio
+                        // Title display for link and memory submissions - 16:9 aspect ratio
                         <div className="w-full h-full bg-yellow-400 flex items-center justify-center p-4">
                           <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
                             {braid.submission_type === "memory"
@@ -793,7 +793,7 @@ export default function BraidGlossaryPage() {
                           </div>
                         )}
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-black uppercase">BY:</span>
+                          <span className="font-medium text-black uppercase">CONTRIBUTOR:</span>
                           <span className="text-black uppercase">{braid.contributor_name}</span>
                         </div>
                       </div>
@@ -905,8 +905,8 @@ export default function BraidGlossaryPage() {
                       {formData.imageFiles.length > 0 ? (
                         <div className="w-full h-full p-4 overflow-y-auto">
                           {formData.imageFiles.length === 1 ? (
-                            // Single image - full display
-                            <div className="relative w-full aspect-square mb-4">
+                            // Single image - full display with 3:4 aspect ratio
+                            <div className="relative w-full mb-4" style={{ aspectRatio: "3/4" }}>
                               <img
                                 src={imagePreviews[0] || "/placeholder.svg"}
                                 alt="Preview"
@@ -932,8 +932,8 @@ export default function BraidGlossaryPage() {
                           ) : (
                             // Multiple images - slideshow with thumbnails
                             <div className="space-y-4">
-                              {/* Main image display */}
-                              <div className="relative w-full aspect-square">
+                              {/* Main image display with 3:4 aspect ratio */}
+                              <div className="relative w-full" style={{ aspectRatio: "3/4" }}>
                                 <img
                                   src={imagePreviews[currentImageIndex] || "/placeholder.svg"}
                                   alt={`Preview ${currentImageIndex + 1}`}
