@@ -1074,7 +1074,7 @@ export default function BraidGlossaryPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-start justify-center p-4 animate-in fade-in duration-300 overflow-y-auto bg-black">
-          <div className="relative w-full max-w-[40rem] my-8">
+          <div className="relative w-full max-w-[50rem] my-8">
             {/* Top bar with close button and dropdown */}
             <div className="flex items-center justify-between mb-0 px-0 py-4">
               {/* Custom Submission Type Dropdown */}
@@ -1405,8 +1405,8 @@ export default function BraidGlossaryPage() {
                       </div>
 
                       {/* Credit Section - Separate bordered section */}
-                      <div className="border-2 border-black bg-gray-50 mb-4 mt-4 px-0 border-none">
-                        <div className="py-2 border-b-2 border-black bg-yellow-200 px-4">
+                        <div className="border-2 border-black bg-gray-50 mb-6 border-none">
+                            <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                           <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                         </div>
 
@@ -1591,7 +1591,7 @@ export default function BraidGlossaryPage() {
                                   </button>
                                 </div>
                                 {showBraidPatterns && (
-                                  <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
+                                  <div className="grid grid-cols-2 gap-2  overflow-y-auto">
                                     {braidPatternOptions.map((option) => (
                                       <label key={option.value} className="flex items-center gap-2 cursor-pointer">
                                         <input
@@ -1673,7 +1673,7 @@ export default function BraidGlossaryPage() {
                             value={formData.memoryTitle ?? ""}
                             onChange={handleInputChange}
                             placeholder="Memory Title "
-                            className="w-full px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black mb-6"
+                            className="w-full px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black "
                             required={submissionType === "memory"}
                           />
 
@@ -1793,7 +1793,7 @@ export default function BraidGlossaryPage() {
                                   </button>
                                 </div>
                                 {showBraidPatterns && (
-                                  <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
+                                  <div className="grid grid-cols-2 gap-2  overflow-y-auto">
                                     {braidPatternOptions.map((option) => (
                                       <label key={option.value} className="flex items-center gap-2 cursor-pointer">
                                         <input
@@ -1926,7 +1926,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Account Creation Toggle */}
                 <div className="p-4 px-0 py-0 bg-black">
-                  <label className="flex items-center gap-2 stick-no-bills text-yellow-200 mx-0 bg-black my-0 px-4 py-4">
+                  <label className="flex items-center gap-2 stick-no-bills text-yellow-200 mx-0 bg-black my-0 px-4 py-0 border-solid border-yellow-200">
                     <input
                       type="checkbox"
                       checked={showAccountCreation}
