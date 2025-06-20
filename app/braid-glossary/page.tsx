@@ -43,6 +43,9 @@ export default function BraidGlossaryPage() {
   // Custom dropdown state
   const [showDropdown, setShowDropdown] = useState(false)
 
+  // Tooltip states
+  const [hoveredIcon, setHoveredIcon] = useState<string | null>(null)
+
   // Add memory-specific form fields to the formData state:
   const [formData, setFormData] = useState({
     braidName: "",
@@ -606,41 +609,85 @@ export default function BraidGlossaryPage() {
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
             <div className="flex gap-4 border-2 border-black rounded-full p-4">
-              <button
-                onClick={() => (window.location.href = "/")}
-                className="hover:opacity-70 transition-opacity"
-                title="Go to Data Assembly home"
-              >
-                <img src="/main.svg" alt="Main" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-              </button>
-              <button
-                onClick={() => setShowInfoModal(true)}
-                className="hover:opacity-70 transition-opacity"
-                title="Learn more about the braid glossary"
-              >
-                <img src="/infor.svg" alt="Info" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-              </button>
-              <button
-                onClick={() => (window.location.href = "/profile")}
-                className="hover:opacity-70 transition-opacity"
-                title="Login to your account"
-              >
-                <img src="/cool.svg" alt="Account" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-              </button>
-              <button
-                onClick={() => setShowFilter(true)}
-                className="hover:opacity-70 transition-opacity"
-                title="Filter submissions"
-              >
-                <img src="/search.svg" alt="Search" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-              </button>
-              <button
-                onClick={() => setShowForm(true)}
-                className="hover:opacity-70 transition-opacity"
-                title="Add a new braid"
-              >
-                <img src="/submit.svg" alt="Submit" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => (window.location.href = "/")}
+                  className="hover:opacity-70 transition-opacity"
+                  onMouseEnter={() => setHoveredIcon("home")}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                >
+                  <img src="/main.svg" alt="Main" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                </button>
+                {hoveredIcon === "home" && (
+                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded whitespace-nowrap stick-no-bills">
+                    Go to Data Assembly home
+                  </div>
+                )}
+              </div>
+              
+              <div className="relative">
+                <button
+                  onClick={() => setShowInfoModal(true)}
+                  className="hover:opacity-70 transition-opacity"
+                  onMouseEnter={() => setHoveredIcon("info")}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                >
+                  <img src="/infor.svg" alt="Info" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                </button>
+                {hoveredIcon === "info" && (
+                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded whitespace-nowrap stick-no-bills">
+                    Learn more about the braid glossary
+                  </div>
+                )}
+              </div>
+              
+              <div className="relative">
+                <button
+                  onClick={() => (window.location.href = "/profile")}
+                  className="hover:opacity-70 transition-opacity"
+                  onMouseEnter={() => setHoveredIcon("account")}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                >
+                  <img src="/cool.svg" alt="Account" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                </button>
+                {hoveredIcon === "account" && (
+                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded whitespace-nowrap stick-no-bills">
+                    Login to your account
+                  </div>
+                )}
+              </div>
+              
+              <div className="relative">
+                <button
+                  onClick={() => setShowFilter(true)}
+                  className="hover:opacity-70 transition-opacity"
+                  onMouseEnter={() => setHoveredIcon("filter")}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                >
+                  <img src="/search.svg" alt="Search" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                </button>
+                {hoveredIcon === "filter" && (
+                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded whitespace-nowrap stick-no-bills">
+                    Filter submissions
+                  </div>
+                )}
+              </div>
+              
+              <div className="relative">
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="hover:opacity-70 transition-opacity"
+                  onMouseEnter={() => setHoveredIcon("submit")}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                >
+                  <img src="/submit.svg" alt="Submit" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                </button>
+                {hoveredIcon === "submit" && (
+                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded whitespace-nowrap stick-no-bills">
+                    Add a new braid
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -864,8 +911,8 @@ export default function BraidGlossaryPage() {
               <div className="p-6">
                 <h2 className="text-xl mb-4 stick-no-bills font-light uppercase">Filter Submissions</h2>
 
-                <div className="space-y-2">
-                  {filterOptions.map((option) => (
+                <div className="space-y-0">
+                  {filterOptions.map((option, index) => (
                     <button
                       key={option.value}
                       onClick={() => {
@@ -874,7 +921,7 @@ export default function BraidGlossaryPage() {
                       }}
                       className={`w-full p-3 text-left stick-no-bills text-black text-lg border-2 border-black transition-colors ${
                         filterType === option.value ? "bg-green-400 hover:bg-green-500" : "bg-gray-50 hover:bg-gray-100"
-                      }`}
+                      } ${index > 0 ? "border-t-0" : ""}`}
                     >
                       {option.label}
                       {option.value !== "all" && (
@@ -1405,202 +1452,4 @@ export default function BraidGlossaryPage() {
 
               {/* Account Creation Toggle */}
               <div className="p-4">
-                <div className="flex items-center gap-3 mb-4">
-                  <input
-                    type="checkbox"
-                    id="createAccount"
-                    checked={showAccountCreation}
-                    onChange={(e) => setShowAccountCreation(e.target.checked)}
-                    className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
-                  />
-                  <label htmlFor="createAccount" className="stick-no-bills text-black font-medium">
-                    CREATE ACCOUNT TO TRACK YOUR SUBMISSIONS
-                  </label>
-                </div>
-
-                {showAccountCreation && (
-                  <div className="space-y-0 border-2 border-black overflow-hidden">
-                    {/* First Name */}
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={accountData.firstName}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, firstName: e.target.value }))}
-                      placeholder="First name"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      required={showAccountCreation}
-                    />
-
-                    {/* Last Name */}
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={accountData.lastName}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, lastName: e.target.value }))}
-                      placeholder="Last name"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      required={showAccountCreation}
-                    />
-
-                    {/* Email */}
-                    <input
-                      type="email"
-                      name="email"
-                      value={accountData.email}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, email: e.target.value }))}
-                      placeholder="Email"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      required={showAccountCreation}
-                    />
-
-                    {/* Password */}
-                    <input
-                      type="password"
-                      name="password"
-                      value={accountData.password}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, password: e.target.value }))}
-                      placeholder="Password"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      required={showAccountCreation}
-                    />
-
-                    {/* Confirm Password */}
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={accountData.confirmPassword}
-                      onChange={(e) => setAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                      placeholder="Confirm password"
-                      className="w-full h-16 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black"
-                      required={showAccountCreation}
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Submit Button - Full Width */}
-              <form onSubmit={handleSubmit}>
-                <button
-                  type="submit"
-                  disabled={submitting || !formData.agreeToShare}
-                  className="w-full bg-green-400 text-black py-6 font-bold hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed stick-no-bills border-t-2 border-black text-5xl"
-                >
-                  {submitting ? "SHARING..." : "SHARE"}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Image Modal */}
-      {showImageModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 animate-in fade-in duration-300">
-          <div className="relative bg-white max-w-4xl max-h-screen overflow-auto p-8 animate-in slide-in-from-bottom-4 duration-300">
-            <button onClick={closeImageModal} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-            <img
-              src={showImageModal.url || "/placeholder.svg"}
-              alt={showImageModal.caption}
-              className="w-full object-contain"
-            />
-            <p className="mt-4 text-center text-gray-800 stick-no-bills">{showImageModal.caption}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Info Modal */}
-      {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 animate-in fade-in duration-300">
-          <div className="relative bg-white max-w-4xl max-h-screen overflow-auto p-8 animate-in slide-in-from-bottom-4 duration-300">
-            <button onClick={closeInfoModal} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-            <h2 className="text-3xl mb-4 stick-no-bills">About the Braid Glossary</h2>
-            <p className="mb-4 stick-no-bills">
-              This glossary is a community-driven project to document and preserve information about different types of
-              braids from around the world.
-            </p>
-            <p className="mb-4 stick-no-bills">
-              You can use this glossary to learn about different braids, their origins, and their cultural significance.
-              You can also contribute to the glossary by submitting information about braids that you know.
-            </p>
-            <h3 className="text-2xl mb-2 stick-no-bills">How to Contribute</h3>
-            <p className="mb-4 stick-no-bills">
-              To contribute to the glossary, simply click the "Add a Braid" button and fill out the form. You can submit
-              information about braids that you know, including their name, origin, and cultural significance.
-            </p>
-            <h3 className="text-2xl mb-2 stick-no-bills">Demo Mode</h3>
-            {demoStatus.isDemo ? (
-              <>
-                <p className="mb-4 stick-no-bills">You are currently in demo mode. Some features may be limited.</p>
-                {demoStatus.reason && <p className="mb-4 stick-no-bills">Reason: {demoStatus.reason}</p>}
-              </>
-            ) : (
-              <p className="mb-4 stick-no-bills">You are not in demo mode.</p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Detail Modal */}
-      {showDetailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80 animate-in fade-in duration-300">
-          <div className="relative bg-white max-w-4xl max-h-screen overflow-auto p-8 animate-in slide-in-from-bottom-4 duration-300">
-            <button
-              onClick={() => setShowDetailModal(null)}
-              className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-            >
-              <img src="/closing.svg" alt="Close" className="w-8 h-8 sm:w-10 sm:h-10" />
-            </button>
-
-            <h2 className="text-3xl mb-4 stick-no-bills">{showDetailModal.braid_name}</h2>
-
-            {showDetailModal.image_url && (
-              <img
-                src={showDetailModal.image_url || "/placeholder.svg"}
-                alt={showDetailModal.braid_name}
-                className="w-full object-contain mb-4"
-              />
-            )}
-
-            <p className="mb-4 stick-no-bills">
-              <span className="font-bold stick-no-bills">Alternative Names:</span> {showDetailModal.alt_names}
-            </p>
-            <p className="mb-4 stick-no-bills">
-              <span className="font-bold stick-no-bills">Region:</span> {showDetailModal.region}
-            </p>
-            <p className="mb-4 stick-no-bills">
-              <span className="font-bold stick-no-bills">Contributor:</span> {showDetailModal.contributor_name}
-            </p>
-
-            {showDetailModal.public_url && (
-              <a
-                href={showDetailModal.public_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline stick-no-bills"
-              >
-                Visit Link
-              </a>
-            )}
-
-            {showDetailModal.memory_description && (
-              <p className="mb-4 stick-no-bills">
-                <span className="font-bold stick-no-bills">Memory:</span> {showDetailModal.memory_description}
-              </p>
-            )}
-
-            {showDetailModal.audio_url && (
-              <audio controls className="w-full">
-                <source src={showDetailModal.audio_url} type="audio/webm" />
-                Your browser does not support audio playback.
-              </audio>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+                \
