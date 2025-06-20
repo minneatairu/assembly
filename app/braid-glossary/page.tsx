@@ -1322,7 +1322,7 @@ export default function BraidGlossaryPage() {
                             name="braidName"
                             value={formData.braidName ?? ""}
                             onChange={handleInputChange}
-                            placeholder="BRAID NAME"
+                            placeholder="Braid Name"
                             className="h-16 px-4 bg-yellow-200 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                             required
                           />
@@ -1332,7 +1332,7 @@ export default function BraidGlossaryPage() {
                             name="altNames"
                             value={formData.altNames ?? ""}
                             onChange={handleInputChange}
-                            placeholder="ALTERNATIVE NAMES"
+                            placeholder="Aternate Names"
                             className="h-16 px-4 bg-yellow-200 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                           />
 
@@ -1341,7 +1341,7 @@ export default function BraidGlossaryPage() {
                             name="era"
                             value={formData.era ?? ""}
                             onChange={handleInputChange}
-                            placeholder="ERA"
+                            placeholder="Era"
                             className="h-16 px-4 bg-yellow-200 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                           />
 
@@ -1406,7 +1406,7 @@ export default function BraidGlossaryPage() {
 
                       {/* Credit Section - Separate bordered section */}
                       <div className="border-2 border-black bg-gray-50 mb-4 mt-4 px-0 border-none">
-                        <div className="py-2 border-b-2 border-black bg-amber-200 px-4">
+                        <div className="py-2 border-b-2 border-black bg-yellow-200 px-4">
                           <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                         </div>
 
@@ -1416,7 +1416,7 @@ export default function BraidGlossaryPage() {
                             name="stylist"
                             value={formData.stylist ?? ""}
                             onChange={handleInputChange}
-                            placeholder="STYLIST"
+                            placeholder="Stylist"
                             className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
@@ -1425,7 +1425,7 @@ export default function BraidGlossaryPage() {
                             name="photographer"
                             value={formData.photographer ?? ""}
                             onChange={handleInputChange}
-                            placeholder="PHOTOGRAPHER"
+                            placeholder="Photographer"
                             className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
@@ -1434,7 +1434,7 @@ export default function BraidGlossaryPage() {
                             name="community"
                             value={formData.community ?? ""}
                             onChange={handleInputChange}
-                            placeholder="COMMUNITY"
+                            placeholder="Community"
                             className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
@@ -1443,15 +1443,15 @@ export default function BraidGlossaryPage() {
                             name="source"
                             value={formData.source ?? ""}
                             onChange={handleInputChange}
-                            placeholder="SOURCE"
-                            className="w-full h-16 px-4 bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            placeholder="Source"
+                              className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           />
                           <input
                             type="text"
                             name="contributorName"
                             value={formData.contributorName ?? ""}
                             onChange={handleInputChange}
-                            placeholder="CONTRIBUTOR NAME"
+                            placeholder="Contributor Name"
                             className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
                         </div>
@@ -1501,7 +1501,7 @@ export default function BraidGlossaryPage() {
                                 name="linkTitle"
                                 value={formData.linkTitle ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="TITLE"
+                                placeholder="Title"
                                 className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                                 required
                               />
@@ -1522,7 +1522,7 @@ export default function BraidGlossaryPage() {
                                 name="linkDescription"
                                 value={formData.linkDescription ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="DESCRIPTION"
+                                placeholder="Description"
                                 rows={4}
                                 className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black resize-none"
                               />
@@ -1544,7 +1544,7 @@ export default function BraidGlossaryPage() {
                                 name="era"
                                 value={formData.era ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="ERA"
+                                placeholder="Era"
                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent"
                               />
 
@@ -1620,7 +1620,7 @@ export default function BraidGlossaryPage() {
                                 name="stylist"
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="STYLIST"
+                                placeholder="Stylist"
                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
@@ -1629,7 +1629,7 @@ export default function BraidGlossaryPage() {
                                 name="photographer"
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="PHOTOGRAPHER"
+                                placeholder="Photographer"
                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
@@ -1638,7 +1638,7 @@ export default function BraidGlossaryPage() {
                                 name="community"
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="COMMUNITY"
+                                placeholder="Community"
                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
@@ -1647,16 +1647,16 @@ export default function BraidGlossaryPage() {
                                 name="source"
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="SOURCE"
-                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Source"
+                           className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                               <input
                                 type="text"
                                 name="contributorName"
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="CONTRIBUTOR NAME"
-                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Contributor Name"
+                                   className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -1672,7 +1672,7 @@ export default function BraidGlossaryPage() {
                             name="memoryTitle"
                             value={formData.memoryTitle ?? ""}
                             onChange={handleInputChange}
-                            placeholder="MEMORY TITLE "
+                            placeholder="Memory Title "
                             className="w-full px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black mb-6"
                             required={submissionType === "memory"}
                           />
@@ -1823,7 +1823,7 @@ export default function BraidGlossaryPage() {
                                 name="stylist"
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="STYLIST"
+                                placeholder="Stylist"
                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
@@ -1832,7 +1832,7 @@ export default function BraidGlossaryPage() {
                                 name="photographer"
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="PHOTOGRAPHER"
+                                placeholder="Photographer"
                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
@@ -1841,7 +1841,7 @@ export default function BraidGlossaryPage() {
                                 name="community"
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="COMMUNITY"
+                                placeholder="Community"
                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
 
@@ -1850,16 +1850,16 @@ export default function BraidGlossaryPage() {
                                 name="source"
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="SOURCE"
-                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Source URL"
+                              className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                               <input
                                 type="text"
                                 name="contributorName"
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
-                                placeholder="CONTRIBUTOR NAME"
-                                className="w-full px-4 bg-yellow-200 text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Contributor Name"
+                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -1891,7 +1891,7 @@ export default function BraidGlossaryPage() {
                 )}
 
                 {/* Agreement Checkbox - Full Width */}
-                <div className="flex items-start gap-3 p-4 py-4 px-4 bg-amber-200">
+                <div className="flex items-start gap-3 p-4 py-4 px-4 bg-yellow-200">
                   <input
                     type="checkbox"
                     id="agreeToShare"
@@ -1942,7 +1942,7 @@ export default function BraidGlossaryPage() {
                   <div className="p-4 space-y-4">
                     <input
                       type="email"
-                      placeholder="EMAIL"
+                      placeholder="Email"
                       value={accountData.email}
                       onChange={(e) => setAccountData({ ...accountData, email: e.target.value })}
                       className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
@@ -1950,7 +1950,7 @@ export default function BraidGlossaryPage() {
                     />
                     <input
                       type="password"
-                      placeholder="PASSWORD"
+                      placeholder="Password"
                       value={accountData.password}
                       onChange={(e) => setAccountData({ ...accountData, password: e.target.value })}
                       className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
@@ -1958,7 +1958,7 @@ export default function BraidGlossaryPage() {
                     />
                     <input
                       type="password"
-                      placeholder="CONFIRM PASSWORD"
+                      placeholder="Confirm Password"
                       value={accountData.confirmPassword}
                       onChange={(e) => setAccountData({ ...accountData, confirmPassword: e.target.value })}
                       className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
@@ -1966,7 +1966,7 @@ export default function BraidGlossaryPage() {
                     />
                     <input
                       type="text"
-                      placeholder="FIRST NAME"
+                      placeholder="First Name"
                       value={accountData.firstName}
                       onChange={(e) => setAccountData({ ...accountData, firstName: e.target.value })}
                       className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
@@ -1974,7 +1974,7 @@ export default function BraidGlossaryPage() {
                     />
                     <input
                       type="text"
-                      placeholder="LAST NAME"
+                      placeholder="Last Name"
                       value={accountData.lastName}
                       onChange={(e) => setAccountData({ ...accountData, lastName: e.target.value })}
                       className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"

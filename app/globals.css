@@ -67,10 +67,10 @@ input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  width: 1rem;
-  height: 1rem;
+  width: 2rem;
+  height: 2rem;
   border: 2px solid #374151;
-  background-color: #f3f4f6;
+  background-color: pink;
   cursor: pointer;
   position: relative;
 }
