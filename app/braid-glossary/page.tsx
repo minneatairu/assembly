@@ -984,7 +984,7 @@ export default function BraidGlossaryPage() {
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="h-12 px-4 bg-yellow-400 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-yellow-500 transition-colors min-w-[120px]"
+                  className="h-12 px-4 bg-yellow-400 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-yellow-500 transition-colors min-w-[200px]"
                 >
                   <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
                   <svg
@@ -1263,7 +1263,7 @@ export default function BraidGlossaryPage() {
                           name="imageUrl"
                           value={formData.imageUrl ?? ""}
                           onChange={handleInputChange}
-                          placeholder="Image URL (optional)"
+                          placeholder="URL"
                           className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
                         />
 
@@ -1323,7 +1323,7 @@ export default function BraidGlossaryPage() {
                               value={formData.linkTitle ?? ""}
                               onChange={handleInputChange}
                               placeholder="Title"
-                              className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                              className="w-full p-4 bg-white border-b border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
                               required
                             />
                           </div>
@@ -1335,7 +1335,7 @@ export default function BraidGlossaryPage() {
                             value={formData.linkUrl ?? ""}
                             onChange={handleInputChange}
                             placeholder="URL"
-                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            className="w-full p-4 bg-white border-b border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
                             required={submissionType === "link"}
                           />
 
@@ -1347,7 +1347,7 @@ export default function BraidGlossaryPage() {
                               onChange={handleInputChange}
                               placeholder="Description"
                               rows={4}
-                              className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400 resize-none"
+                              className="w-full p-4 bg-white border-b border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black resize-none"
                             />
                             <span className="absolute right-4 top-4 text-gray-400 stick-no-bills text-sm">
                               Optional
@@ -1361,7 +1361,7 @@ export default function BraidGlossaryPage() {
                             value={formData.contributorName ?? ""}
                             onChange={handleInputChange}
                             placeholder="Contributor name"
-                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            className="w-full p-4 bg-white border-b border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
                             required
                           />
                         </div>
@@ -1376,22 +1376,22 @@ export default function BraidGlossaryPage() {
                             name="memoryTitle"
                             value={formData.memoryTitle ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Memory title"
-                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            placeholder="Memory title (sound)"
+                            className="w-full p-4 bg-white border-b border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
                             required={submissionType === "memory"}
                           />
 
                           {/* Audio Recording for Memory */}
                           {audioSupported && (
-                            <div className="bg-white p-4 border border-gray-300">
+                            <div className="bg-white p-4 border border-black">
                               <div className="flex flex-col items-center justify-center min-h-[120px]">
                                 {!isRecording && !audioBlob && (
                                   <button
                                     type="button"
                                     onClick={startRecording}
-                                    className="px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium stick-no-bills border-2 border-black text-3xl"
+                                    className="px-6 py-3 bg-lime-400 text-black hover:bg-lime-500 font-medium stick-no-bills border-2 border-black text-3xl uppercase"
                                   >
-                                    Start Recording
+                                    START RECORDING
                                   </button>
                                 )}
 
@@ -1442,7 +1442,7 @@ export default function BraidGlossaryPage() {
                             value={formData.contributorName ?? ""}
                             onChange={handleInputChange}
                             placeholder="Contributor name"
-                            className="w-full p-4 bg-white border-b border-gray-300 text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-gray-400"
+                            className="w-full p-4 bg-white border-b border-black text-gray-700 placeholder-black stick-no-bills text-3xl sm:text-2xl md:text-3xl focus:outline-none focus:border-black"
                             required
                           />
                         </div>
