@@ -688,8 +688,6 @@ export default function BraidGlossaryPage() {
                 )}
               </div>
 
-              {/* Remove this entire block: */}
-
               <div className="relative">
                 <button
                   onClick={() => setShowFilter(true)}
@@ -729,7 +727,6 @@ export default function BraidGlossaryPage() {
       {/* Main Content */}
       <div className="pt-32 px-8 pb-8">
         {/* Header */}
-        <div className="text-center mb-12">{/* Remove this entire header section */}</div>
 
         {/* Loading State */}
         {loading && (
@@ -982,12 +979,12 @@ export default function BraidGlossaryPage() {
         <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-white animate-in fade-in duration-300 overflow-y-auto">
           <div className="relative w-full max-w-5xl my-8">
             {/* Top bar with close button and dropdown */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-0">
               {/* Custom Submission Type Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="h-12 px-4 bg-green-400 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-xl flex items-center justify-between hover:bg-green-500 transition-colors min-w-[120px]"
+                  className="h-12 px-4 bg-yellow-400 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-yellow-500 transition-colors min-w-[120px]"
                 >
                   <span>{submissionOptions.find((opt) => opt.value === submissionType)?.label}</span>
                   <svg
@@ -1008,7 +1005,7 @@ export default function BraidGlossaryPage() {
                 </button>
 
                 {showDropdown && (
-                  <div className="absolute top-full left-0 w-full bg-green-400 border-2 border-black border-t-0 z-20">
+                  <div className="absolute top-full left-0 w-full bg-yellow-400 border-2 border-black border-t-0 z-20">
                     {submissionOptions.map((option) => (
                       <button
                         key={option.value}
@@ -1016,8 +1013,8 @@ export default function BraidGlossaryPage() {
                           setSubmissionType(option.value as "photo" | "link" | "memory")
                           setShowDropdown(false)
                         }}
-                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-xl hover:bg-green-500 transition-colors border-b border-black last:border-b-0 ${
-                          submissionType === option.value ? "bg-green-500" : ""
+                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase hover:bg-yellow-500 transition-colors border-b border-black last:border-b-0 ${
+                          submissionType === option.value ? "bg-yellow-500" : ""
                         }`}
                       >
                         {option.label}
@@ -1055,8 +1052,8 @@ export default function BraidGlossaryPage() {
                     {/* Left Side - Photo Upload Area */}
                     <div className="w-1/2">
                       <div
-                        className={`relative bg-green-400 border-r-2 border-black transition-colors ${
-                          isDragOver ? "bg-green-500" : ""
+                        className={`relative bg-yellow-400 border-r-2 border-black transition-colors ${
+                          isDragOver ? "bg-yellow-500" : ""
                         } flex flex-col items-center justify-center cursor-pointer overflow-visible h-full min-h-[500px]`}
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
@@ -1085,10 +1082,10 @@ export default function BraidGlossaryPage() {
                                     const fileInput = document.getElementById("file-input") as HTMLInputElement
                                     if (fileInput) fileInput.value = ""
                                   }}
-                                  className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 text-sm font-bold"
+                                  className="absolute top-0 right-0 w-12 h-12 bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 text-sm font-bold"
                                   title="Remove image"
                                 >
-                                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                       strokeLinecap="round"
                                       strokeLinejoin="round"
@@ -1130,10 +1127,10 @@ export default function BraidGlossaryPage() {
                                         if (fileInput) fileInput.value = ""
                                       }
                                     }}
-                                    className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 text-sm font-bold"
+                                    className="absolute top-0 right-0 w-12 h-12 bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 text-sm font-bold"
                                     title="Remove image"
                                   >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -1247,7 +1244,7 @@ export default function BraidGlossaryPage() {
                           name="region"
                           value={formData.region ?? ""}
                           onChange={handleInputChange}
-                          placeholder="Cultural origin"
+                          placeholder="Origin"
                           className="h-20 px-4 bg-gray-50 border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-3xl sm:text-2xl md:text-3xl"
                           required
                         />
@@ -1557,7 +1554,7 @@ export default function BraidGlossaryPage() {
                     type="submit"
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="w-full py-4 bg-green-400 text-black text-3xl sm:text-2xl md:text-3xl hover:bg-green-500 transition-colors stick-no-bills border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-4 bg-yellow-400 text-black text-3xl sm:text-2xl md:text-3xl hover:bg-yellow-500 transition-colors stick-no-bills border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Submitting..." : "Submit Braid"}
                   </button>
