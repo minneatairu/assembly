@@ -700,7 +700,7 @@ export default function BraidGlossaryPage() {
   ]
 
   const filterOptions = [
-    { value: "all", label: "All submissions" },
+    { value: "all", label: "All Contributions" },
     { value: "photo", label: "Photo" },
     { value: "link", label: "Link" },
     { value: "memory", label: "Memory" },
@@ -737,8 +737,6 @@ export default function BraidGlossaryPage() {
         <div className="px-8 py-6">
           <div className="flex items-center justify-start gap-4">
             <div className="flex gap-4 p-4 ">
-        
-
               <div className="relative">
                 <button
                   onClick={() => setShowInfoModal(true)}
@@ -746,7 +744,7 @@ export default function BraidGlossaryPage() {
                   onMouseEnter={() => setHoveredIcon("info")}
                   onMouseLeave={() => setHoveredIcon(null)}
                 >
-                  <img src="/globe.svg" alt="Info" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                  <img src="/globe.svg" alt="Info" className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
                 </button>
                 {hoveredIcon === "info" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
@@ -762,7 +760,7 @@ export default function BraidGlossaryPage() {
                   onMouseEnter={() => setHoveredIcon("account")}
                   onMouseLeave={() => setHoveredIcon(null)}
                 >
-                  <img src="/cool.svg" alt="Cool" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" />
+                  <img src="/cool.svg" alt="Cool" className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
                 </button>
                 {hoveredIcon === "account" && (
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 text-xs rounded-none whitespace-nowrap stick-no-bills uppercase">
@@ -944,7 +942,7 @@ export default function BraidGlossaryPage() {
                               )}
                             </button>
                           ) : (
-                            <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                            <h3 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
                               {braid.submission_type === "link"
                                 ? (braid as any).link_title || braid.braid_name || "Untitled Link"
                                 : braid.braid_name}
@@ -1036,18 +1034,18 @@ export default function BraidGlossaryPage() {
                       setFilterType(option.value as "all" | "photo" | "link" | "memory")
                       // Don't close the filter dropdown when a filter is selected
                     }}
-                    className={`w-full p-3 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl transition-colors ${
+                    className={`w-full p-3 text-left stick-no-bills text-black text-3xl sm:text-2xl md:text-5xl transition-colors ${
                       filterType === option.value ? "bg-green-400 hover:bg-green-500" : "bg-gray-50 hover:bg-gray-100"
                     } ${index > 0 ? "border-t border-black" : ""} ${index === 0 ? "border-b border-black" : ""} ${index === filterOptions.length - 1 ? "" : "border-b border-black"}`}
                   >
                     {option.label}
                     {option.value !== "all" && (
                       <span className="text-sm text-gray-600 block">
-                        {braids.filter((b) => b.submission_type === option.value).length} submissions
+                        {braids.filter((b) => b.submission_type === option.value).length} ENTRIES
                       </span>
                     )}
                     {option.value === "all" && (
-                      <span className="text-sm text-gray-600 block">{braids.length} total submissions</span>
+                      <span className="text-sm text-gray-600 block">DATASET COUNT = {braids.length} </span>
                     )}
                   </button>
                 ))}
@@ -1391,9 +1389,8 @@ export default function BraidGlossaryPage() {
                       </div>
 
                       {/* Credit Section - Separate bordered section */}
-                        <div className="border-2 border-black bg-gray-50 mb-6 border-none"   style={{ marginTop: "20px" }}
->
-                            <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
+                      <div className="border-2 border-black bg-gray-50 mb-6 border-none" style={{ marginTop: "20px" }}>
+                        <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                           <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                         </div>
 
@@ -1431,7 +1428,7 @@ export default function BraidGlossaryPage() {
                             value={formData.source ?? ""}
                             onChange={handleInputChange}
                             placeholder="Source"
-                              className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           />
                           <input
                             type="text"
@@ -1635,7 +1632,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Source"
-                           className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                               <input
                                 type="text"
@@ -1643,7 +1640,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Contributor Name"
-                                   className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -1799,8 +1796,7 @@ export default function BraidGlossaryPage() {
                           </div>
 
                           {/* Credit Section for Memory - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-6 border-none"
-                          style="margin-top: 20px">
+                          <div className="border-2 border-black bg-gray-50 mb-6 border-none" style="margin-top: 20px">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black text-xl font-semibold uppercase">Credits</h3>
                             </div>
@@ -1839,7 +1835,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Source URL"
-                              className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                               <input
                                 type="text"
@@ -1847,7 +1843,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Contributor Name"
-                                 className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 bg-yellow-200 border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             </div>
                           </div>
@@ -2014,8 +2010,8 @@ export default function BraidGlossaryPage() {
 
       {/* Info Modal */}
       {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80">
-          <div className="relative bg-white max-w-3xl mx-auto p-8 rounded-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black ">
+          <div className="relative bg-white max-w-3xl mx-auto p-8 ">
             <button onClick={closeInfoModal} className="absolute top-4 right-4 text-black hover:text-gray-600 z-10">
               <svg
                 className="w-12 h-12 sm:w-12 sm:h-12 lg:w-12 lg:h-12"
@@ -2026,38 +2022,28 @@ export default function BraidGlossaryPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <h2 className="text-3xl font-semibold mb-6 stick-no-bills text-black">About the Braid Glossary</h2>
-            <p className="mb-4 stick-no-bills text-black">
-              The Braid Glossary is a community-driven project dedicated to documenting and preserving the diverse world
-              of braids. Our mission is to create a comprehensive resource that celebrates the cultural significance,
-              history, and artistry of braids from around the globe.
-            </p>
-            <h3 className="text-2xl font-semibold mb-4 stick-no-bills text-black">How to Contribute</h3>
-            <p className="mb-4 stick-no-bills text-black">
-              We invite you to share your knowledge and experiences by submitting information about different types of
-              braids. Whether it's a traditional style passed down through generations or a contemporary creation, your
-              contributions help enrich our understanding of this intricate art form.
-            </p>
-            <ul className="list-disc pl-6 mb-4 stick-no-bills text-black">
-              <li>
-                <b>Photos:</b> Share clear images of braids, highlighting their unique patterns and textures.
-              </li>
-              <li>
-                <b>Links:</b> Provide links to relevant articles, tutorials, or resources that offer further insights
-                into specific braid styles.
-              </li>
-              <li>
-                <b>Memories:</b> Share personal stories and anecdotes related to braids, adding a personal touch to the
-                glossary.
-              </li>
-            </ul>
-            <h3 className="text-2xl font-semibold mb-4 stick-no-bills text-black">Contact Us</h3>
-            <p className="stick-no-bills text-black">
-              If you have any questions, suggestions, or feedback, please don't hesitate to reach out to us at{" "}
-              <a href="mailto:contact@dataassembly.com" className="text-blue-600 hover:underline">
-                contact@dataassembly.com
-              </a>
-              .
+            <h2 className="text-3xl font-semibold mb-6 stick-no-bills text-black">
+              THE BRAID INTELLIGENCE DATASET (B.I.D.){" "}
+            </h2>
+            <p className="mb-4 stick-no-bills text-black text-3xl">
+              The Braid Intelligence Dataset (B.I.D.) is designed to improve braid-to-name grounding for Da Braidr, a
+              text-to-braid generation engine built on Imagen-3.
+              <br />
+              <br />
+              Drawing from research on multimodal grounding (Radford et al., 2021; Jia et al., 2021), B.I.D. provides a
+              semantic alignment layer that maps braid names to their corresponding visual structures.
+              <br />
+              <br />
+              Despite advances in image-text models, existing foundation models struggle with underrepresented concept
+              classes—particularly those tied to Black cultural production. In our tests, Imagen-3 consistently returns
+              generic outputs for terms like butterfly braids, lemonade braids, and braided baldie, indicating semantic
+              misalignment.
+              <br />
+              <br />
+              This failure reflects what researchers describe as model fossilization—when a model’s knowledge is fixed
+              at the time of training and lacks exposure to emerging or vernacular concepts. B.I.D. intervenes in this
+              gap by supporting fine-tuning for Da Braidr and improving the system’s ability to generate name-aligned,
+              style-specific outputs.
             </p>
           </div>
         </div>
@@ -2067,7 +2053,7 @@ export default function BraidGlossaryPage() {
       {showDetailModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="relative w-full max-w-md">
+            <div className="relative w-full max-w-[35rem]">
               <button
                 onClick={() => setShowDetailModal(null)}
                 className="absolute -top-12 right-0 text-white bg-black hover:bg-gray-800 p-2 transition-colors duration-200 z-10"
@@ -2126,7 +2112,7 @@ export default function BraidGlossaryPage() {
                     ) : (
                       // Link submissions show title on yellow background
                       <div className="w-full h-full bg-[rgb(254,228,107)] flex items-center justify-center p-4">
-                        <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
+                        <h3 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-bold stick-no-bills text-black uppercase text-center leading-tight">
                           {(showDetailModal as any).link_title || showDetailModal.braid_name || "Untitled Link"}
                         </h3>
                       </div>
