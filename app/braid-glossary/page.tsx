@@ -1096,7 +1096,7 @@ export default function BraidGlossaryPage() {
                           setSubmissionType(option.value as "photo" | "link" | "memory")
                           setShowDropdown(false)
                         }}
-                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-black last:border-b-0 border-b-2 md:text-5xl bg-pink-100 py-0 ${
+                        className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-black last:border-b-0 border-b-2 md:text-5xl py-0 bg-red-200 ${
                           submissionType === option.value ? "bg-[rgb(244,218,97)]" : ""
                         }`}
                       >
