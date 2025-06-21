@@ -55,117 +55,119 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-black overflow-hidden">
-        <div className="container mx-auto px-8 py-12 pb-24">
-          <div className="max-w-2xl mx-auto relative">
-            {/* Create Account Form */}
-            <div
-              className={`absolute top-0 left-0 w-full transition-all duration-700 ease-in-out ${
-                isSignIn ? "transform -translate-y-full opacity-0" : "transform translate-y-0 opacity-100"
-              }`}
-            >
-              <div className="bg-white border-dashed border-2 border-black">
-                <div className="px-4 border-b-dashed border-b-2 border-black bg-yellow-200 py-0">
-                  <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A NEW ACCOUNT</h3>
+      <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden">
+        <div className="w-full max-w-2xl mx-auto px-8 relative min-h-[600px]">
+          {/* Create Account Form */}
+          <div
+            className={`absolute top-0 left-0 w-full transition-all duration-700 ease-in-out ${
+              isSignIn
+                ? "transform -translate-y-full opacity-0 pointer-events-none z-0"
+                : "transform translate-y-0 opacity-100 pointer-events-auto z-10"
+            }`}
+          >
+            <div className="bg-white border-dashed border-2 border-black">
+              <div className="px-4 border-b border-b-2 border-dashed border-black bg-yellow-200 py-0">
+                <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A NEW ACCOUNT</h3>
+              </div>
+
+              <form className="p-0">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full px-4 py-4 bg-yellow-200 border-b border-b-2 border-dashed border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                  required
+                />
+
+                <input
+                  type="text"
+                  placeholder="Username"
+                  className="w-full px-4 py-4 bg-yellow-200 border-b border-b-2 border-dashed border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                  required
+                />
+
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="w-full px-4 py-4 bg-yellow-200 border-b border-b-2 border-dashed border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                  required
+                />
+
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  className="w-full px-4 py-4 bg-yellow-200 border-b border-b-2 border-dashed border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                  required
+                />
+
+                <div className="p-4 bg-yellow-200">
+                  <button
+                    type="submit"
+                    className="w-full py-4 text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-dashed border-2 border-black font-bold uppercase text-5xl bg-yellow-200"
+                  >
+                    Create Account
+                  </button>
                 </div>
-
-                <form className="p-0">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
-                    required
-                  />
-
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
-                    required
-                  />
-
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
-                    required
-                  />
-
-                  <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
-                    required
-                  />
-
-                  <div className="p-4 bg-yellow-200">
-                    <button
-                      type="submit"
-                      className="w-full py-4 text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-dashed border-2 border-black font-bold uppercase text-5xl bg-yellow-200"
-                    >
-                      Create Account
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              <div className="text-center mt-6">
-                <p className="stick-no-bills mb-4 text-amber-200">ALREADY HAVE AN ACCOUNT?</p>
-                <button
-                  onClick={() => setIsSignIn(true)}
-                  className="hover:bg-green-600 transition-colors stick-no-bills text-black bg-green-500 text-5xl py-3.5 px-12"
-                >
-                  SIGN IN
-                </button>
-              </div>
+              </form>
             </div>
 
-            {/* Sign In Form */}
-            <div
-              className={`absolute top-0 left-0 w-full transition-all duration-700 ease-in-out ${
-                isSignIn ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"
-              }`}
-            >
-              <div className="bg-white border-dashed border-2 border-black">
-                <div className="px-4 border-b-dashed border-b-2 border-black bg-green-400 py-0">
-                  <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR ACCOUNT</h3>
+            <div className="text-center mt-6">
+              <p className="stick-no-bills mb-4 text-amber-200">ALREADY HAVE AN ACCOUNT?</p>
+              <button
+                onClick={() => setIsSignIn(true)}
+                className="hover:bg-green-600 transition-colors stick-no-bills text-black bg-green-500 text-5xl py-3.5 px-12"
+              >
+                SIGN IN
+              </button>
+            </div>
+          </div>
+
+          {/* Sign In Form */}
+          <div
+            className={`absolute top-0 left-0 w-full transition-all duration-700 ease-in-out ${
+              isSignIn
+                ? "transform translate-y-0 opacity-100 pointer-events-auto z-10"
+                : "transform translate-y-full opacity-0 pointer-events-none z-0"
+            }`}
+          >
+            <div className="bg-white border-dashed border-2 border-black">
+              <div className="px-4 border-b border-b-2 border-dashed border-black bg-green-400 py-0">
+                <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR ACCOUNT</h3>
+              </div>
+
+              <form className="p-0">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full px-4 py-4 bg-green-400 border-b border-b-2 border-dashed border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                  required
+                />
+
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="w-full px-4 py-4 bg-green-400 border-b border-b-2 border-dashed border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                  required
+                />
+
+                <div className="p-4 bg-green-400">
+                  <button
+                    type="submit"
+                    className="w-full py-4 text-black hover:bg-green-500 transition-colors stick-no-bills border-dashed border-2 border-black font-bold uppercase text-5xl bg-green-400"
+                  >
+                    Sign In
+                  </button>
                 </div>
+              </form>
+            </div>
 
-                <form className="p-0">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-full px-4 py-4 bg-green-400 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
-                    required
-                  />
-
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full px-4 py-4 bg-green-400 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
-                    required
-                  />
-
-                  <div className="p-4 bg-green-400">
-                    <button
-                      type="submit"
-                      className="w-full py-4 text-black hover:bg-green-500 transition-colors stick-no-bills border-dashed border-2 border-black font-bold uppercase text-5xl bg-green-400"
-                    >
-                      Sign In
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              <div className="text-center mt-6">
-                <p className="stick-no-bills mb-4 text-amber-200">DON'T HAVE AN ACCOUNT?</p>
-                <button
-                  onClick={() => setIsSignIn(false)}
-                  className="hover:bg-yellow-300 transition-colors stick-no-bills text-black text-5xl py-3.5 px-12 bg-green-500"
-                >
-                  CREATE ACCOUNT
-                </button>
-              </div>
+            <div className="text-center mt-6">
+              <p className="stick-no-bills mb-4 text-amber-200">DON'T HAVE AN ACCOUNT?</p>
+              <button
+                onClick={() => setIsSignIn(false)}
+                className="hover:bg-yellow-300 transition-colors stick-no-bills text-black text-5xl py-3.5 px-12 bg-green-500"
+              >
+                CREATE ACCOUNT
+              </button>
             </div>
           </div>
         </div>

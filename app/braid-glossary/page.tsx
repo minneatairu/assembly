@@ -1083,7 +1083,7 @@ export default function BraidGlossaryPage() {
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="h-12 px-4 border-dashed border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] py-8 bg-yellow-200 border-dashed border-2"
+                  className="h-12 px-4 border-black focus:outline-none stick-no-bills text-black text-3xl sm:text-2xl md:text-3xl uppercase flex items-center justify-between hover:bg-[rgb(244,218,97)] transition-colors min-w-[200px] bg-yellow-200 py-12 border-0"
                 >
                   <span className="text-5xl">
                     {submissionOptions.find((opt) => opt.value === submissionType)?.label}
@@ -1345,7 +1345,7 @@ export default function BraidGlossaryPage() {
                             className="py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                           />
 
-                          <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black">
+                          <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black py-4">
                             <div className="py-2">
                               <div className="flex items-center justify-between">
                                 <label className="stick-no-bills text-black text-5xl">Braid Family</label>
@@ -1389,7 +1389,7 @@ export default function BraidGlossaryPage() {
                           </div>
 
                           {/* Braid Patterns - Collapsible with Plus Icon */}
-                          <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black">
+                          <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black py-3.5 border-dashed">
                             <div className="py-2">
                               <div className="flex items-center justify-between">
                                 <label className="stick-no-bills text-black text-5xl">Braid Pattern</label>
@@ -1577,7 +1577,7 @@ export default function BraidGlossaryPage() {
                                 className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
                               />
 
-                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black">
+                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black my-0 py-3.5">
                                 <div className="py-2">
                                   <div className="flex items-center justify-between">
                                     <label className="stick-no-bills text-black text-5xl">Braid Family</label>
@@ -1621,7 +1621,7 @@ export default function BraidGlossaryPage() {
                               </div>
 
                               {/* Braid Patterns for Link - Collapsible */}
-                              <div className="px-4 bg-yellow-200 py-0.5">
+                              <div className="px-4 bg-yellow-200 py-5">
                                 <div className="flex items-center justify-between mb-2">
                                   <label className="stick-no-bills text-black text-5xl">Braid Pattern</label>
                                   <button
@@ -1734,13 +1734,13 @@ export default function BraidGlossaryPage() {
 
                           {/* Audio Recording for Memory */}
                           {audioSupported && (
-                            <div className="p-4 border-dashed border-2 border-black mb-6 border-none bg-yellow-200 py-16">
+                            <div className="p-4 border-dashed border-2 border-black border-none bg-yellow-200 py-16 mb-0">
                               <div className="flex flex-col items-center justify-center min-h-[120px]">
                                 {!isRecording && !audioBlob && (
                                   <button
                                     type="button"
                                     onClick={startRecording}
-                                    className="px-6 py-3 text-black hover:bg-lime-500 font-medium stick-no-bills border-dashed border-2 border-black uppercase bg-rose-200 text-5xl border-solid"
+                                    className="px-6 text-black hover:bg-lime-500 font-medium stick-no-bills border-dashed border-2 border-black uppercase bg-rose-200 text-5xl border-solid py-6"
                                   >
                                     START RECORDING
                                   </button>
@@ -1803,7 +1803,7 @@ export default function BraidGlossaryPage() {
                                 className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
                               />
 
-                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black">
+                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black py-3.5">
                                 <div className="py-2">
                                   <div className="flex items-center justify-between">
                                     <label className="stick-no-bills text-black text-5xl">Braid Family</label>
@@ -1847,7 +1847,7 @@ export default function BraidGlossaryPage() {
                               </div>
 
                               {/* Braid Patterns for Memory - Collapsible */}
-                              <div className="px-4 bg-yellow-200">
+                              <div className="px-4 bg-yellow-200 py-5">
                                 <div className="flex items-center justify-between mb-2">
                                   <label className="stick-no-bills text-black text-5xl">Braid Pattern</label>
                                   <button
@@ -2065,7 +2065,7 @@ export default function BraidGlossaryPage() {
                     type="submit"
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="w-full py-4 text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-dashed border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed uppercase text-5xl border-none my-8 bg-yellow-200"
+                    className="w-full text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-dashed border-2 border-black font-bold disabled:opacity-50 disabled:cursor-not-allowed uppercase text-5xl border-none my-8 bg-yellow-200 py-7"
                   >
                     {submitting ? "Submitting..." : "SUBMIT BRAID"}
                   </button>
