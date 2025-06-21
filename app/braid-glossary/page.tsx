@@ -1056,11 +1056,9 @@ export default function BraidGlossaryPage() {
       )}
 
       {/* Form Modal */}
-{showForm && (
-  <div className="fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black">
-    <div className="relative w-full max-w-4xl bg-black border-2 border-black p-6 overflow-y-auto max-h-[90vh]">
-    
-   
+      {showForm && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black">
+          <div className="relative w-full max-w-4xl bg-black border-2 border-black p-6 overflow-y-auto max-h-[90vh]">
             {/* Top bar with close button and dropdown */}
             <div className="flex items-center justify-between mb-0 px-0 py-0">
               {/* Custom Submission Type Dropdown */}
@@ -1297,9 +1295,7 @@ export default function BraidGlossaryPage() {
                       {/* Main Form Fields - Separate bordered section */}
                       <div className="border-black mb-3 mt-0 bg-yellow-300 border-0">
                         <div className="px-4 py-2 border-b-2 border-black bg-yellow-200 mt-8">
-                          <h3 className="stick-no-bills text-black font-semibold uppercase ">
-                            Braid Information
-                          </h3>
+                          <h3 className="stick-no-bills text-black font-semibold uppercase ">Braid Information</h3>
                         </div>
 
                         <div className="p-0">
@@ -1475,9 +1471,7 @@ export default function BraidGlossaryPage() {
                           {/* Link Information - Bordered section */}
                           <div className="border-black bg-gray-50 border-0 mb-4 mt-8">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black font-semibold uppercase">
-                                Link Information
-                              </h3>
+                              <h3 className="stick-no-bills text-black font-semibold uppercase">Link Information</h3>
                             </div>
 
                             <div className="p-0 bg-amber-200">
@@ -1518,9 +1512,7 @@ export default function BraidGlossaryPage() {
                           {/* Basic Information - Separate bordered section */}
                           <div className="border-2 border-black mb-4 mt-6">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black  font-semibold uppercase">
-                                Basic Information
-                              </h3>
+                              <h3 className="stick-no-bills text-black  font-semibold uppercase">Basic Information</h3>
                             </div>
 
                             <div className="p-0">
@@ -1720,9 +1712,7 @@ export default function BraidGlossaryPage() {
                           {/* Basic Information - Separate bordered section */}
                           <div className="border-2 border-black bg-gray-50 mb-6 border-none">
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
-                              <h3 className="stick-no-bills text-black font-semibold uppercase">
-                                Basic Information
-                              </h3>
+                              <h3 className="stick-no-bills text-black font-semibold uppercase">Basic Information</h3>
                             </div>
 
                             <div className="p-0">
@@ -1798,7 +1788,10 @@ export default function BraidGlossaryPage() {
                           </div>
 
                           {/* Credit Section for Memory - Separate bordered section */}
-                          <div className="border-2 border-black bg-gray-50 mb-6 border-none" style="margin-top: 20px">
+                          <div
+                            className="border-2 border-black bg-gray-50 mb-6 border-none"
+                            style={{ marginTop: "20px" }}
+                          >
                             <div className="px-4 py-2 border-b-2 border-black bg-yellow-200">
                               <h3 className="stick-no-bills text-black font-semibold uppercase">Credits</h3>
                             </div>
@@ -1887,9 +1880,8 @@ export default function BraidGlossaryPage() {
                     className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                     required
                   />
-<label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-black uppercase">
-               I have the rights to submit this braid for inclusion in The Braid Intelligence
-                    Dataset (B.I.D.).
+                  <label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-black uppercase">
+                    I have the rights to submit this braid for inclusion in The Braid Intelligence Dataset (B.I.D.).
                   </label>
                 </div>
 
@@ -1904,7 +1896,10 @@ export default function BraidGlossaryPage() {
                     className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
                     required
                   />
-                  <label htmlFor="licenseCheck" className="stick-no-bills leading-relaxed text-black leading-6 uppercase">
+                  <label
+                    htmlFor="licenseCheck"
+                    className="stick-no-bills leading-relaxed text-black leading-6 uppercase"
+                  >
                     This braid is either my original work, in the public domain, or covered by an open license.
                   </label>
                 </div>
@@ -2174,7 +2169,7 @@ export default function BraidGlossaryPage() {
                       {showDetailModal.braid_family && (
                         <div className="flex items-center gap-4">
                           <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                  Braid Family
+                            Braid Family
                           </span>
                           <span className="stick-no-bills text-black uppercase text-xl">
                             ( {showDetailModal.braid_family.replace("-", " ")} )
