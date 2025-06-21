@@ -56,18 +56,16 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <div className="min-h-screen bg-black overflow-hidden">
-        <div className="container mx-auto px-8 py-12">
+        <div className="container mx-auto px-8 py-12 pb-24">
           <div className="max-w-2xl mx-auto relative">
             {/* Create Account Form */}
             <div
-              className={`transition-transform duration-700 ease-in-out ${isSignIn ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}
+              className={`absolute top-0 left-0 w-full transition-all duration-700 ease-in-out ${
+                isSignIn ? "transform -translate-y-full opacity-0" : "transform translate-y-0 opacity-100"
+              }`}
             >
-              <h1 className="text-4xl stick-no-bills text-white font-bold mb-8 text-center uppercase">
-                Create Your Account
-              </h1>
-
               <div className="bg-white border-2 border-black">
-                <div className="px-4 border-b-2 border-black bg-yellow-200 py-2">
+                <div className="px-4 border-b-2 border-black bg-yellow-200 py-0">
                   <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A NEW ACCOUNT</h3>
                 </div>
 
@@ -124,12 +122,14 @@ export default function ProfilePage() {
 
             {/* Sign In Form */}
             <div
-              className={`absolute top-0 left-0 w-full transition-transform duration-700 ease-in-out ${isSignIn ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
+              className={`absolute top-0 left-0 w-full transition-all duration-700 ease-in-out ${
+                isSignIn ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"
+              }`}
             >
-              <h1 className="text-4xl stick-no-bills text-white font-bold mb-8 text-center uppercase">Sign In</h1>
+              
 
               <div className="bg-white border-2 border-black">
-                <div className="px-4 border-b-2 border-black bg-green-400 py-2">
+                <div className="px-4 border-b-2 border-black bg-green-400 py-0">
                   <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR ACCOUNT</h3>
                 </div>
 
@@ -163,7 +163,7 @@ export default function ProfilePage() {
                 <p className="stick-no-bills mb-4 text-amber-200">DON'T HAVE AN ACCOUNT?</p>
                 <button
                   onClick={() => setIsSignIn(false)}
-                  className="hover:bg-yellow-300 transition-colors stick-no-bills text-black bg-yellow-200 text-5xl py-3.5 px-12"
+                  className="hover:bg-yellow-300 transition-colors stick-no-bills text-black text-5xl py-3.5 px-12 bg-green-500"
                 >
                   CREATE ACCOUNT
                 </button>

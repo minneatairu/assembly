@@ -361,7 +361,14 @@ export default function BraidGlossaryPage() {
         body: formData,
       })
 
-      const result = await response.json()
+      // Safely parse response (some 5xx routes return plain-text)
+      let result: any
+      try {
+        result = await response.clone().json()
+      } catch {
+        const text = await response.text()
+        throw new Error(text || "Unexpected response format from upload endpoint")
+      }
 
       if (!response.ok) {
         console.error("Upload failed:", result)
@@ -390,32 +397,35 @@ export default function BraidGlossaryPage() {
     try {
       setUploadStatus("Uploading pronunciation...")
 
-      // Convert blob to file
       const audioFile = new File([audioBlob], `pronunciation-${Date.now()}.webm`, { type: "audio/webm" })
+      const formData = new FormData()
+      formData.append("file", audioFile)
 
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       })
 
-      const result = await response.json()
+      let result: any
+      try {
+        result = await response.clone().json()
+      } catch {
+        const text = await response.text()
+        throw new Error(text || "Unexpected response format from upload endpoint")
+      }
 
       if (!response.ok) {
         console.error("Audio upload failed:", result)
         throw new Error(result.details || result.error || "Audio upload failed")
       }
 
-      if (result.provider === "demo") {
-        setUploadStatus("Pronunciation ready for demo playback")
-      } else {
-        setUploadStatus("Pronunciation uploaded successfully!")
-      }
-
-      return result.url
+      setUploadStatus(
+        result.provider === "demo" ? "Pronunciation ready for demo playback" : "Pronunciation uploaded successfully!",
+      )
+      return result.url as string
     } catch (error) {
       console.error("Audio upload error:", error)
       setUploadStatus(`Pronunciation upload failed: ${error instanceof Error ? error.message : "Unknown error"}`)
-      // Return null instead of throwing to allow form submission to continue
       return null
     }
   }
@@ -893,7 +903,7 @@ export default function BraidGlossaryPage() {
                           {/* Multiple images navigation */}
                           {hasMultipleImages && (
                             <div className="absolute top-0 left-0">
-                              <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl md:text-2xl lg:text-3xl stick-no-bills mb-1 inline-block">
+                              <div className="bg-black text-white px-2 py-1 text-3xl sm:text-xl stick-no-bills mb-1 inline-block md:text-5xl">
                                 {currentImageIndex + 1} / {totalImages}
                               </div>
                               <div className="flex flex-col gap-1">
@@ -904,7 +914,7 @@ export default function BraidGlossaryPage() {
                                     const newIndex = currentIndex > 0 ? currentIndex - 1 : totalImages - 1
                                     setCurrentImageIndices((prev) => ({ ...prev, [braid.id.toString()]: newIndex }))
                                   }}
-                                  className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                  className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors text-5xl px-11"
                                   title="Previous image"
                                 >
                                   ←
@@ -916,7 +926,7 @@ export default function BraidGlossaryPage() {
                                     const newIndex = currentIndex < totalImages - 1 ? currentIndex + 1 : 0
                                     setCurrentImageIndices((prev) => ({ ...prev, [braid.id.toString()]: newIndex }))
                                   }}
-                                  className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                  className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors text-5xl px-11"
                                   title="Next image"
                                 >
                                   →
@@ -1233,7 +1243,7 @@ export default function BraidGlossaryPage() {
 
                                   {/* Image counter and navigation arrows */}
                                   <div className="absolute top-0 left-0">
-                                    <div className="bg-black text-white px-2 py-1 text-2xl stick-no-bills mb-1 inline-block">
+                                    <div className="bg-black text-white px-2 py-1 stick-no-bills mb-1 inline-block text-5xl">
                                       {currentImageIndex + 1} / {formData.imageFiles.length}
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -1242,7 +1252,7 @@ export default function BraidGlossaryPage() {
                                           e.stopPropagation()
                                           setCurrentImageIndex((prev) => prev - 1)
                                         }}
-                                        className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                        className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors text-5xl px-11"
                                         title="Previous image"
                                       >
                                         ←
@@ -1252,7 +1262,7 @@ export default function BraidGlossaryPage() {
                                           e.stopPropagation()
                                           setCurrentImageIndex((prev) => prev + 1)
                                         }}
-                                        className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors"
+                                        className="h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors text-5xl w-8 px-11"
                                         title="Next image"
                                       >
                                         →
@@ -1714,7 +1724,7 @@ export default function BraidGlossaryPage() {
                             name="memoryTitle"
                             value={formData.memoryTitle ?? ""}
                             onChange={handleInputChange}
-                            placeholder="Memory Title "
+                            placeholder="Braid Name "
                             className="w-full px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black "
                             required={submissionType === "memory"}
                           />
@@ -2003,7 +2013,7 @@ export default function BraidGlossaryPage() {
                       onChange={() => setShowAccountCreation(!showAccountCreation)}
                       className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2 uppercase"
                     />
-                    Create an account to manage your submissions
+                    Create an account to manage your contributions.
                   </label>
                 </div>
 
@@ -2018,7 +2028,7 @@ export default function BraidGlossaryPage() {
                       className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                       required
                     />
-      
+
                     <input
                       type="text"
                       placeholder="Username"
@@ -2043,7 +2053,6 @@ export default function BraidGlossaryPage() {
                       className="w-full px-3 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                       required
                     />
-              
                   </div>
                 )}
 
@@ -2324,7 +2333,7 @@ export default function BraidGlossaryPage() {
                           {showDetailModal.public_url && (
                             <div className="flex items-start gap-4">
                               <span className="text-xl font-semibold stick-no-bills text-black uppercase min-w-fit">
-                            Https://
+                                Https://
                               </span>
                               <span className="stick-no-bills text-black uppercase text-xl">
                                 ({" "}
