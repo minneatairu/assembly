@@ -64,8 +64,8 @@ export default function ProfilePage() {
                 isSignIn ? "transform -translate-y-full opacity-0" : "transform translate-y-0 opacity-100"
               }`}
             >
-              <div className="bg-white border-2 border-black">
-                <div className="px-4 border-b-2 border-black bg-yellow-200 py-0">
+              <div className="bg-white border-dashed border-2 border-black">
+                <div className="px-4 border-b-dashed border-b-2 border-black bg-yellow-200 py-0">
                   <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A NEW ACCOUNT</h3>
                 </div>
 
@@ -73,35 +73,35 @@ export default function ProfilePage() {
                   <input
                     type="email"
                     placeholder="Email"
-                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                     required
                   />
 
                   <input
                     type="text"
                     placeholder="Username"
-                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                     required
                   />
 
                   <input
                     type="password"
                     placeholder="Password"
-                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                     required
                   />
 
                   <input
                     type="password"
                     placeholder="Confirm Password"
-                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    className="w-full px-4 py-4 bg-yellow-200 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                     required
                   />
 
                   <div className="p-4 bg-yellow-200">
                     <button
                       type="submit"
-                      className="w-full py-4 text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-2 border-black font-bold uppercase text-5xl bg-yellow-200"
+                      className="w-full py-4 text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-dashed border-2 border-black font-bold uppercase text-5xl bg-yellow-200"
                     >
                       Create Account
                     </button>
@@ -126,10 +126,8 @@ export default function ProfilePage() {
                 isSignIn ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"
               }`}
             >
-              
-
-              <div className="bg-white border-2 border-black">
-                <div className="px-4 border-b-2 border-black bg-green-400 py-0">
+              <div className="bg-white border-dashed border-2 border-black">
+                <div className="px-4 border-b-dashed border-b-2 border-black bg-green-400 py-0">
                   <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR ACCOUNT</h3>
                 </div>
 
@@ -137,21 +135,21 @@ export default function ProfilePage() {
                   <input
                     type="email"
                     placeholder="Email"
-                    className="w-full h-16 px-4 bg-green-400 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    className="w-full px-4 py-4 bg-green-400 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                     required
                   />
 
                   <input
                     type="password"
                     placeholder="Password"
-                    className="w-full h-16 px-4 bg-green-400 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    className="w-full px-4 py-4 bg-green-400 border-b-dashed border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                     required
                   />
 
                   <div className="p-4 bg-green-400">
                     <button
                       type="submit"
-                      className="w-full py-4 text-black hover:bg-green-500 transition-colors stick-no-bills border-2 border-black font-bold uppercase text-5xl bg-green-400"
+                      className="w-full py-4 text-black hover:bg-green-500 transition-colors stick-no-bills border-dashed border-2 border-black font-bold uppercase text-5xl bg-green-400"
                     >
                       Sign In
                     </button>
@@ -192,11 +190,11 @@ export default function ProfilePage() {
           <h2 className="text-2xl stick-no-bills text-black font-bold mb-4">Your Submissions ({userBraids.length})</h2>
 
           {userBraids.length === 0 ? (
-            <div className="text-center py-12 bg-white border-2 border-black rounded-lg">
+            <div className="text-center py-12 bg-white border-dashed border-2 border-black rounded-lg">
               <p className="stick-no-bills text-black mb-4">You haven't submitted any braids yet</p>
               <a
                 href="/braid-glossary"
-                className="bg-green-400 text-black py-2 px-6 hover:bg-green-500 transition-colors stick-no-bills border-2 border-black rounded-full"
+                className="bg-green-400 text-black py-2 px-6 hover:bg-green-500 transition-colors stick-no-bills border-dashed border-2 border-black rounded-full"
               >
                 Submit Your First Braid
               </a>
@@ -204,7 +202,7 @@ export default function ProfilePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {userBraids.map((braid) => (
-                <div key={braid.id} className="bg-white border-2 border-black rounded-lg overflow-hidden">
+                <div key={braid.id} className="bg-white border-dashed border-2 border-black rounded-lg overflow-hidden">
                   {braid.image_url && (
                     <img
                       src={braid.image_url || "/placeholder.svg"}
@@ -228,7 +226,7 @@ export default function ProfilePage() {
         <div className="text-center">
           <a
             href="/braid-glossary"
-            className="bg-blue-600 text-white py-2 px-6 hover:bg-blue-700 transition-colors stick-no-bills border-2 border-black rounded-full mr-4"
+            className="bg-blue-600 text-white py-2 px-6 hover:bg-blue-700 transition-colors stick-no-bills border-dashed border-2 border-black rounded-full mr-4"
           >
             Back to Glossary
           </a>
@@ -237,7 +235,7 @@ export default function ProfilePage() {
               await fetch("/api/auth/logout", { method: "POST" })
               window.location.href = "/braid-glossary"
             }}
-            className="bg-gray-400 text-black py-2 px-6 hover:bg-gray-500 transition-colors stick-no-bills border-2 border-black rounded-full"
+            className="bg-gray-400 text-black py-2 px-6 hover:bg-gray-500 transition-colors stick-no-bills border-dashed border-2 border-black rounded-full"
           >
             Logout
           </button>
