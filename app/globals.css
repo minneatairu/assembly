@@ -83,6 +83,9 @@ div.flex.items-start.gap-3.p-4.px-4.py-4.bg-yellow-200 {align-items:center}
 
 
 }
+.px-3 {
+    padding-left: 2rem;
+    padding-right: 2rem;}
 .space-y-4>:not([hidden])~:not([hidden]){margin-top:0}
 div.grid.grid-cols-2.gap-2.overflow-y-auto {
     margin: 3rem 0;

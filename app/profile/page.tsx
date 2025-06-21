@@ -7,6 +7,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState<any>(null)
   const [userBraids, setUserBraids] = useState<Braid[]>([])
   const [loading, setLoading] = useState(true)
+  const [isSignIn, setIsSignIn] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in and fetch their submissions
@@ -46,23 +47,129 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="stick-no-bills text-black">Loading profile...</div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="stick-no-bills text-white">Loading profile...</div>
       </div>
     )
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl stick-no-bills text-black mb-4">Please log in to view your profile</h1>
-          <a
-            href="/braid-glossary"
-            className="bg-green-400 text-black py-2 px-6 hover:bg-green-500 transition-colors stick-no-bills border-2 border-black rounded-full"
-          >
-            Back to Glossary
-          </a>
+      <div className="min-h-screen bg-black overflow-hidden">
+        <div className="container mx-auto px-8 py-12">
+          <div className="max-w-2xl mx-auto relative">
+            {/* Create Account Form */}
+            <div
+              className={`transition-transform duration-700 ease-in-out ${isSignIn ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}
+            >
+              <h1 className="text-4xl stick-no-bills text-white font-bold mb-8 text-center uppercase">
+                Create Your Account
+              </h1>
+
+              <div className="bg-white border-2 border-black">
+                <div className="px-4 border-b-2 border-black bg-yellow-200 py-2">
+                  <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A NEW ACCOUNT</h3>
+                </div>
+
+                <form className="p-0">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    required
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    required
+                  />
+
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    required
+                  />
+
+                  <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    className="w-full h-16 px-4 bg-yellow-200 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    required
+                  />
+
+                  <div className="p-4 bg-yellow-200">
+                    <button
+                      type="submit"
+                      className="w-full py-4 text-black hover:bg-[rgb(244,218,97)] transition-colors stick-no-bills border-2 border-black font-bold uppercase text-5xl bg-yellow-200"
+                    >
+                      Create Account
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="text-center mt-6">
+                <p className="stick-no-bills mb-4 text-amber-200">ALREADY HAVE AN ACCOUNT?</p>
+                <button
+                  onClick={() => setIsSignIn(true)}
+                  className="hover:bg-green-600 transition-colors stick-no-bills text-black bg-green-500 text-5xl py-3.5 px-12"
+                >
+                  SIGN IN
+                </button>
+              </div>
+            </div>
+
+            {/* Sign In Form */}
+            <div
+              className={`absolute top-0 left-0 w-full transition-transform duration-700 ease-in-out ${isSignIn ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
+            >
+              <h1 className="text-4xl stick-no-bills text-white font-bold mb-8 text-center uppercase">Sign In</h1>
+
+              <div className="bg-white border-2 border-black">
+                <div className="px-4 border-b-2 border-black bg-green-400 py-2">
+                  <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR ACCOUNT</h3>
+                </div>
+
+                <form className="p-0">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    className="w-full h-16 px-4 bg-green-400 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    required
+                  />
+
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    className="w-full h-16 px-4 bg-green-400 border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                    required
+                  />
+
+                  <div className="p-4 bg-green-400">
+                    <button
+                      type="submit"
+                      className="w-full py-4 text-black hover:bg-green-500 transition-colors stick-no-bills border-2 border-black font-bold uppercase text-5xl bg-green-400"
+                    >
+                      Sign In
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="text-center mt-6">
+                <p className="stick-no-bills mb-4 text-amber-200">DON'T HAVE AN ACCOUNT?</p>
+                <button
+                  onClick={() => setIsSignIn(false)}
+                  className="hover:bg-yellow-300 transition-colors stick-no-bills text-black bg-yellow-200 text-5xl py-3.5 px-12"
+                >
+                  CREATE ACCOUNT
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
