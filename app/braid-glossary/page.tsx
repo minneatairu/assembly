@@ -1475,7 +1475,7 @@ export default function BraidGlossaryPage() {
                             value={formData.photographer ?? ""}
                             onChange={handleInputChange}
                             placeholder="Photographer"
-                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
                           <input
@@ -1484,7 +1484,7 @@ export default function BraidGlossaryPage() {
                             value={formData.community ?? ""}
                             onChange={handleInputChange}
                             placeholder="Community"
-                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
                           <input
@@ -1493,7 +1493,7 @@ export default function BraidGlossaryPage() {
                             value={formData.source ?? ""}
                             onChange={handleInputChange}
                             placeholder="Https://"
-                            className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                            className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                           />
                         </div>
                       </div>
@@ -1541,7 +1541,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.linkTitle ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Braid Name"
-                                className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                                className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                                 required
                               />
 
@@ -1552,7 +1552,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.linkUrl ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Https://"
-                                className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
+                                className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black"
                                 required={submissionType === "link"}
                               />
 
@@ -1582,7 +1582,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.era ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Era"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
                               />
 
                               <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black my-0 py-3.5">
@@ -1684,7 +1684,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Contributor Name"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
                               <input
                                 type="text"
@@ -1692,7 +1692,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Hair Stylist"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
 
                               <input
@@ -1701,7 +1701,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Photographer"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
 
                               <input
@@ -1710,7 +1710,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Community"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
 
                               <input
@@ -1719,7 +1719,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Https://"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
                             </div>
                           </div>
@@ -1748,7 +1748,7 @@ export default function BraidGlossaryPage() {
                                   <button
                                     type="button"
                                     onClick={startRecording}
-                                    className="px-6 text-black hover:bg-lime-500 font-medium stick-no-bills border-dashed border-2 border-black uppercase bg-rose-200 text-5xl border-solid py-6"
+                                    className="px-6 text-black hover:bg-lime-500 font-medium stick-no-bills border-dashed border-2 border-black uppercase bg-rose-200 text-5xl border-dotted py-6"
                                   >
                                     START RECORDING
                                   </button>
@@ -1808,7 +1808,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.era ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Era"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
                               />
 
                               <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black py-3.5">
@@ -1914,7 +1914,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.contributorName ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Contributor Name"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
                               <input
                                 type="text"
@@ -1922,7 +1922,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.stylist ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Hair Stylist"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
 
                               <input
@@ -1931,7 +1931,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.photographer ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Photographer"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
 
                               <input
@@ -1940,7 +1940,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.community ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Community"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
 
                               <input
@@ -1949,7 +1949,7 @@ export default function BraidGlossaryPage() {
                                 value={formData.source ?? ""}
                                 onChange={handleInputChange}
                                 placeholder="Https://"
-                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
+                                className="w-full px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent py-4"
                               />
                             </div>
                           </div>
@@ -2017,7 +2017,7 @@ export default function BraidGlossaryPage() {
 
                 {/* Account Creation Toggle */}
                 <div className="p-4 px-0 py-0 bg-black">
-                  <label className="flex items-center gap-2 stick-no-bills mx-0 my-0 px-4 border-solid border-yellow-200 uppercase py-4 text-black bg-yellow-200 pt-4 pb-12">
+                  <label className="flex items-center gap-2 stick-no-bills mx-0 my-0 px-4 border-dotted border-yellow-200 uppercase py-4 text-black bg-yellow-200 pt-4 pb-12">
                     <input
                       type="checkbox"
                       checked={showAccountCreation}
