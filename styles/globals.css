@@ -93,3 +93,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.border-b-2{    border-style: dotted;
+}
