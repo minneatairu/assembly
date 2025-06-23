@@ -729,8 +729,7 @@ export default function BraidGlossaryPage() {
   const braidFamilyOptions = [
     { value: "cornrows", label: "Cornrows" },
     { value: "two-strand-twist", label: "Two Strand Twist" },
-    { value: "tree", label: "Tree" },
-    { value: "strand-twist", label: "Strand Twist" },
+    { value: "three-strand-twist", label: "Three Strand Twist" },
     { value: "feed-in", label: "Feed In" },
   ]
 

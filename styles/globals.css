@@ -103,7 +103,7 @@ input[type=checkbox] {    border: 2px dotted #000000!important;}
 margin-top: 0!important
 }
 
-.border-b-2 {
+.border-b-2,  .px-4 {
  
-    border-style: dotted;
+    border-style: dotted!important;
 }
