@@ -1076,8 +1076,8 @@ export default function BraidGlossaryPage() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black">
-          <div className="relative w-full max-w-4xl bg-black border-dotted border-2 border-black p-6 overflow-y-auto max-h-[90vh]">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black">
+          <div className="relative w-full max-w-4xl bg-black border-dotted border-2 border-black p-6">
             {/* Top bar with close button and dropdown */}
             <div className="flex items-center justify-between mb-0 px-0 py-0">
               {/* Custom Submission Type Dropdown */}
@@ -1122,7 +1122,7 @@ export default function BraidGlossaryPage() {
                             setSubmissionType(option.value as "photo" | "link" | "memory")
                             setShowDropdown(false)
                           }}
-                          className={`w-full h-12 text-left stick-no-bills text-black text-3xl sm:text-2xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-black last:border-b-0 border-b-dotted md:text-5xl bg-pink-100 border-dotted border-t-2 border-b-0 px-4 py-0 ${
+                          className={`w-full h-12 px-4 text-left stick-no-bills text-black text-3xl sm:text-2xl uppercase hover:bg-[rgb(244,218,97)] transition-colors border-black last:border-b-0 border-b-dotted md:text-5xl bg-pink-100 py-0 ${
                             submissionType === option.value ? "bg-[rgb(244,218,97)]" : ""
                           }`}
                         >
@@ -1397,7 +1397,7 @@ export default function BraidGlossaryPage() {
                                           type="checkbox"
                                           checked={formData.braidFamily.includes(option.value)}
                                           onChange={(e) => handleBraidFamilyChange(option.value, e.target.checked)}
-                                          className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                                          className="w-4 h-4 text-blue-600 border-gray-300 focus:outline-none"
                                         />
                                         <span className="stick-no-bills text-black text-5xl">{option.label}</span>
                                       </label>
@@ -1434,33 +1434,21 @@ export default function BraidGlossaryPage() {
                                   </svg>
                                 </button>
                               </div>
-
-                              <AnimatePresence initial={false}>
-                                {showBraidPatterns && (
-                                  <motion.div
-                                    key="patterns"
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                                    className="overflow-hidden"
-                                  >
-                                    <div className="grid grid-cols-2 gap-2 overflow-y-auto mt-2">
-                                      {braidPatternOptions.map((option) => (
-                                        <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            checked={formData.braidPatterns.includes(option.value)}
-                                            onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
-                                            className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                                          />
-                                          <span className="stick-no-bills text-black text-5xl">{option.label}</span>
-                                        </label>
-                                      ))}
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
+                              {showBraidPatterns && (
+                                <div className="grid grid-cols-2 gap-2  overflow-y-auto mt-2">
+                                  {braidPatternOptions.map((option) => (
+                                    <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                                      <input
+                                        type="checkbox"
+                                        checked={formData.braidPatterns.includes(option.value)}
+                                        onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
+                                        className="w-4 h-4 text-blue-600 border-gray-300 focus:outline-none"
+                                      />
+                                      <span className="stick-no-bills text-black text-5xl">{option.label}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1508,7 +1496,7 @@ export default function BraidGlossaryPage() {
                             value={formData.community ?? ""}
                             onChange={handleInputChange}
                             placeholder="Community"
-                            className="w-full py-4 px-4 bg-yellow-200 border-b-dotted border-b-2 border-black border-dotted focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            className="w-full px-4 bg-yellow-200 border-b-dotted border-b-2 border-black border-dotted focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
                           <input
@@ -1553,7 +1541,7 @@ export default function BraidGlossaryPage() {
                         <div className="min-w-[400px] mx-auto space-y-6">
                           {/* Link Information - Bordered section */}
                           <div className="border-dotted border-black bg-gray-50 border-0 mb-4 mt-8">
-                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0 border-dotted">
+                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0">
                               <h3 className="stick-no-bills text-black font-semibold uppercase">Link Information</h3>
                             </div>
 
@@ -1594,7 +1582,7 @@ export default function BraidGlossaryPage() {
 
                           {/* Basic Information - Separate bordered section */}
                           <div className="border-dotted border-2 border-black mb-4 mt-6">
-                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0 border-dotted">
+                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0">
                               <h3 className="stick-no-bills text-black  font-semibold uppercase">Braid Information</h3>
                             </div>
 
@@ -1609,51 +1597,62 @@ export default function BraidGlossaryPage() {
                                 className="w-full px-4 bg-yellow-200 border-b-dotted border-b-2 border-black border-dotted text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
                               />
 
-                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dotted border-b-2 border-black my-0 py-3.5 border-dotted">
-                                <div className="py-2">
-                                  <div className="flex items-center justify-between">
-                                    <label className="stick-no-bills text-black text-5xl">Braid Family</label>
-                                    <button
-                                      type="button"
-                                      onClick={() => setShowBraidFamilies(!showBraidFamilies)}
-                                      className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors border-dotted border-2 border-black"
-                                      title={showBraidFamilies ? "Hide families" : "Show families"}
+                              {/* Braid Family */}
+                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dotted border-b-2 border-black py-4">
+                                <div className="flex items-center justify-between">
+                                  <label className="stick-no-bills text-black text-5xl">Braid Family</label>
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowBraidFamilies(!showBraidFamilies)}
+                                    className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors border-dotted border-2 border-black"
+                                    title={showBraidFamilies ? "Hide families" : "Show families"}
+                                  >
+                                    <svg
+                                      className={`w-4 h-4 transition-transform ${showBraidFamilies ? "rotate-45" : ""}`}
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
                                     >
-                                      <svg
-                                        className={`w-4 h-4 transition-transform ${showBraidFamilies ? "rotate-45" : ""}`}
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M12 4v16m8-8H4"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </div>
-                                  {showBraidFamilies && (
-                                    <div className="grid grid-cols-2 gap-2 overflow-y-auto mt-2">
-                                      {braidFamilyOptions.map((option) => (
-                                        <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            checked={formData.braidFamily.includes(option.value)}
-                                            onChange={(e) => handleBraidFamilyChange(option.value, e.target.checked)}
-                                            className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                                          />
-                                          <span className="stick-no-bills text-black text-5xl">{option.label}</span>
-                                        </label>
-                                      ))}
-                                    </div>
-                                  )}
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 4v16m8-8H4"
+                                      />
+                                    </svg>
+                                  </button>
                                 </div>
+
+                                <AnimatePresence initial={false}>
+                                  {showBraidFamilies && (
+                                    <motion.div
+                                      key="families"
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: "auto", opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                                      className="overflow-hidden mt-2"
+                                    >
+                                      <div className="grid grid-cols-2 gap-2">
+                                        {braidFamilyOptions.map((option) => (
+                                          <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                              type="checkbox"
+                                              checked={formData.braidFamily.includes(option.value)}
+                                              onChange={(e) => handleBraidFamilyChange(option.value, e.target.checked)}
+                                              className="w-4 h-4 text-blue-600 border-gray-300 focus:outline-none"
+                                            />
+                                            <span className="stick-no-bills text-black text-5xl">{option.label}</span>
+                                          </label>
+                                        ))}
+                                      </div>
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
                               </div>
 
                               {/* Braid Patterns for Link - Collapsible */}
-                              <div className="px-4 bg-yellow-200 py-5 border-dotted">
+                              <div className="px-4 bg-yellow-200 py-5">
                                 <div className="flex items-center justify-between mb-2">
                                   <label className="stick-no-bills text-black text-5xl">Braid Pattern</label>
                                   <button
@@ -1677,38 +1676,27 @@ export default function BraidGlossaryPage() {
                                     </svg>
                                   </button>
                                 </div>
-                                <AnimatePresence initial={false}>
-                                  {showBraidPatterns && (
-                                    <motion.div
-                                      key="patterns"
-                                      initial={{ height: 0, opacity: 0 }}
-                                      animate={{ height: "auto", opacity: 1 }}
-                                      exit={{ height: 0, opacity: 0 }}
-                                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                                      className="overflow-hidden"
-                                    >
-                                      <div className="grid grid-cols-2 gap-2  overflow-y-auto">
-                                        {braidPatternOptions.map((option) => (
-                                          <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                            <input
-                                              type="checkbox"
-                                              checked={formData.braidPatterns.includes(option.value)}
-                                              onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
-                                              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                                            />
-                                            <span className="stick-no-bills text-black text-5xl">{option.label}</span>
-                                          </label>
-                                        ))}
-                                      </div>
-                                    </motion.div>
-                                  )}
-                                </AnimatePresence>
+                                {showBraidPatterns && (
+                                  <div className="grid grid-cols-2 gap-2  overflow-y-auto">
+                                    {braidPatternOptions.map((option) => (
+                                      <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                          type="checkbox"
+                                          checked={formData.braidPatterns.includes(option.value)}
+                                          onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
+                                          className="w-4 h-4 text-blue-600 border-gray-300 focus:outline-none"
+                                        />
+                                        <span className="stick-no-bills text-black text-5xl">{option.label}</span>
+                                      </label>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
                           {/* Credit Section for Link - Separate bordered section */}
                           <div className="border-dotted border-black bg-gray-50 mb-6 mt-6 border-0">
-                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0 border-dotted">
+                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0">
                               <h3 className="stick-no-bills text-black font-semibold uppercase">Credits</h3>
                             </div>
 
@@ -1831,7 +1819,7 @@ export default function BraidGlossaryPage() {
 
                           {/* Basic Information - Separate bordered section */}
                           <div className="border-dotted border-2 border-black bg-gray-50 mb-6 border-none">
-                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0 border-dotted">
+                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0">
                               <h3 className="stick-no-bills text-black font-semibold uppercase">Braid Information</h3>
                             </div>
 
@@ -1846,47 +1834,58 @@ export default function BraidGlossaryPage() {
                                 className="w-full px-4 bg-yellow-200 border-b-dotted border-b-2 border-black border-dotted text-black placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-transparent py-4"
                               />
 
-                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dotted border-b-2 border-black py-3.5 border-dotted">
-                                <div className="py-2">
-                                  <div className="flex items-center justify-between">
-                                    <label className="stick-no-bills text-black text-5xl">Braid Family</label>
-                                    <button
-                                      type="button"
-                                      onClick={() => setShowBraidFamilies(!showBraidFamilies)}
-                                      className="w-8 h-8 bg-black text-white flex justify-center hover:bg-gray-800 transition-colors items-center border-dotted border-2 border-black"
-                                      title={showBraidFamilies ? "Hide families" : "Show families"}
+                              {/* Braid Family */}
+                              <div className="min-h-16 px-4 bg-yellow-200 border-b-dotted border-b-2 border-black py-4">
+                                <div className="flex items-center justify-between">
+                                  <label className="stick-no-bills text-black text-5xl">Braid Family</label>
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowBraidFamilies(!showBraidFamilies)}
+                                    className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors border-dotted border-2 border-black"
+                                    title={showBraidFamilies ? "Hide families" : "Show families"}
+                                  >
+                                    <svg
+                                      className={`w-4 h-4 transition-transform ${showBraidFamilies ? "rotate-45" : ""}`}
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
                                     >
-                                      <svg
-                                        className={`w-4 h-4 transition-transform ${showBraidFamilies ? "rotate-45" : ""}`}
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M12 4v16m8-8H4"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </div>
-                                  {showBraidFamilies && (
-                                    <div className="grid grid-cols-2 gap-2  overflow-y-auto">
-                                      {braidFamilyOptions.map((option) => (
-                                        <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            checked={formData.braidFamily.includes(option.value)}
-                                            onChange={(e) => handleBraidFamilyChange(option.value, e.target.checked)}
-                                            className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                                          />
-                                          <span className="stick-no-bills text-black text-5xl">{option.label}</span>
-                                        </label>
-                                      ))}
-                                    </div>
-                                  )}
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 4v16m8-8H4"
+                                      />
+                                    </svg>
+                                  </button>
                                 </div>
+
+                                <AnimatePresence initial={false}>
+                                  {showBraidFamilies && (
+                                    <motion.div
+                                      key="families"
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: "auto", opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                                      className="overflow-hidden mt-2"
+                                    >
+                                      <div className="grid grid-cols-2 gap-2">
+                                        {braidFamilyOptions.map((option) => (
+                                          <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                              type="checkbox"
+                                              checked={formData.braidFamily.includes(option.value)}
+                                              onChange={(e) => handleBraidFamilyChange(option.value, e.target.checked)}
+                                              className="w-4 h-4 text-blue-600 border-gray-300 focus:outline-none"
+                                            />
+                                            <span className="stick-no-bills text-black text-5xl">{option.label}</span>
+                                          </label>
+                                        ))}
+                                      </div>
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
                               </div>
 
                               {/* Braid Patterns for Memory - Collapsible */}
@@ -1896,7 +1895,7 @@ export default function BraidGlossaryPage() {
                                   <button
                                     type="button"
                                     onClick={() => setShowBraidPatterns(!showBraidPatterns)}
-                                    className="w-8 h-8 bg-black text-white flex justify-center hover:bg-gray-800 transition-colors items-center border-dotted border-2 border-black"
+                                    className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors border-dotted border-2 border-black"
                                     title={showBraidPatterns ? "Hide patterns" : "Show patterns"}
                                   >
                                     <svg
@@ -1914,32 +1913,21 @@ export default function BraidGlossaryPage() {
                                     </svg>
                                   </button>
                                 </div>
-                                <AnimatePresence initial={false}>
-                                  {showBraidPatterns && (
-                                    <motion.div
-                                      key="patterns"
-                                      initial={{ height: 0, opacity: 0 }}
-                                      animate={{ height: "auto", opacity: 1 }}
-                                      exit={{ height: 0, opacity: 0 }}
-                                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                                      className="overflow-hidden"
-                                    >
-                                      <div className="grid grid-cols-2 gap-2  overflow-y-auto">
-                                        {braidPatternOptions.map((option) => (
-                                          <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                            <input
-                                              type="checkbox"
-                                              checked={formData.braidPatterns.includes(option.value)}
-                                              onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
-                                              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                                            />
-                                            <span className="stick-no-bills text-black text-5xl">{option.label}</span>
-                                          </label>
-                                        ))}
-                                      </div>
-                                    </motion.div>
-                                  )}
-                                </AnimatePresence>
+                                {showBraidPatterns && (
+                                  <div className="grid grid-cols-2 gap-2  overflow-y-auto">
+                                    {braidPatternOptions.map((option) => (
+                                      <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                          type="checkbox"
+                                          checked={formData.braidPatterns.includes(option.value)}
+                                          onChange={(e) => handleBraidPatternChange(option.value, e.target.checked)}
+                                          className="w-4 h-4 text-blue-600 border-gray-300 focus:outline-none"
+                                        />
+                                        <span className="stick-no-bills text-black text-5xl">{option.label}</span>
+                                      </label>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -1949,7 +1937,7 @@ export default function BraidGlossaryPage() {
                             className="border-dotted border-2 border-black bg-gray-50 mb-6 border-none"
                             style={{ marginTop: "20px" }}
                           >
-                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0 border-dotted">
+                            <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 py-0">
                               <h3 className="stick-no-bills text-black font-semibold uppercase">Credits</h3>
                             </div>
 
@@ -2034,7 +2022,7 @@ export default function BraidGlossaryPage() {
                     name="agreeToShare"
                     checked={formData.agreeToShare}
                     onChange={handleInputChange}
-                    className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
+                    className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:outline-none"
                     required
                   />
                   <label htmlFor="agreeToShare" className="stick-no-bills leading-relaxed text-black uppercase">
@@ -2050,7 +2038,7 @@ export default function BraidGlossaryPage() {
                     name="licenseCheck"
                     checked={formData.licenseCheck}
                     onChange={handleInputChange}
-                    className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2"
+                    className="mt-1 w-4 h-4 text-green-600 border-gray-300 focus:outline-none"
                     required
                   />
                   <label
@@ -2068,7 +2056,7 @@ export default function BraidGlossaryPage() {
                       type="checkbox"
                       checked={showAccountCreation}
                       onChange={() => setShowAccountCreation(!showAccountCreation)}
-                      className="w-5 h-5 text-green-600 border-gray-300 focus:ring-green-500 focus:ring-2 uppercase"
+                      className="w-5 h-5 text-green-600 border-gray-300 focus:outline-none uppercase"
                     />
                     Create an account to manage your contributions.
                   </label>
