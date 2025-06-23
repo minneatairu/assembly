@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { db, type Braid } from "@/lib/db"
+import { AnimatePresence, motion } from "framer-motion"
 
 export default function BraidGlossaryPage() {
   // Add Memory to the submission type
@@ -1345,48 +1346,55 @@ export default function BraidGlossaryPage() {
                             className="py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl w-full"
                           />
 
-                          <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black py-4">
-                            <div className="py-2">
-                              <div className="flex items-center justify-between">
-                                <label className="stick-no-bills text-black text-5xl">Braid Family</label>
-                                <button
-                                  type="button"
-                                  onClick={() => setShowBraidFamilies(!showBraidFamilies)}
-                                  className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors border-dashed border-2 border-black"
-                                  title={showBraidFamilies ? "Hide families" : "Show families"}
-                                >
-                                  <svg
-                                    className={`w-4 h-4 transition-transform ${showBraidFamilies ? "rotate-45" : ""}`}
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M12 4v16m8-8H4"
-                                    />
-                                  </svg>
-                                </button>
-                              </div>
-                              {showBraidFamilies && (
-                                <div className="grid grid-cols-2 gap-2 overflow-y-auto mt-2">
-                                  {braidFamilyOptions.map((option) => (
-                                    <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                      <input
-                                        type="checkbox"
-                                        checked={formData.braidFamily.includes(option.value)}
-                                        onChange={(e) => handleBraidFamilyChange(option.value, e.target.checked)}
-                                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                                      />
-                                      <span className="stick-no-bills text-black text-5xl">{option.label}</span>
-                                    </label>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                         {/* Braid Family */}
+<div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black py-4">
+  <div className="flex items-center justify-between">
+    <label className="stick-no-bills text-black text-5xl">Braid Family</label>
+    <button
+      type="button"
+      onClick={() => setShowBraidFamilies(!showBraidFamilies)}
+      className="w-8 h-8 bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors border-dashed border-2 border-black"
+      title={showBraidFamilies ? "Hide families" : "Show families"}
+    >
+      <svg
+        className={`w-4 h-4 transition-transform ${showBraidFamilies ? "rotate-45" : ""}`}
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+      </svg>
+    </button>
+  </div>
+
+  <AnimatePresence initial={false}>
+    {showBraidFamilies && (
+      <motion.div
+        key="families"
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: "auto", opacity: 1 }}
+        exit={{ height: 0, opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="overflow-hidden mt-2"
+      >
+        <div className="grid grid-cols-2 gap-2">
+          {braidFamilyOptions.map((option) => (
+            <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formData.braidFamily.includes(option.value)}
+                onChange={(e) => handleBraidFamilyChange(option.value, e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2"
+              />
+              <span className="stick-no-bills text-black text-5xl">{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
+
 
                           {/* Braid Patterns - Collapsible with Plus Icon */}
                           <div className="min-h-16 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black py-3.5 border-dashed">
