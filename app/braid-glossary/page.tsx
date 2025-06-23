@@ -1076,7 +1076,7 @@ export default function BraidGlossaryPage() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-40 flex overflow-y-auto max-h-[100vh]  pt-10 items-center justify-center bg-black">
+<div className="fixed inset-0 z-40 overflow-y-auto max-h-[100vh] flex items-start justify-center bg-black pt-10">
           <div className="relative w-full max-w-4xl bg-black border-dotted border-2 border-black p-6">
             {/* Top bar with close button and dropdown */}
             <div className="flex items-center justify-between mb-0 px-0 py-0">
