@@ -100,7 +100,10 @@ body {
 input[type=checkbox] {    border: 2px dotted #000000!important;}
 
 .space-y-6>:not([hidden])~:not([hidden]) {
-    --tw-space-y-reverse: 0;
-    /* margin-top: calc(1.5rem* calc(1 - var(--tw-space-y-reverse))); */
-    margin-bottom: calc(1.5rem* var(--tw-space-y-reverse));
+margin-top: 0!important
+}
+
+.border-b-2 {
+ 
+    border-style: dotted;
 }
