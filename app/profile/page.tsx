@@ -56,10 +56,7 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden">
-      <a
-  href="/"
-  className="fixed top-6 right-6 z-50 bg-black text-white px-5 py-2 border-white rounded-full stick-no-bills text-sm hover:bg-gray-900 transition-colors border-0to Main Page
-</a>
+
 
         <div className="w-full max-w-2xl mx-auto px-8 relative min-h-[600px]">
           {/* Create Account Form */}
