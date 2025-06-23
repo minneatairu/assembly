@@ -58,7 +58,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden">
     <a
       href="/"
-      className="fixed top-6 right-6 z-50 bg-black text-white px-5 py-2 border-2 border-white rounded-full stick-no-bills text-sm hover:bg-gray-900 transition-colors"
+      className="fixed top-6 right-6 z-50 bg-black text-white px-5 py-2 border-2 rounded-full stick-no-bills text-sm hover:bg-gray-900 transition-colors"
     >
 RETURN TO MAIN
     </a>
@@ -118,7 +118,7 @@ RETURN TO MAIN
             </div>
 
             <div className="text-center mt-6">
-              <p className="stick-no-bills mb-4 text-amber-200">ALREADY HAVE AN ACCOUNT?</p>
+              <p className="stick-no-bills mb-4 text-amber-200">ALREADY HAVE A CONTRIBUTOR ACCOUNT?</p>
               <button
                 onClick={() => setIsSignIn(true)}
                 className="hover:bg-green-600 transition-colors stick-no-bills text-black bg-green-500 text-5xl py-3.5 px-12"
@@ -138,7 +138,7 @@ RETURN TO MAIN
           >
             <div className="bg-white  border-2 border-black">
               <div className="px-4 border-b border-b-2 border-dotted border-black bg-green-400 py-0">
-                <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR ACCOUNT</h3>
+                <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR CONTRIBUTOR ACCOUNT</h3>
               </div>
 
               <form className="p-0">
