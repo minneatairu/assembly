@@ -72,7 +72,7 @@ RETURN TO MAIN
                 : "transform translate-y-0 opacity-100 pointer-events-auto z-10"
             }`}
           >
-            <div className="bg-white border-dotted border-2 border-black">
+            <div className="bg-white  border-2 border-black">
               <div className="px-4 border-b border-b-2 border-dotted border-black bg-yellow-200 py-0">
                 <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A CONTRIBUTOR ACCOUNT</h3>
               </div>
@@ -136,7 +136,7 @@ RETURN TO MAIN
                 : "transform translate-y-full opacity-0 pointer-events-none z-0"
             }`}
           >
-            <div className="bg-white border-dotted border-2 border-black">
+            <div className="bg-white  border-2 border-black">
               <div className="px-4 border-b border-b-2 border-dotted border-black bg-green-400 py-0">
                 <h3 className="stick-no-bills text-black font-semibold uppercase">SIGN INTO YOUR ACCOUNT</h3>
               </div>
