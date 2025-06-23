@@ -1320,7 +1320,7 @@ export default function BraidGlossaryPage() {
 
                       {/* Main Form Fields - Separate bordered section */}
                       <div className="border-dotted border-black mb-3 mt-0 bg-yellow-300 border-0">
-                        <div className="px-4 border-b-dotted border-b-2 border-black bg-yellow-200 mt-8 py-0 border-dotted">
+                        <div className="px-4 border-b-2 border-black border-dotted bg-yellow-200 mt-8 py-0">
                           <h3 className="stick-no-bills text-black font-semibold uppercase ">Braid Information</h3>
                         </div>
 
