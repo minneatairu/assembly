@@ -1458,7 +1458,7 @@ export default function BraidGlossaryPage() {
                             value={formData.contributorName ?? ""}
                             onChange={handleInputChange}
                             placeholder="Contributor Name"
-                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
                           <input
                             type="text"
@@ -1466,7 +1466,7 @@ export default function BraidGlossaryPage() {
                             value={formData.stylist ?? ""}
                             onChange={handleInputChange}
                             placeholder="Hair Stylist"
-                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-solid focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
+                            className="w-full py-4 px-4 bg-yellow-200 border-b-dashed border-b-2 border-black border-dotted focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent stick-no-bills text-black placeholder-black text-5xl"
                           />
 
                           <input
