@@ -96,3 +96,5 @@ body {
 
 .border-b-2, .border-dashed{    border-style: dotted;
 }
+
+input[type=checkbox] {    border: 2px dotted #000000!important;}
