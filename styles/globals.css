@@ -94,7 +94,7 @@ body {
   }
 }
 
-.border-b-2, .border-dashed{    border-style: dotted;
+.border-b-2, .border-dashed{    border-style: dotted!important;
 }
 
 input[type=checkbox] {    border: 2px dotted #000000!important;}
