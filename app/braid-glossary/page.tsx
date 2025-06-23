@@ -1787,7 +1787,7 @@ export default function BraidGlossaryPage() {
                                       Stop Recording
                                     </button>
                                     <span className="text-red-600 font-mono stick-no-bills text-2xl">
-                                      🔴 {formatTime(recordingTime)}
+                                      {formatTime(recordingTime)}
                                     </span>
                                   </div>
                                 )}
