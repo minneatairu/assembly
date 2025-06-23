@@ -12,7 +12,9 @@
     transform: scale(1);
   }
 }
-.text-white {color:rgb(254 228 107/var(--tw-bg-opacity,1))}
+.text-white {
+  color: rgb(254 228 107 / var(--tw-bg-opacity, 1));
+}
 @keyframes blink {
   0%,
   50% {
@@ -58,10 +60,6 @@
   font-family: "Boldonse", sans-serif;
 }
 
-/* label {
-  background: grey;
-} */
-
 /* Custom square checkboxes */
 input[type="checkbox"] {
   appearance: none;
@@ -69,30 +67,33 @@ input[type="checkbox"] {
   -moz-appearance: none;
   width: 2rem;
   height: 2rem;
-  border: 2px dashed #000000;
+  border: 2px dotted #000000;
   background-color: pink;
   cursor: pointer;
   position: relative;
 }
-div.flex.items-start.gap-3.p-4.px-4.py-4.bg-yellow-200 {align-items:center}
-.bg-green-400 {    background-color: rgb(254 228 107/var(--tw-bg-opacity,1));
+div.flex.items-start.gap-3.p-4.px-4.py-4.bg-yellow-200 {
+  align-items: center;
+}
+.bg-green-400 {
+  background-color: rgb(254 228 107 / var(--tw-bg-opacity, 1));
 }
 .px-4 {
-    padding-left: 2rem;
-
-
-
+  padding-left: 2rem;
 }
 .px-3 {
-    padding-left: 2rem;
-    padding-right: 2rem;}
-.space-y-4>:not([hidden])~:not([hidden]){margin-top:0}
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0;
+}
 div.grid.grid-cols-2.gap-2.overflow-y-auto {
-    margin: 3rem 0;
+  margin: 3rem 0;
 }
 input[type="checkbox"]:checked {
   background-color: #000000;
-  border-color: PINK;
+  border: 2px dotted PINK;
 }
 
 input[type="checkbox"]:checked::after {
@@ -107,5 +108,17 @@ input[type="checkbox"]:checked::after {
 }
 
 input[type="checkbox"]:focus {
-  outline:NONE;
+  outline: NONE;
+}
+
+/* Make all input borders dotted */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input {
+  border-style: dotted !important;
 }
