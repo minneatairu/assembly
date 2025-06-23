@@ -1765,7 +1765,7 @@ export default function BraidGlossaryPage() {
 
                           {/* Audio Recording for Memory */}
                           {audioSupported && (
-                            <div className="p-4 border-dotted border-2 border-black border-none bg-yellow-200 mb-0 py-16">
+                            <div className="p-4 border-dotted border-2 border-black border-none bg-yellow-200 mb-0 py-16 ">
                               <div className="flex flex-col items-center justify-center min-h-[120px]">
                                 {!isRecording && !audioBlob && (
                                   <button
