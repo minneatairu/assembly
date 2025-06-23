@@ -94,5 +94,5 @@ body {
   }
 }
 
-.border-b-2{    border-style: dotted;
+.border-b-2, .border-dashed{    border-style: dotted;
 }
