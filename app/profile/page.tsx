@@ -60,7 +60,7 @@ export default function ProfilePage() {
       href="/"
       className="fixed top-6 right-6 z-50 bg-black text-white px-5 py-2 border-2 border-white rounded-full stick-no-bills text-sm hover:bg-gray-900 transition-colors"
     >
-      Return to Main Page
+RETURN TO MAIN
     </a>
 
         <div className="w-full max-w-2xl mx-auto px-8 relative min-h-[600px]">
@@ -74,7 +74,7 @@ export default function ProfilePage() {
           >
             <div className="bg-white border-dotted border-2 border-black">
               <div className="px-4 border-b border-b-2 border-dotted border-black bg-yellow-200 py-0">
-                <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A NEW ACCOUNT</h3>
+                <h3 className="stick-no-bills text-black font-semibold uppercase">CREATE A CONTRIBUTOR ACCOUNT</h3>
               </div>
 
               <form className="p-0">
