@@ -1761,15 +1761,12 @@ export default function BraidGlossaryPage() {
                             placeholder="Braid Name "
                             className="w-full px-4 bg-yellow-200 border-b-dotted border-b-2 border-black text-gray-700 placeholder-black stick-no-bills text-5xl focus:outline-none focus:border-black py-4"
                             required={submissionType === "memory"}
-                              style={{ marginTop: 1rem }}
                           />
 
                           {/* Audio Recording for Memory */}
                           {audioSupported && (
-<div
-  className="p-4 border-dotted border-2 border-black border-none bg-yellow-200 mb-0 py-16"
-  style={{ marginTop: 0 }}
->                              <div className="flex flex-col items-center justify-center min-h-[120px]">
+                            <div className="p-4 border-dotted border-2 border-black border-none bg-yellow-200 mb-0 py-16">
+                              <div className="flex flex-col items-center justify-center min-h-[120px]">
                                 {!isRecording && !audioBlob && (
                                   <button
                                     type="button"
